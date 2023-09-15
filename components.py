@@ -4,6 +4,10 @@ A python class for simple ray tracing optics.
 Based heavily in parts on the work of Matthew Hand's dls-optics-core package
 Author: Patrick Wang
 Email: patrick.wang@diamond.ac.uk
+
+Version: 0.1
+Date: 2023-09-15
+
 """
 
 import numpy as np
@@ -180,3 +184,39 @@ class Grating(object):
     def wavelength(self):
         return 12398.42 / self.energy
     
+
+class Plane_Mirror(object):
+    """
+    A class for a simple plane mirror.
+
+    Parameters
+    ----------
+    dimensions : array_like
+        The dimensions of the mirror in mm
+    position : Point3D
+        The position of the mirror
+    normal : Vector3D
+        The normal vector of the mirror
+    orientation : Vector3D
+    """
+    
+class PGM(object):
+    """
+    A class for a PGM setup.
+
+    Parameters
+    ----------
+    grating : Grating
+        The grating of the PGM
+    mirror : Mirror
+        The mirror of the PGM
+    mirror_voffset : float
+        The vertical offset of the mirror in mm
+    mirror_hoffset : float
+        The horizontal offset of the mirror in mm
+    mirror_axis_voffset : float
+        The vertical offset of the mirror axis in mm
+    mirror_axis_hoffset : float
+        The horizontal offset of the mirror axis in mm
+    mirror_leng
+    """

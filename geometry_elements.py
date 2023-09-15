@@ -5,6 +5,9 @@ used in ray tracing of X-ray optics.
 Author: Patrick Wang
 Email: patrick.wang@diamond.ac.uk
 
+Version: 0.1
+Date: 2023-09-15
+
 """
 import numpy as np
 
@@ -301,55 +304,6 @@ class Point3D(object):
     def z(self, value):
         self._point[2] = value
 
-class Ray3D(object):
-    """
-    A class for a simple 3D ray
-
-    Parameters
-    ----------
-    position : Point3D
-        The position of the ray
-    vector : Vector3D
-        The vector of the ray
-    
-    Methods
-    ----------
-    __repr__ : str
-        Returns a string representation of the ray
-
-    Attributes
-    ----------
-    position : Point3D
-        The position of the ray
-    vector : Vector3D
-        The vector of the ray
-
-    """
-    def __init__(self, position, vector):
-        self._position = position
-        vector_mag = vector.norm()
-        if vector_mag == 0:
-            raise ValueError("Vector magnitude cannot be zero")
-        self._vector = vector / vector_mag
-
-    def __repr__(self):
-        return "Ray3D(position={}, vector={})".format(self.position, self.vector)
-
-    @property
-    def position(self):
-        return self._position
-    
-    @position.setter
-    def position(self, value):
-        self._position = value
-    
-    @property
-    def vector(self):
-        return self._vector
-    
-    @vector.setter
-    def vector(self, value):
-        self._vector = value.normalize()
 
 class Plane(object):
     """
