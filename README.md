@@ -6,4 +6,4 @@ The package also contains a linear algebra library for simple manipulation of 3D
 
 See documentation html for more details.
 
-Documentation forthcoming.
+Documentation located in ./docs/pgm-components as html files.
