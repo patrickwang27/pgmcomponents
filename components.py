@@ -230,6 +230,28 @@ class Plane_Mirror(object):
     """
 
     def __init__(self, voffset=20, hoffset=0, axis_voffset=0, axis_hoffset=0, dimensions = np.array([450, 70, 50]),theta=45, plane=Plane()):
+        """
+        Constructor for the Plane_Mirror class.
+
+        Parameters
+        ----------
+        voffset : float
+            The vertical offset of the mirror in mm
+        hoffset : float
+            The horizontal offset of the mirror in mm
+        axis_voffset : float
+            The vertical offset of the mirror axis in mm
+        axis_hoffset : float
+            The horizontal offset of the mirror axis in mm
+        dimensions : array_like
+            The dimensions of the mirror in mm [length, width, height]
+        theta : float
+            The angle of the mirror in degrees
+        plane : Plane
+            The plane of the mirror
+        
+        """
+
         self._voffset = voffset
         self._hoffset = hoffset
         self._axis_voffset = axis_voffset
