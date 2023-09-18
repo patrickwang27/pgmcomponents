@@ -34,7 +34,7 @@ class Grating(object):
     order : int
         The diffraction order of the grating
     dimensions : array_like
-        The dimensions of the grating in mm
+        The dimensions of the grating in mm [length, width, height]
     
     Attributes
     ----------
@@ -88,6 +88,11 @@ class Grating(object):
         
         if len(config['grating']) != 5:
             raise ValueError("Expected exactly five parameters in grating file")
+
+        variables = ['line_density', 'energy', 'cff', 'order', 'dimensions']
+        for var in variables:
+            if var not in config['grating']:
+                raise ValueError("Missing parameter {} in grating file".format(var))
 
         for key, value in list(config['grating'].items())[0:-1]:
             exec(f"self._{key} = float({value})")
@@ -184,6 +189,30 @@ class Grating(object):
     def wavelength(self):
         return 12398.42 / self.energy
     
+    def compute_corners(self):
+        beta_g = np.deg2rad(self._beta + 90)
+        l = self._dimensions[0]
+        #Bottom left back
+        blbz = -()
+
+    
+    @classmethod
+    def grating_from_file(cls, filename):
+        """
+        Create a grating from a file. 
+        See config_pgm.ini for an example.
+        A config_file may contain more than one sections, but only the
+        grating section will be read.
+
+        Parameters
+        ----------
+        filename : str
+            The name of the file to read from
+        """
+        grating = cls()
+        grating.read_file(filename)
+        return grating
+    
 
 class Plane_Mirror(object):
     """
@@ -200,14 +229,13 @@ class Plane_Mirror(object):
     orientation : Vector3D
     """
 
-    def __init__(self, voffset=20, hoffset=0, axis_voffset=0, axis_hoffset=0, length=450, width=70, height=50,theta=45, plane=Plane()):
+    def __init__(self, voffset=20, hoffset=0, axis_voffset=0, axis_hoffset=0, dimensions = np.array([450, 70, 50]),theta=45, plane=Plane()):
         self._voffset = voffset
         self._hoffset = hoffset
         self._axis_voffset = axis_voffset
         self._axis_hoffset = axis_hoffset
-        self._length = length
-        self._width = width
-        self._height = height
+        self._dimensions = dimensions
+
         self._plane = plane
         self._theta = theta
         _ = self.compute_corners()
@@ -228,6 +256,39 @@ class Plane_Mirror(object):
                             self.height, 
                             self.plane)
     
+    def read_file(self, filename):
+        """
+        Read mirror parameters from a file. 
+        See config_pgm.ini for an example.
+        A config_file may contain more than one sections, but only the
+        mirror section will be read.
+
+        Parameters
+        ----------
+        filename : str
+            The name of the file to read from
+        """
+        config = configparser.ConfigParser()
+        config.read(filename)
+        
+        if len(config['mirror']) != 8:
+            raise ValueError("Expected exactly eight parameters in mirror file")
+
+        variables = ['voffset', 'hoffset', 'axis_voffset', 'axis_hoffset', 'length', 'width', 'height', 'theta']
+        for var in variables:
+            if var not in config['mirror']:
+                raise ValueError("Missing parameter {} in mirror file".format(var))
+            
+        for key, value in list(config['mirror'].items())[0:-1]:
+            exec(f"self._{key} = float({value})")
+            print(key)
+            print(value)
+        
+        
+        self._dimensions = np.array([float(x) for x in config['mirror']['dimensions'].split(',')])
+
+        
+
     @property
     def voffset(self):
         return self._voffset
@@ -261,34 +322,12 @@ class Plane_Mirror(object):
         self._axis_hoffset = value
 
     @property
-    def length(self):
-        return self._length
-
-    @length.setter
-    def length(self, value):
-        if value <= 0:
-            raise ValueError("Mirror length must be greater than zero")
-        self._length = value
-
-    @property
-    def width(self):
-        return self._width
-
-    @width.setter
-    def width(self, value):
-        if value <= 0:
-            raise ValueError("Mirror width must be greater than zero")
-        self._width = value
-
-    @property
-    def height(self):
-        return self._height
-
-    @height.setter
-    def height(self, value):
-        if value <= 0:
-            raise ValueError("Mirror height must be greater than zero")
-        self._height = value
+    def dimensions(self):
+        return self._dimensions
+    
+    @dimensions.setter
+    def dimensions(self, value):
+        self._dimensions = value
 
     @property
     def plane(self):
@@ -307,10 +346,27 @@ class Plane_Mirror(object):
     def set_orientation(self, orientation):
         self._plane.orientation = orientation
 
-    def set_dimensions(self, length, width, height):
-        self._length = length
-        self._width = width
-        self._height = height
+    def set_dimensions(self, *args):
+        """
+        Set the dimensions of the mirror.
+
+        Parameters
+        ----------
+        *args : array_like
+            Either one or three arguments for the dimensions
+
+        Raises
+        ------
+        ValueError
+            If the number of arguments is not one or three
+
+        """
+        if len(args) == 1:
+            self._dimensions = args[0]
+        elif len(args) == 3:
+            self._dimensions = np.array(args)
+        else:
+            raise ValueError("Expected either one or three arguments for dimensions")
 
     def set_offsets(self, voffset, hoffset, axis_voffset, axis_hoffset):
         self._voffset = voffset
@@ -405,6 +461,24 @@ class Plane_Mirror(object):
 
     def draw(self, ax):
         pass
+
+    @classmethod
+
+    def mirror_from_file(cls, filename):
+        """
+        Create a mirror from a file. 
+        See config_pgm.ini for an example.
+        A config_file may contain more than one sections, but only the
+        mirror section will be read.
+
+        Parameters
+        ----------
+        filename : str
+            The name of the file to read from
+        """
+        mirror = cls()
+        mirror.read_file(filename)
+        return mirror
 
 class PGM(object):
     """
