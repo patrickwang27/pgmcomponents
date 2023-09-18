@@ -293,10 +293,10 @@ class Plane_Mirror(object):
         config = configparser.ConfigParser()
         config.read(filename)
         
-        if len(config['mirror']) != 8:
-            raise ValueError("Expected exactly eight parameters in mirror file")
+        if len(config['mirror']) != 6:
+            raise ValueError("Expected exactly six parameters in mirror file")
 
-        variables = ['voffset', 'hoffset', 'axis_voffset', 'axis_hoffset', 'length', 'width', 'height', 'theta']
+        variables = ['voffset', 'hoffset', 'axis_voffset', 'axis_hoffset', 'dimensions', 'theta']
         for var in variables:
             if var not in config['mirror']:
                 raise ValueError("Missing parameter {} in mirror file".format(var))
