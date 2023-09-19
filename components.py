@@ -202,6 +202,29 @@ class Grating(object):
         
         return beta
 
+    def compute_angles(self):
+        """
+        Compute the incident and diffraction angles of the grating.
+        The incident angle is calculated from the diffraction angle
+        using the fixed focus constant.
+
+        Returns
+        -------
+        alpha : float
+            The incident angle in degrees
+
+        beta : float
+            The diffraction angle in degrees
+        
+        """
+        wavelength = wavelength(self.energy)
+        lambda_u = self.order*self.line_density*1000*wavelength/(1-self.cff**2)
+        sin_alpha = lambda_u + np.sqrt(1+lambda_u**2*self.cff**2)
+        self._alpha = np.rad2deg(np.arcsin(sin_alpha))
+        self._beta = -np.rad2deg(np.arccos(np.cos(np.arcsin(sin_alpha))*self.cff))
+
+        return self._alpha, self._beta
+
     def diffract(self, rays):
         """
         A method to diffract rays off the grating.
@@ -227,18 +250,12 @@ class Grating(object):
         for index, ray in enumerate(rays):
             if not isinstance(ray, Ray3D):
                 raise TypeError("Expected Ray3D object")
-            try:
-                plane_intersection = self._grating_plane.intersectQ(ray)
-            except ValueError:
-                print(f'Ray of index {index} does not intersect grating, tread with caution!')
-                continue
-            ray_array = ray.vector
-            grating_normal = self._grating_plane.normal
-            diffracted_ray_array = ray_array - 2 * np.dot(ray_array, grating_normal) * grating_normal
-            diffracted_ray_array = diffracted_ray_array / np.linalg.norm(diffracted_ray_array)
-            diffracted_ray = Ray3D(plane_intersection, diffracted_ray_array)
-            diffracted_rays.append(diffracted_ray)
-        
+            raydotplane = ray.vector.dot(self._grating_plane.normal)
+            angle = np.arccos(raydotplane/self._grating_plane.normal.norm())
+            alpha = np.rad2deg(np.pi/2-angle)
+            beta = self.calc_beta(alpha, self._line_density, self._energy, self._order)
+            diff_ray = self.reflect(ray)
+            diffracted_rays.append(diff_ray)
         return diffracted_rays
     
     @staticmethod
@@ -349,7 +366,47 @@ class Grating(object):
 
         return self._corners
 
-    
+    def reflect(self, *args):
+        """
+        A method to reflect rays off the grating.
+
+        Parameters
+        ----------
+        *args : Ray3D
+            The rays to be reflected
+
+        Returns
+        -------
+        reflected_rays : list
+            A list of reflected rays
+
+        """
+        reflected_rays = []
+        
+        if len(args) == 0:
+            raise ValueError("Expected at least one ray")
+        
+        if type(args[0]) == list:
+            args = args[0]
+        
+
+        for index, ray in enumerate(args):
+            if not isinstance(ray, Ray3D):
+                raise TypeError("Expected Ray3D object")
+            try:
+                plane_intersection = self._grating_plane.intersectQ(ray)
+            except ValueError:
+                print(f'Ray of index {index} does not intersect grating, tread with caution!')
+                continue
+            ray_array = ray.vector
+            grating_normal = self._grating_plane.normal
+            reflected_ray_array = ray_array - 2 * np.dot(ray_array, grating_normal) * grating_normal
+            reflected_ray_array = reflected_ray_array / np.linalg.norm(reflected_ray_array)
+            reflected_ray = Ray3D(plane_intersection, reflected_ray_array)
+            reflected_rays.append(reflected_ray)
+        
+        return reflected_rays
+
     @classmethod
     def grating_from_file(cls, filename):
         """
