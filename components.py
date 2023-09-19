@@ -55,6 +55,20 @@ class Grating(object):
     dimensions : array_like
         The dimensions of the grating in mm
 
+    Methods
+    -------
+    set_angles(alpha, beta)
+        Set the incident and diffraction angles of the grating
+    wavelength()
+        Calculate the wavelength of the beam in Angstroms
+    compute_corners()
+        Compute the corners of the grating in the global coordinate system
+    diffract(*args)
+        A method to diffract rays off the grating
+    compute_beta(alpha, line_density, energy, order)
+        Calculate the diffraction angle beta from the incident angle alpha
+
+
     """
     def __init__(self, line_density=600, energy=250, cff=2, order=1, dimensions = np.array([1,1,1])):
 
@@ -167,17 +181,88 @@ class Grating(object):
         wavelength = (np.sin(np.deg2rad(alpha)) + np.sin(np.deg2rad(beta))) / (self.line_density*1000*self._order)
         
         try:
-            self._energy = 12398.42 / wavelength
+            self._energy = 12398.42 / wavelength #converts wavelength to eV
         except ZeroDivisionError:
             raise ValueError("Unexpected divide by zero in grating.set_angles")
         
         self._alpha = alpha
         self._beta = beta
         self._cff = self.cff
+
+    @staticmethod
+    def compute_beta(alpha, line_density, energy, order):
+        beta = 0
+        try:
+            wavelength = wavelength(energy)
+            u = order*line_density*1000*wavelength - np.sin(np.deg2rad(alpha))
+            beta = np.rad2deg(np.arcsin(u))
+        
+        except ZeroDivisionError:
+            print('Error in grating.compute_beta')
+        
+        return beta
+
+    def diffract(self, rays):
+        """
+        A method to diffract rays off the grating.
+
+        Parameters
+        ----------
+        rays : list
+            The rays to be diffracted
+
+        Returns
+        -------
+        diffracted_rays : list
+            A list of diffracted rays
+
+        """
+        diffracted_rays = []
+        if len(rays) == 0:
+            raise ValueError("Expected at least one ray")
+        
+        if type(rays[0]) == list:
+            rays = rays[0]
+        
+        for index, ray in enumerate(rays):
+            if not isinstance(ray, Ray3D):
+                raise TypeError("Expected Ray3D object")
+            try:
+                plane_intersection = self._grating_plane.intersectQ(ray)
+            except ValueError:
+                print(f'Ray of index {index} does not intersect grating, tread with caution!')
+                continue
+            ray_array = ray.vector
+            grating_normal = self._grating_plane.normal
+            diffracted_ray_array = ray_array - 2 * np.dot(ray_array, grating_normal) * grating_normal
+            diffracted_ray_array = diffracted_ray_array / np.linalg.norm(diffracted_ray_array)
+            diffracted_ray = Ray3D(plane_intersection, diffracted_ray_array)
+            diffracted_rays.append(diffracted_ray)
+        
+        return diffracted_rays
     
     @staticmethod
 
-    def calc_beta(alpha, line_density, order, energy):
+    def calc_beta(alpha, line_density, energy, order):
+        """
+        Calculate the diffraction angle beta from the incident angle alpha.
+        
+        Parameters
+        ----------
+        alpha : float
+            The incident angle in degrees
+        line_density : float
+            The line density of the grating in lines per mm
+        energy : float
+            The energy of the incident beam in eV
+        order : int
+            The diffraction order of the grating
+
+        Returns
+        -------
+        beta : float
+            The diffraction angle in degrees
+        """
         beta = 0 
 
         try:
@@ -195,9 +280,74 @@ class Grating(object):
     
     def compute_corners(self):
         beta_g = np.deg2rad(self._beta + 90)
-        l = self._dimensions[0]
+        l = self._length()
+        w = self._width()
+        d = self._height()        
         #Bottom left back
-        blbz = -()
+        blbz = -(l/2)*np.cos(beta_g)
+        blby = -(l/2)*np.sin(beta_g)
+        blbx = -w/2
+        blb = Point3D(blbx, blby, blbz)
+        #Bottom right back
+        brbz = blbz
+        brby = blby
+        brbx = w/2
+        brb = Point3D(brbx, brby, brbz)
+
+        #Bottom left front
+        blfz = (l/2)*np.cos(beta_g)
+        blfy = (l/2)*np.sin(beta_g)
+        blfx = -w/2
+        blf = Point3D(blfx, blfy, blfz)
+
+        #Bottom right front
+        brfz = blfz
+        brfy = blfy
+        brfx = w/2
+        brf = Point3D(brfx, brfy, brfz)
+
+        #Top left back
+        tlbz = blbz - d*np.sin(beta_g)
+        tlby = blby + d*np.cos(beta_g)
+        tlbx = -w/2
+        tlb = Point3D(tlbx, tlby, tlbz)
+
+        #Top right back
+        trbz = brbz - d*np.sin(beta_g)
+        trby = brby + d*np.cos(beta_g)
+        trbx = w/2
+        trb = Point3D(trbx, trby, trbz)
+
+        #Top left front
+        tlfz = blfz - d*np.sin(beta_g)
+        tlfy = blfy + d*np.cos(beta_g)
+        tlfx = -w/2
+        tlf = Point3D(tlfx, tlfy, tlfz)
+
+        #Top right front
+        trfz = brfz - d*np.sin(beta_g)
+        trfy = brfy + d*np.cos(beta_g)
+        trfx = w/2
+        trf = Point3D(trfx, trfy, trfz)
+
+        self._grating_plane = Plane(
+            Point3D(blfx, blfy, blfz),
+            Point3D(brfx, brfy, brfz),
+            Point3D(blbx, blby, blbz)
+        )
+
+        self._corners = np.array([
+            blb,
+            brb,
+            blf,
+            brf,
+            tlb,
+            trb,
+            tlf,
+            trf
+        ])
+
+        return self._corners
 
     
     @classmethod
@@ -231,6 +381,34 @@ class Plane_Mirror(object):
     normal : Vector3D
         The normal vector of the mirror
     orientation : Vector3D
+
+    Attributes
+    ----------
+    dimensions : array_like
+        The dimensions of the mirror in mm
+    position : Point3D
+        The position of the mirror
+    normal : Vector3D
+        The normal vector of the mirror
+    orientation : Vector3D
+        The orientation of the mirror
+    corners : array_like
+        The corners of the mirror in the global coordinate system
+    plane : Plane
+        The plane of the mirror
+        
+
+    Methods
+    -------
+    set_position(position)
+        Set the position of the mirror
+    set_normal(normal)
+        Set the normal vector of the mirror
+    set_orientation(orientation)
+        Set the orientation of the mirror
+    set_dimensions(*args)
+
+    
     """
 
     def __init__(self, voffset=20, hoffset=0, axis_voffset=0, axis_hoffset=0, dimensions = np.array([450, 70, 50]),theta=45, plane=Plane()):
@@ -383,9 +561,6 @@ class Plane_Mirror(object):
 
     def set_normal(self, normal):
         self._plane.normal = normal
-
-    def set_orientation(self, orientation):
-        self._plane.orientation = orientation
 
     def set_dimensions(self, *args):
         """
@@ -562,6 +737,7 @@ class Plane_Mirror(object):
         
         return reflected_rays
     
+
             
 
 class PGM(object):
