@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Rectangle, Polygon
 from matplotlib.collections import PatchCollection
 import configparser
-from geometry_elements import *
+from geometry_elements import Plane, Point3D, Vector3D, Ray3D
 
 class Grating(object):
     """

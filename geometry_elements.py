@@ -10,7 +10,87 @@ Date: 2023-09-15
 
 """
 import numpy as np
-from light import Ray3D
+
+
+class Ray3D(object):
+    """
+    A class for a simple 3D ray
+
+    Parameters
+    ----------
+    position : Point3D
+        The position of the ray
+    vector : Vector3D
+        The vector of the ray
+    
+    Methods
+    ----------
+    __repr__ : str
+        Returns a string representation of the ray
+
+    Attributes
+    ----------
+    position : Point3D
+        The position of the ray
+    vector : Vector3D
+        The vector of the ray
+
+    """
+    def __init__(self, position, vector):
+        self._position = position
+        vector_mag = vector.norm()
+        if vector_mag == 0:
+            raise ValueError("Vector magnitude cannot be zero")
+        self._vector = vector / vector_mag
+
+    def __repr__(self):
+        return "Ray3D(position={}, vector={})".format(self.position, self.vector)
+
+    @property
+    def position(self):
+        return self._position
+    
+    @position.setter
+    def position(self, value):
+        self._position = value
+    
+    @property
+    def vector(self):
+        return self._vector
+    
+    @vector.setter
+    def vector(self, value):
+        self._vector = value.normalize()
+
+class Image(object):
+    """
+    A class for a 2D image.
+
+    Parameters
+    ----------
+    width : float
+        The width of the image
+    height : float
+        The height of the image
+    h_div : int
+        The number of horizontal divisions
+    v_div : int
+        The number of vertical divisions
+
+    Methods
+    ----------
+    __repr__ : str
+        Returns a string representation of the image
+
+    """
+    def __init__(self, width, height, h_div, v_div):
+        self.width = width
+        self.height = height
+        self.h_div = h_div
+        self.v_div = v_div
+    
+    def __repr__(self):
+        return "Image(width={}, height={}, h_div={}, v_div={})".format(self.width, self.height, self.h_div, self.v_div)
 
 
 class Vector3D(object):
@@ -321,29 +401,64 @@ class Plane(object):
     point : array_like
         A point on the plane
 
+    normal : array_like
+        The normal vector of the plane
+
+    Methods
+    ----------
+    __repr__ : str
+        Returns a string representation of the plane
+    __eq__ : bool
+        Checks if two planes are equal
+    intersectQ : bool
+        Checks if the plane intersects another plane or ray3d
+
     """
 
     def __init__(self, *args):
+        if len(args) == 0:
+            print("No arguments given, plane at origin with normal (0, 0, 1) initialised! Tread carefully!")
+            self._point = np.array([0, 0, 0])
+            self._normal = np.array([0, 0, 1])
+
 
         if len(args) == 2:
-            self.point = args[0]
-            self.normal = args[1]
+            self._point = args[0]
+            self._normal = args[1]
 
         elif len(args) == 3:
             v1 = args[2] - args[0]
             v2 = args[1] - args[0]
 
-            self.normal = np.cross(v1, v2) / np.linalg.norm(np.cross(v1, v2))
-            self.point = args[0]
 
-        self.d = -self.normal.dot(self.point)
+            self._normal = np.cross(v1, v2) / np.linalg.norm(np.cross(v1, v2))
+            self._point = args[0]
+
+        self.d = -self._normal.dot(self._point)
 
     def __repr__(self):
-        return "Plane(point={}, normal={})".format(self.point, self.normal)
+        return "Plane(point={}, normal={})".format(self._point, self._normal)
     
     def __eq__(self, other):
-        return np.array_equal(self.point, other.point) and np.array_equal(self.normal, other.normal)
+        return np.array_equal(self._point, other.point) and np.array_equal(self._normal, other.normal)
     
+    @property
+    def point(self):
+        return self._point
+    
+    @point.setter
+    def point(self, value):
+        self._point = np.array(value)
+
+    @property
+    def normal(self):
+        return self._normal
+    
+    @normal.setter
+    def normal(self, value):
+        self._normal = np.array(value)
+            
+
     def intersectQ(self, other, atol=1e-6):
         """
         Checks if the plane intersects another plane or ray3d
