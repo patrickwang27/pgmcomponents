@@ -34,7 +34,9 @@ class Grating(object):
     order : int
         The diffraction order of the grating
     dimensions : array_like
-        The dimensions of the grating in mm [length, width, height]
+        The dimensions of the grating in mm [length, width, height],
+        dimensions are also accessible with lambda functions as:
+        self._length(), self._width(), self._height()
     
     Attributes
     ----------
@@ -63,7 +65,9 @@ class Grating(object):
         self._alpha = None
         self._beta = None
         self._dimensions = dimensions
-    
+        self._length = lambda: self._dimensions[0]
+        self._width = lambda: self._dimensions[1]
+        self._height = lambda: self._dimensions[2]
     def __repr__(self):
         return "Grating(line_density={}, energy={}, cff={}, order={}, dimensions={})".format(self.line_density, 
                                                                                              self.energy, 
@@ -245,6 +249,10 @@ class Plane_Mirror(object):
             The horizontal offset of the mirror axis in mm
         dimensions : array_like
             The dimensions of the mirror in mm [length, width, height]
+            Dimensions are also accessible with lambda functions as:
+            self._length(), self._width(), self._height()
+
+        
         theta : float
             The angle of the mirror in degrees
         plane : Plane
@@ -257,7 +265,9 @@ class Plane_Mirror(object):
         self._axis_voffset = axis_voffset
         self._axis_hoffset = axis_hoffset
         self._dimensions = dimensions
-
+        self._length = lambda: dimensions[0]
+        self._width = lambda: dimensions[1]
+        self._height = lambda: dimensions[2]
         self._plane = plane
         self._theta = theta
         _ = self.compute_corners()
@@ -358,6 +368,15 @@ class Plane_Mirror(object):
     @plane.setter
     def plane(self, value):
         self._plane = value
+    
+    @property
+    def theta(self):
+        return self._theta
+    
+    @theta.setter
+    def theta(self, value):
+        self._theta = value
+    
 
     def set_position(self, position):
         self._plane.position = position
@@ -501,6 +520,49 @@ class Plane_Mirror(object):
         mirror = cls()
         mirror.read_file(filename)
         return mirror
+
+    def reflect(self, *args):
+        """
+        A method to reflect rays off the mirror.
+
+        Parameters
+        ----------
+        *args : Ray3D
+            The rays to be reflected
+
+        Returns
+        -------
+        reflected_rays : list
+            A list of reflected rays
+
+        """
+        reflected_rays = []
+        
+        if len(args) == 0:
+            raise ValueError("Expected at least one ray")
+        
+        if type(args[0]) == list:
+            args = args[0]
+        
+
+        for index, ray in enumerate(args):
+            if not isinstance(ray, Ray3D):
+                raise TypeError("Expected Ray3D object")
+            try:
+                plane_intersection = self._plane.intersectQ(ray)
+            except ValueError:
+                print(f'Ray of index {index} does not intersect mirror, tread with caution!')
+                continue
+            ray_array = ray.vector
+            mirror_normal = self._plane.normal
+            reflected_ray_array = ray_array - 2 * np.dot(ray_array, mirror_normal) * mirror_normal
+            reflected_ray_array = reflected_ray_array / np.linalg.norm(reflected_ray_array)
+            reflected_ray = Ray3D(plane_intersection, reflected_ray_array)
+            reflected_rays.append(reflected_ray)
+        
+        return reflected_rays
+    
+            
 
 class PGM(object):
     """

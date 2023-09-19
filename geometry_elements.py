@@ -374,5 +374,4 @@ class Plane(object):
                 return True, plane_intersect
             
             else:
-                return False, None
-    
+                raise ValueError("The plane and ray are parallel")    
