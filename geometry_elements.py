@@ -10,7 +10,7 @@ Date: 2023-09-15
 
 """
 import numpy as np
-
+from light import Ray3D
 
 
 class Vector3D(object):
@@ -335,3 +335,44 @@ class Plane(object):
 
             self.normal = np.cross(v1, v2) / np.linalg.norm(np.cross(v1, v2))
             self.point = args[0]
+
+        self.d = -self.normal.dot(self.point)
+
+    def __repr__(self):
+        return "Plane(point={}, normal={})".format(self.point, self.normal)
+    
+    def __eq__(self, other):
+        return np.array_equal(self.point, other.point) and np.array_equal(self.normal, other.normal)
+    
+    def intersectQ(self, other, atol=1e-6):
+        """
+        Checks if the plane intersects another plane or ray3d
+
+        Parameters
+        ----------
+        other : Plane or Ray3D
+            The other plane or ray3d
+        atol : float
+            The absolute tolerance for the dot product of the normal vectors
+
+        Returns
+        ----------
+        bool
+            True if the plane intersects the other plane or ray3d, False otherwise
+        Point3D or None
+            The point of intersection if the plane intersects the other plane or ray3d, None otherwise
+        """
+
+        if isinstance(other, Plane):
+            return not np.isclose(self.normal.dot(other.normal), 1.0, atol=atol), None
+
+        elif isinstance(other, Ray3D):
+            if not np.isclose(self.normal.dot(other.direction), 0.0, atol=atol):
+                w = other.point - self.point
+                fac = -self.normal.dot(w) / self.normal.dot(other.vector)
+                plane_intersect = w + fac * other.vector + self.point
+                return True, plane_intersect
+            
+            else:
+                return False, None
+    
