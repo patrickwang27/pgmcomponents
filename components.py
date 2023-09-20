@@ -92,6 +92,10 @@ class Grating(object):
         self._length = lambda: self._dimensions[0]
         self._width = lambda: self._dimensions[1]
         self._height = lambda: self._dimensions[2]
+        _ = self.compute_corners()
+
+        
+
     def __repr__(self):
         return "Grating(line_density={},\n energy={}, \n cff={}, \n order={}, \n dimensions={})".format(self.line_density, 
                                                                                              self.energy, 
