@@ -225,7 +225,7 @@ class Grating(object):
 
         return self._alpha, self._beta
 
-    def diffract(self, rays):
+    def diffract(self, *args):
         """
         A method to diffract rays off the grating.
 
@@ -241,13 +241,15 @@ class Grating(object):
 
         """
         diffracted_rays = []
-        if len(rays) == 0:
+        
+        if len(args) == 0:
             raise ValueError("Expected at least one ray")
         
-        if type(rays[0]) == list:
-            rays = rays[0]
-        
-        for index, ray in enumerate(rays):
+        if type(args[0]) == list:
+            args = args[0]
+
+
+        for index, ray in enumerate(args):
             if not isinstance(ray, Ray3D):
                 raise TypeError("Expected Ray3D object")
             raydotplane = ray.vector.dot(self._grating_plane.normal)
@@ -255,6 +257,10 @@ class Grating(object):
             alpha = np.rad2deg(np.pi/2-angle)
             beta = self.calc_beta(alpha, self._line_density, self._energy, self._order)
             diff_ray = self.reflect(ray)
+            angle = -90 - beta - alpha
+            diff_ray.vector[2] += np.cos(np.deg2rad(angle))
+            diff_ray.vector[1] += np.sin(np.deg2rad(angle))
+            diff_ray.vector.normalize()
             diffracted_rays.append(diff_ray)
         return diffracted_rays
     
@@ -500,9 +506,9 @@ class Plane_Mirror(object):
         self._axis_voffset = axis_voffset
         self._axis_hoffset = axis_hoffset
         self._dimensions = dimensions
-        self._length = lambda: dimensions[0]
-        self._width = lambda: dimensions[1]
-        self._height = lambda: dimensions[2]
+        self._length = lambda: self._dimensions[0]
+        self._width = lambda: self._dimensions[1]
+        self._height = lambda: self._dimensions[2]
         self._plane = plane
         self._theta = theta
         _ = self.compute_corners()
@@ -518,9 +524,9 @@ class Plane_Mirror(object):
                             self.hoffset, 
                             self.axis_voffset, 
                             self.axis_hoffset, 
-                            self.length, 
-                            self.width, 
-                            self.height, 
+                            self._length(), 
+                            self._width(), 
+                            self._height(), 
                             self.plane)
     
     def read_file(self, filename):
@@ -664,9 +670,9 @@ class Plane_Mirror(object):
         c = self._voffset
         v = self._axis_voffset
         h = self._axis_hoffset
-        w = self._width
-        l = self._length
-        d = self._height
+        w = self._width()
+        l = self._length()
+        d = self._height()
         #Top left front
 
         tlfz = -((a - c * np.tan(theta_g)) * np.cos(theta_g)) + h
@@ -793,8 +799,6 @@ class Plane_Mirror(object):
             reflected_rays.append(reflected_ray)
         
         return reflected_rays
-    
-
             
 
 class PGM(object):
@@ -803,28 +807,135 @@ class PGM(object):
 
     Parameters
     ----------
-    grating : Grating
-        The grating of the PGM
-    mirror : Mirror
-        The mirror of the PGM
-    mirror_voffset : float
-        The vertical offset of the mirror in mm
-    mirror_hoffset : float
-        The horizontal offset of the mirror in mm
-    mirror_axis_voffset : float
-        The vertical offset of the mirror axis in mm
-    mirror_axis_hoffset : float
-        The horizontal offset of the mirror axis in mm
-    mirror_leng
     """
 
-    def __init__(self, grating = Grating()):
-        self._grating = grating
-        self._mirror_voffset = 20
-        self._mirror_hoffset = 0
-        self._mirror_axis_voffset = 0
-        self._mirror_axis_hoffset = 0
-        self._mirror_length = 450
-        self._mirror_width = 70
-        self._mirror_height = 50
+    def __init__(self, grating = None, mirror = None, **kwargs):
         
+        if grating is None:
+            grating_kwargs = [
+                'line_density',
+                'energy',
+                'cff',
+                'order',
+                'grating_dimensions'
+            ]
+            grating_kwarg_keys = [
+                'line_density',
+                'energy',
+                'cff',
+                'order',
+                'dimensions'
+            ]
+        
+            grating_args = [kwargs.get(x) for x in grating_kwargs]
+            grating_kwargs = dict(zip(grating_kwarg_keys, grating_args))
+            self._grating = Grating(**grating_kwargs)
+
+        else:
+            self._grating = grating
+        
+        if mirror is None:
+            mirror_kwargs = [
+                'voffset',
+                'hoffset',
+                'axis_voffset',
+                'axis_hoffset',
+                'mirror_dimensions',
+                'theta'
+            ]
+            mirror_kwarg_keys = [
+                'voffset',
+                'hoffset',
+                'axis_voffset',
+                'axis_hoffset',
+                'dimensions',
+                'theta'
+            ]
+        
+            mirror_args = [kwargs.get(x) for x in mirror_kwargs]
+            mirror_kwargs = dict(zip(mirror_kwarg_keys, mirror_args))
+            self._mirror = Plane_Mirror(**mirror_kwargs)
+        
+        else:
+            self._mirror = mirror
+
+
+    def __repr__(self):
+        return """PGM(grating={}, mirror={})""".format(self.grating, self.mirror)
+    
+    def read_file(self, filename):
+        """
+        Read PGM parameters from a file. 
+        See config_pgm.ini for an example.
+        The config file should contain a grating and a mirror section.
+
+        Parameters
+        ----------
+        filename : str
+            The name of the file to read from
+        """
+        
+        self._grating.read_file(filename)
+        self._mirror.read_file(filename)
+
+    @classmethod
+
+    def pgm_from_file(cls, filename):
+        """
+        Create a PGM from a file. 
+        See config_pgm.ini for an example.
+        The config file should contain a grating and a mirror section.
+
+        Parameters
+        ----------
+        filename : str
+            The name of the file to read from
+        """
+        pgm = cls()
+        pgm.read_file(filename)
+        return pgm
+
+    def propagate(self, *args):
+        """
+        Propagate rays through the PGM setup.
+
+        Parameters
+        ----------
+        *args : Ray3D
+            The rays to be propagated
+        
+        Returns
+        -------
+        propagated_rays : list
+            A list of propagated rays
+
+        """
+        _ = self._mirror.compute_corners()
+        _ = self._grating.compute_corners()
+
+        mirr_ray = self._mirror.reflect(*args)
+        grating_ray = self._grating.diffract(*mirr_ray)
+        mirror_intercept = [mirr_ray.position for mirr_ray in mirr_ray]
+        grating_intercept = [grating_ray.position for grating_ray in grating_ray]
+        propagated_rays = []
+
+        return grating_ray, mirror_intercept, grating_intercept
+
+    @property
+    def grating(self):
+        return self._grating
+    
+    @grating.setter
+    def grating(self, value):
+        self._grating = value
+
+    @property
+    def mirror(self):
+        return self._mirror
+    
+    @mirror.setter
+    def mirror(self, value):
+        self._mirror = value
+
+    
+

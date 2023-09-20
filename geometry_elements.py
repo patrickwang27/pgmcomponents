@@ -384,6 +384,11 @@ class Point3D(object):
     def z(self, value):
         self._point[2] = value
 
+    @property
+    def list(self):
+        return self._point.tolist()
+    
+    
 
 class Plane(object):
     """
