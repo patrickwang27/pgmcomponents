@@ -92,9 +92,10 @@ class Grating(object):
         self._length = lambda: self._dimensions[0]
         self._width = lambda: self._dimensions[1]
         self._height = lambda: self._dimensions[2]
-        _ = self.compute_corners()
+        #_,_ = self.compute_angles()
+        #_ = self.compute_corners()
 
-        
+
 
     def __repr__(self):
         return "Grating(line_density={},\n energy={}, \n cff={}, \n order={}, \n dimensions={})".format(self.line_density, 
@@ -239,7 +240,7 @@ class Grating(object):
             The diffraction angle in degrees
         
         """
-        wavelength = wavelength(self.energy)
+        wavelength = self.wavelength(self.energy)
         lambda_u = self.order*self.line_density*1000*wavelength/(1-self.cff**2)
         sin_alpha = lambda_u + np.sqrt(1+lambda_u**2*self.cff**2)
         self._alpha = np.rad2deg(np.arcsin(sin_alpha))
@@ -320,8 +321,8 @@ class Grating(object):
         
         return beta
     
-    def wavelength(self):
-        return 12398.42 / self.energy
+    def wavelength(self, energy):
+        return 12398.42 / energy
     
     def compute_corners(self):
         beta_g = np.deg2rad(self._beta + 90)
