@@ -54,6 +54,16 @@ class Grating(object):
         The diffraction angle of the beam in degrees
     dimensions : array_like
         The dimensions of the grating in mm
+    corners : array_like
+        The corners of the grating in the global coordinate system:
+        [bottom left back, 
+        bottom right back, 
+        bottom left front, 
+        bottom right front,
+        top left back,
+        top right back,
+        top left front,
+        top right front]
 
     Methods
     -------
@@ -83,7 +93,7 @@ class Grating(object):
         self._width = lambda: self._dimensions[1]
         self._height = lambda: self._dimensions[2]
     def __repr__(self):
-        return "Grating(line_density={}, energy={}, cff={}, order={}, dimensions={})".format(self.line_density, 
+        return "Grating(line_density={},\n energy={}, \n cff={}, \n order={}, \n dimensions={})".format(self.line_density, 
                                                                                              self.energy, 
                                                                                              self.cff, 
                                                                                              self.order, 
@@ -188,6 +198,14 @@ class Grating(object):
         self._alpha = alpha
         self._beta = beta
         self._cff = self.cff
+
+    @property
+    def corners(self):
+        return self._corners
+    
+    @corners.setter
+    def corners(self, value):
+        raise AttributeError("Corners should be calculated via compute_corners().")
 
     @staticmethod
     def compute_beta(alpha, line_density, energy, order):
@@ -456,10 +474,18 @@ class Plane_Mirror(object):
     orientation : Vector3D
         The orientation of the mirror
     corners : array_like
-        The corners of the mirror in the global coordinate system
+        The corners of the grating in the global coordinate system:
+        [bottom left back, 
+        bottom right back, 
+        bottom left front, 
+        bottom right front,
+        top left back,
+        top right back,
+        top left front,
+        top right front]
     plane : Plane
         The plane of the mirror
-        
+    
 
     Methods
     -------
@@ -618,6 +644,13 @@ class Plane_Mirror(object):
     def theta(self, value):
         self._theta = value
     
+    @property
+    def corners(self):
+        return self._corners
+    
+    @corners.setter
+    def corners(self, value):
+        raise AttributeError("Corners should be calculated via compute_corners().")
 
     def set_position(self, position):
         self._plane.position = position
