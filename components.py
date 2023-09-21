@@ -13,11 +13,12 @@ Date: 2023-09-15
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Rectangle, Polygon
+from matplotlib import axes
 from matplotlib.collections import PatchCollection
 import configparser
 from scipy.constants import c, h, e
 from geometry_elements import Plane, Point3D, Vector3D, Ray3D
-
+from scipy.spatial import ConvexHull
 class Grating(object):
     """
     A class for a simple grating
@@ -325,6 +326,7 @@ class Grating(object):
         return h*c/(e*energy)
     
     def compute_corners(self):
+        beta = np.deg2rad(self._beta)
         beta_g = np.deg2rad(self._beta + 90)
         l = self._length()
         w = self._width()
@@ -702,6 +704,7 @@ class Plane_Mirror(object):
         corners : array_like
             The corners of the mirror in the global coordinate system
         """
+        theta = np.deg2rad(self.theta)
         theta_g = 90 - self._theta
         theta_g = np.deg2rad(theta_g)
         a = self._hoffset
@@ -714,7 +717,7 @@ class Plane_Mirror(object):
         #Top left front
 
         tlfz = -((a - c * np.tan(theta_g)) * np.cos(theta_g)) + h
-        tlfy = -(c / np.cos(theta_g) + 
+        tlfy = -(c / np.sin(theta) + 
                  (a - c*np.tan(theta_g)) * np.sin(theta_g)) + v
         tlfx = -w/2
         tlf = Point3D(tlfx, tlfy, tlfz)
@@ -985,5 +988,27 @@ class PGM(object):
     def mirror(self, value):
         self._mirror = value
 
-    
+    def draw(self, ax):
+        """
+        Draws the setup on a y-z projection on a given axis.
 
+        Parameters
+        ----------
+        ax : matplotlib.axes
+            The axis to draw on
+
+        """
+        mirror_corners = self.mirror.compute_corners()
+        grating_corners = self.grating.compute_corners()
+        mirror_corners_y, mirror_corners_z = mirror_corners[::2,1], mirror_corners[::2,2]
+        mirror_corners_yz = np.array([mirror_corners_z, mirror_corners_y]).T
+        hull_grating = ConvexHull(mirror_corners_yz)
+
+        grating_corners_y, grating_corners_z = grating_corners[::2,1], grating_corners[::2,2]
+        grating_corners_yz = np.array([grating_corners_z, grating_corners_y]).T
+        hull_mirror = ConvexHull(grating_corners_yz)
+
+        ax.fill(mirror_corners_yz[hull_mirror.vertices,0], mirror_corners_yz[hull_mirror.vertices,1], 'r')
+        ax.fill(grating_corners_yz[hull_grating.vertices,0], grating_corners_yz[hull_grating.vertices,1], 'b')
+
+        return ax
