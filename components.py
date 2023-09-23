@@ -71,7 +71,7 @@ class Grating(object):
         |-----------Top------------|
         |                          |
        Left   Grating Plane      Right
-        |                          |
+        |                          |      ----> +z direction
         |----------Bottom----------|
         [top, bottom, left, right]
     Methods
@@ -523,7 +523,7 @@ class Plane_Mirror(object):
         |-----------Top------------|
         |                          |
        Left   Mirror Plane       Right
-        |                          |
+        |                          |       ---> +z direction
         |----------Bottom----------|
         [top, bottom, left, right]
     Methods
