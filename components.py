@@ -546,7 +546,7 @@ class Plane_Mirror(object):
                  axis_hoffset=0, 
                  dimensions = np.array([450, 70, 50]),
                  theta=45, 
-                 plane=Plane()
+                 plane=Plane(),
                  borders = np.array([0,0,0,0])
                  ):
         """
