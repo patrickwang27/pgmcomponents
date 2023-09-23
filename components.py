@@ -66,7 +66,14 @@ class Grating(object):
         top right back,
         top left front,
         top right front]
-
+    borders : array_like
+        Specifies the borders of a realistic grating component.
+        |-----------Top------------|
+        |                          |
+       Left   Grating Plane      Right
+        |                          |
+        |----------Bottom----------|
+        [top, bottom, left, right]
     Methods
     -------
     set_angles(alpha, beta)
@@ -82,7 +89,7 @@ class Grating(object):
 
 
     """
-    def __init__(self, line_density=600, energy=250, cff=2, order=1, dimensions = np.array([1,1,1])):
+    def __init__(self, line_density=600, energy=250, cff=2, order=1, dimensions = np.array([1,1,1]), borders = np.array([0,0,0,0])):
 
         self._line_density=line_density
         self._energy=energy
@@ -94,6 +101,7 @@ class Grating(object):
         self._length = lambda: self._dimensions[0]
         self._width = lambda: self._dimensions[1]
         self._height = lambda: self._dimensions[2]
+        self._borders = borders
         _,_ = self.compute_angles()
         _ = self.compute_corners()
 
@@ -192,7 +200,22 @@ class Grating(object):
     
     @dimensions.setter
     def dimensions(self, value):
+        if len(value) != 3:
+            raise ValueError("Expected exactly three values for dimensions")
         self._dimensions = value
+
+
+    @property
+    def borders(self):
+        return self._borders
+    
+    @borders.setter
+
+    def borders(self, value):
+        if len(value) != 4:
+            raise ValueError("Expected exactly four values for borders")
+        self._borders = value
+
 
     def set_angles(self, alpha, beta):
         wavelength = (np.sin(np.deg2rad(alpha)) + np.sin(np.deg2rad(beta))) / (self.line_density*1000*self._order)
@@ -493,7 +516,16 @@ class Plane_Mirror(object):
     plane : Plane
         The plane of the mirror
     
-
+    borders: array_like
+        Specifies the borders for a realistic plane mirror:
+        borders : array_like
+        Specifies the borders of a realistic grating component.
+        |-----------Top------------|
+        |                          |
+       Left   Mirror Plane       Right
+        |                          |
+        |----------Bottom----------|
+        [top, bottom, left, right]
     Methods
     -------
     set_position(position)
@@ -507,7 +539,16 @@ class Plane_Mirror(object):
     
     """
 
-    def __init__(self, voffset=20, hoffset=0, axis_voffset=0, axis_hoffset=0, dimensions = np.array([450, 70, 50]),theta=45, plane=Plane()):
+    def __init__(self, 
+                 voffset=20, 
+                 hoffset=0, 
+                 axis_voffset=0, 
+                 axis_hoffset=0, 
+                 dimensions = np.array([450, 70, 50]),
+                 theta=45, 
+                 plane=Plane()
+                 borders = np.array([0,0,0,0])
+                 ):
         """
         Constructor for the Plane_Mirror class.
 
@@ -545,6 +586,7 @@ class Plane_Mirror(object):
         self._plane = plane
         self._theta = theta
         _ = self.compute_corners()
+        self._borders = borders
     def __repr__(self):
         return """Plane_Mirror(voffset={}, 
         hoffset={}, 
@@ -658,6 +700,17 @@ class Plane_Mirror(object):
     @corners.setter
     def corners(self, value):
         raise AttributeError("Corners should be calculated via compute_corners().")
+
+    @property
+    def borders(self):
+        return self._borders
+    
+    @borders.setter
+    def borders(self, value):
+        if len(value) != 4:
+            raise ValueError("Expected exactly four values for borders")
+        self._borders = value
+
 
     def set_position(self, position):
         self._plane.position = position
