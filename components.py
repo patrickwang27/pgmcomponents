@@ -142,7 +142,7 @@ class Grating(object):
             print(key)
             print(value)
         
-        
+        self._order = int(self._order)
         self._dimensions = np.array([float(x) for x in config['grating']['dimensions'].split(',')])
 
 
@@ -1055,6 +1055,8 @@ class PGM(object):
         grating_corners = self.grating.compute_corners()
         mirror_corners_y, mirror_corners_z = mirror_corners[::2,1], mirror_corners[::2,2]
         mirror_corners_yz = np.array([mirror_corners_z, mirror_corners_y]).T
+        # ConvelHull method used to ensure the entire region is filled regardless
+        # of point order.
         hull_grating = ConvexHull(mirror_corners_yz)
 
         grating_corners_y, grating_corners_z = grating_corners[::2,1], grating_corners[::2,2]
