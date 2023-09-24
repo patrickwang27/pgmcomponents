@@ -325,7 +325,7 @@ class Point3D(object):
         return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
     
     def __sub__(self, other):
-        return Point3D(self.x - other.x, self.y - other.y, self.z - other.z)
+        return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
     
     def __eq__(self, other):
         return np.array_equal(self._point, other._point)
