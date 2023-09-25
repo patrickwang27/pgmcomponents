@@ -86,8 +86,8 @@ class Grating(object):
         A method to diffract rays off the grating
     compute_beta(alpha, line_density, energy, order)
         Calculate the diffraction angle beta from the incident angle alpha
-
-
+    reflect(*args)
+        A method to 'reflect' rays off the grating
     """
     def __init__(self, line_density=600, energy=250, cff=2, order=1, dimensions = np.array([1,1,1]), borders = np.array([0,0,0,0])):
 
@@ -535,7 +535,12 @@ class Plane_Mirror(object):
     set_orientation(orientation)
         Set the orientation of the mirror
     set_dimensions(*args)
-
+        Set the dimensions of the mirror
+    set_offsets(voffset, hoffset, axis_voffset, axis_hoffset)
+        Set the offsets of the mirror
+    compute_corners()
+        Compute the corners of the mirror in the global coordinate system,  
+    
     
     """
 
@@ -901,10 +906,49 @@ class PGM(object):
 
     Parameters
     ----------
+    grating : Grating
+        The grating component of the PGM
+    mirror : Plane_Mirror
+        The mirror component of the PGM
+
+    Attributes
+    ----------
+    grating : Grating
+        The grating component of the PGM
+    mirror : Plane_Mirror
+        The mirror component of the PGM
+
+    Methods
+    -------
+    read_file(filename)
+        Read PGM parameters from a file. 
+        See config_pgm.ini for an example.
+        The config file should contain a grating and a mirror section.
+    propagate(*args)
+        Propagate rays through the PGM setup.
+    draw_sideview(ax)
+        Draws the setup on a y-z projection on a given axis.
+    draw_topview(ax)
+        Draws the setup on a x-z projection on a given axis, along with the beam footprints.
     """
 
     def __init__(self, grating = None, mirror = None, **kwargs):
+        """
         
+        Constructor for the PGM class.
+        
+        Parameters
+        ----------
+        grating : Grating
+            The grating component of the PGM
+        mirror : Plane_Mirror
+            The mirror component of the PGM
+        **kwargs : 
+            Keyword arguments for the grating and mirror components.
+            See Grating and Plane_Mirror classes for details.
+
+        
+        """
         if grating is None:
             grating_kwargs = [
                 'line_density',
@@ -953,10 +997,44 @@ class PGM(object):
         else:
             self._mirror = mirror
 
+        
+        self._rays = []
+        self._beam_offset = 0 
+        self._beam_width = 0
+        self._beam_height = 0
 
     def __repr__(self):
         return """PGM(grating={}, mirror={})""".format(self.grating, self.mirror)
     
+    def generate_rays(self):
+        """
+        Generate rays for the PGM setup.
+        """
+        
+        r0 = Ray3D(Point3D(0, self.beam_offset, -1000),
+                   Point3D(0, self.beam_offset, 0)-
+                   Point3D(0, self.beam_offset, -1000))
+        
+        r1 = Ray3D(Point3D(0, self.beam_offset + self.beam_height/2, -1000),
+                   Point3D(0, self.beam_offset + self.beam_height/2, 0)-
+                     Point3D(0, self.beam_offset + self.beam_height/2, -1000)
+                   )
+
+        r2 = Ray3D(Point3D(0, self.beam_offset - self.beam_height/2, -1000),
+                   Point3D(0, self.beam_offset - self.beam_height/2, 0) -
+                   Point3D(0, self.beam_offset - self.beam_height/2, -1000))
+
+        r3 = Ray3D(Point3D(-self.beam_width/2, self.beam_offset, -1000),
+                   Point3D(-self.beam_width/2, self.beam_offset, 0) -
+                   Point3D(-self.beam_width/2, self.beam_offset, -1000))
+
+        r4 = Ray3D(Point3D(self.beam_width/2, self.beam_offset, -1000),
+                   Point3D(self.beam_width/2, self.beam_offset, 0) -
+                   Point3D(self.beam_width/2, self.beam_offset, -1000))
+
+        self._rays = [r0, r1, r2, r3, r4]
+
+
     def read_file(self, filename):
         """
         Read PGM parameters from a file. 
@@ -971,6 +1049,14 @@ class PGM(object):
         
         self._grating.read_file(filename)
         self._mirror.read_file(filename)
+        pgm_config = configparser.ConfigParser()
+        pgm_config.read(filename)
+
+        self._energy = float(pgm_config['beam']['energy'])
+        self._beam_offset = float(pgm_config['beam']['beam_offset'])
+        self._beam_width = float(pgm_config['beam']['beam_width'])
+        self._beam_height = float(pgm_config['beam']['beam_height'])
+    
 
     @property
 
@@ -1021,7 +1107,7 @@ class PGM(object):
         grating_ray = self._grating.diffract(*mirr_ray)
         mirror_intercept = [mirr_ray.position for mirr_ray in mirr_ray]
         grating_intercept = [grating_ray.position for grating_ray in grating_ray]
-        propagated_rays = []
+
 
         return grating_ray, mirror_intercept, grating_intercept
 
@@ -1041,7 +1127,41 @@ class PGM(object):
     def mirror(self, value):
         self._mirror = value
 
-    def draw(self, ax):
+    @property
+    def rays(self):
+        return self._rays
+    
+    @rays.setter
+    def rays(self, value):
+        self._rays = value
+
+    @property
+    def beam_offset(self):
+        return self._beam_offset
+    
+    @beam_offset.setter
+    def beam_offset(self, value):
+        self._beam_offset = value
+    
+    @property
+    def beam_width(self):
+        return self._beam_width
+    
+    @beam_width.setter
+    def beam_width(self, value):
+        self._beam_width = value
+
+    @property
+    def beam_height(self):
+        return self._beam_height
+    
+    @beam_height.setter
+    def beam_height(self, value):
+        self._beam_height = value
+
+    
+    
+    def draw_sideview(self, ax):
         """
         Draws the setup on a y-z projection on a given axis.
 
@@ -1066,4 +1186,15 @@ class PGM(object):
         ax.fill(mirror_corners_yz[hull_mirror.vertices,0], mirror_corners_yz[hull_mirror.vertices,1], 'r')
         ax.fill(grating_corners_yz[hull_grating.vertices,0], grating_corners_yz[hull_grating.vertices,1], 'b')
 
-        return ax
+        return 
+    
+    def draw_topview(self, ax):
+        """
+        Draws the top-view (x-z projection) of the setup on a given axis.
+
+        Parameters
+        ----------
+        ax : matplotlib.axes
+            The axis to draw on
+        """
+
