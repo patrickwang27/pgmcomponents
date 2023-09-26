@@ -349,14 +349,15 @@ class Grating(object):
         return h*c/(e*energy)
     
     def compute_corners(self):
+        
         beta = np.deg2rad(self._beta)
         beta_g = np.deg2rad(self._beta + 90)
         l = self._length()
         w = self._width()
         d = self._height()        
         #Bottom left back
-        blbz = -(l/2)*np.cos(beta_g)
-        blby = -(l/2)*np.sin(beta_g)
+        blbz = (l/2)*np.sin(beta)
+        blby = -(l/2)*np.cos(beta)
         blbx = -w/2
         blb = Point3D(blbx, blby, blbz)
         #Bottom right back
@@ -366,8 +367,8 @@ class Grating(object):
         brb = Point3D(brbx, brby, brbz)
 
         #Bottom left front
-        blfz = (l/2)*np.cos(beta_g)
-        blfy = (l/2)*np.sin(beta_g)
+        blfz = -(l/2)*np.sin(beta)
+        blfy = (l/2)*np.cos(beta)
         blfx = -w/2
         blf = Point3D(blfx, blfy, blfz)
 
@@ -378,26 +379,26 @@ class Grating(object):
         brf = Point3D(brfx, brfy, brfz)
 
         #Top left back
-        tlbz = blbz - d*np.sin(beta_g)
-        tlby = blby + d*np.cos(beta_g)
+        tlbz = blbz - d*np.cos(beta)
+        tlby = blby - d*np.sin(beta)
         tlbx = -w/2
         tlb = Point3D(tlbx, tlby, tlbz)
 
         #Top right back
-        trbz = brbz - d*np.sin(beta_g)
-        trby = brby + d*np.cos(beta_g)
+        trbz = brbz - d*np.cos(beta)
+        trby = brby - d*np.sin(beta)
         trbx = w/2
         trb = Point3D(trbx, trby, trbz)
 
         #Top left front
-        tlfz = blfz - d*np.sin(beta_g)
-        tlfy = blfy + d*np.cos(beta_g)
+        tlfz = blfz - d*np.cos(beta)
+        tlfy = blfy - d*np.sin(beta)
         tlfx = -w/2
         tlf = Point3D(tlfx, tlfy, tlfz)
 
         #Top right front
-        trfz = brfz - d*np.sin(beta_g)
-        trfy = brfy + d*np.cos(beta_g)
+        trfz = brfz - d*np.cos(beta)
+        trfy = brfy - d*np.sin(beta)
         trfx = w/2
         trf = Point3D(trfx, trfy, trfz)
 
@@ -524,7 +525,7 @@ class Plane_Mirror(object):
         |                          |
        Left   Mirror Plane       Right
         |                          |       ---> +z direction
-        |----------Bottom----------|
+        |----------Bottom----------|        
         [top, bottom, left, right]
     Methods
     -------
@@ -762,6 +763,7 @@ class Plane_Mirror(object):
         corners : array_like
             The corners of the mirror in the global coordinate system
         """
+        cot = lambda x: 1/np.tan(x)
         theta = np.deg2rad(self.theta)
         theta_g = 90 - self._theta
         theta_g = np.deg2rad(theta_g)
@@ -774,15 +776,15 @@ class Plane_Mirror(object):
         d = self._height()
         #Top left front
 
-        tlfz = -((a - c * np.tan(theta_g)) * np.cos(theta_g)) + h
+        tlfz = -((a - c * cot(theta)) * np.sin(theta)) + h
         tlfy = -(c / np.sin(theta) + 
-                 (a - c*np.tan(theta_g)) * np.sin(theta_g)) + v
+                 (a - c*cot(theta)) * np.cos(theta)) + v
         tlfx = -w/2
         tlf = Point3D(tlfx, tlfy, tlfz)
 
         #Bottom left front
-        blfz = tlfz + d*np.sin(theta_g)
-        blfy = tlfy - d*np.cos(theta_g)        
+        blfz = tlfz + d*np.cos(theta)
+        blfy = tlfy - d*np.sin(theta)        
         blfx = -w/2
         blf = Point3D(blfx, blfy, blfz)
 
@@ -799,14 +801,14 @@ class Plane_Mirror(object):
         brf = Point3D(brfx, brfy, brfz)
 
         #Top left back
-        tlbz = tlfz - l*np.cos(theta_g)
-        tlby = tlfy - l*np.sin(theta_g)
+        tlbz = tlfz - l*np.sin(theta)
+        tlby = tlfy - l*np.cos(theta)
         tlbx = -w/2
         tlb = Point3D(tlbx, tlby, tlbz)
 
         #Bottom left back
-        blbz = tlbz + d*np.sin(theta_g)
-        blby = tlby - d*np.cos(theta_g)
+        blbz = tlbz + d*np.cos(theta)
+        blby = tlby - d*np.sin(theta)
         blbx = -w/2
         blb = Point3D(blbx, blby, blbz)
 
@@ -1107,8 +1109,9 @@ class PGM(object):
         grating_ray = self._grating.diffract(*mirr_ray)
         mirror_intercept = [mirr_ray.position for mirr_ray in mirr_ray]
         grating_intercept = [grating_ray.position for grating_ray in grating_ray]
-
-
+        
+        self._mirror_intercept = mirror_intercept
+        self._grating_intercept = grating_intercept
         return grating_ray, mirror_intercept, grating_intercept
 
     @property
@@ -1159,6 +1162,13 @@ class PGM(object):
     def beam_height(self, value):
         self._beam_height = value
 
+    @property
+    def mirror_intercept(self):
+        return self._mirror_intercept
+    
+    @property
+    def grating_intercept(self):
+        return self._grating_intercept
     
     
     def draw_sideview(self, ax):
@@ -1198,3 +1208,71 @@ class PGM(object):
             The axis to draw on
         """
 
+        m_corners = self.mirror_corners()
+        g_corners = self.grating_corners()
+
+        mirror_rect = np.array([
+            [m_corners[2][0]]
+        ])
+
+        mirror_blx = self.mirror_intercept[3].x + self.mirror_width/2
+        mirror_blz = self.mirror_intercept[2].z
+        mirror_l = self.mirror_intercept[1].z - self.mirror_intercept[2].z
+        mirror_w = self.mirror_intercept[4].x - self.mirror_intercept[3].x
+
+        grating_blx = self.grating_intercept[3].x - self.grating_width/2
+        grating_blz = self.grating_intercept[2].z
+        grating_l = self.grating_intercept[1].z - self.grating_intercept[2].z
+        grating_w = self.grating_intercept[4].x - self.grating_intercept[3].x
+
+       
+        grating_corners = np.array([])
+
+
+
+    def mirror_corners(self):
+        a = self.mirror.hoffset
+        c = self.mirror.voffset
+        h = self.mirror.axis_voffset
+        theta = self.mirror.theta
+        w = self.mirror._width
+        l = self.mirror._length
+        theta_g = 90 - theta
+        theta_rad = theta_g*np.pi/180
+
+        tlfz = -((a - c * np.tan(theta_rad)) * np.cos(theta_rad)) + h
+        tlfx = -w/2
+
+        trfz = tlfz
+        trfx = w/2
+
+        tlbz = tlfz - l*np.cos(theta_rad)
+        tlbx = -w/2
+
+        trbz = tlbz
+        trbx = w/2
+
+        return ((tlfz, tlfx), (trfz, trfx), (tlbz, tlbx), (trbz, trbx))
+
+    def grating_corners(self):
+        
+        l = self.grating._length
+        w = self.grating._width
+        beta = self.grating.beta
+        
+        beta_g = 90 + beta
+        beta_rad = beta_g*np.pi/180
+
+        blbz = -(l/2)*np.cos(beta_rad)
+        blbx = -w/2
+
+        brbz = -(l/2)*np.cos(beta_rad)
+        brbx = w/2
+
+        blfz = (l/2)*np.cos(beta_rad)
+        blfx = -w/2
+
+        brfz = (l/2)*np.cos(beta_rad)
+        brfx = w/2
+
+        return ((blbz, blbx), (brbz, brbx), (blfz, blfx), (brfz, brfx))
