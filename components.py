@@ -1122,7 +1122,7 @@ class PGM(object):
     def grating(self, value):
         self._grating = value
 
-    @property
+    @property 
     def mirror(self):
         return self._mirror
     
@@ -1198,6 +1198,7 @@ class PGM(object):
 
         return 
     
+
     def draw_topview(self, ax):
         """
         Draws the top-view (x-z projection) of the setup on a given axis.
@@ -1212,9 +1213,45 @@ class PGM(object):
         g_corners = self.grating_corners()
 
         mirror_rect = np.array([
-            [m_corners[2][0]]
+            [m_corners[2][0], m_corners[2][1]+self.mirror._width()/2], #top left
+            [m_corners[2][0], m_corners[2][1]-self.mirror._width()/2], #bottom_left
+            [m_corners[2][0]+ self.mirror._length(), m_corners[2][1]-self.mirror._width()/2], #bottom_right
+            [m_corners[2][0]+ self.mirror._length(), m_corners[2][1]+self.mirror._width()/2]  #top_right
         ])
 
+        # Mirror the borders of the rectangular image
+        displacement = np.array([
+            [0, self.mirror._width()/2+ self.grating._width()/2],
+            [0, self.mirror._width()/2+ self.grating._width()/2],
+            [0, self.mirror._width()/2+ self.grating._width()/2],
+            [0, self.mirror._width()/2+ self.grating._width()/2]
+        ])
+        
+        mirror_rect_borders = np.array([
+            [mirror_rect[0][0] - self.mirror.borders[2], mirror_rect[0][1] + self.mirror.borders[0]],
+            [mirror_rect[1][0] - self.mirror.borders[2], mirror_rect[1][1] - self.mirror.borders[1]],
+            [mirror_rect[2][0] + self.mirror.borders[3], mirror_rect[2][1] - self.mirror.borders[1]],
+            [mirror_rect[3][0] + self.mirror.borders[3], mirror_rect[3][1] + self.mirror.borders[0]]])
+        
+        grating_rect = np.array([
+            [g_corners[0][0], g_corners[0][1] - self.grating._width()/2], #top left
+            [g_corners[0][0], g_corners[0][1] + self.grating._width()/2], #bottom_left
+            [g_corners[0][0] + self.grating._length(), g_corners[0][1] + self.grating._width()/2], #bottom_right
+            [g_corners[0][0] + self.grating._length(), g_corners[0][1] - self.grating._width()/2]  #top_right
+        ])
+
+        grating_rect = grating_rect + displacement
+
+        grating_rect_borders = np.array([
+            [grating_rect[0][0] + self.grating.borders[2], grating_rect[0][1] + self.grating.borders[0]],
+            [grating_rect[1][0] + self.grating.borders[2], grating_rect[1][1] - self.grating.borders[1]],
+            [grating_rect[2][0] - self.grating.borders[3], grating_rect[2][1] - self.grating.borders[1]],
+            [grating_rect[3][0] - self.grating.borders[3], grating_rect[3][1] + self.grating.borders[0]]])
+        
+
+
+        #Index denotes the ray i.e. mirror_intercept[0] is the ray_0
+        """
         mirror_blx = self.mirror_intercept[3].x + self.mirror_width/2
         mirror_blz = self.mirror_intercept[2].z
         mirror_l = self.mirror_intercept[1].z - self.mirror_intercept[2].z
@@ -1224,9 +1261,16 @@ class PGM(object):
         grating_blz = self.grating_intercept[2].z
         grating_l = self.grating_intercept[1].z - self.grating_intercept[2].z
         grating_w = self.grating_intercept[4].x - self.grating_intercept[3].x
+        """
 
-       
-        grating_corners = np.array([])
+        ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
+        ax.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
+        ax.fill(mirror_rect[:,0], mirror_rect[:,1], 'r',alpha=1)
+        ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5)
+        
+        #print(mirror_rect_hull.vertices)
+        print(ax.get_children())
+        return
 
 
 
@@ -1235,8 +1279,8 @@ class PGM(object):
         c = self.mirror.voffset
         h = self.mirror.axis_voffset
         theta = self.mirror.theta
-        w = self.mirror._width
-        l = self.mirror._length
+        w = self.mirror._width()
+        l = self.mirror._length()
         theta_g = 90 - theta
         theta_rad = theta_g*np.pi/180
 
@@ -1256,8 +1300,8 @@ class PGM(object):
 
     def grating_corners(self):
         
-        l = self.grating._length
-        w = self.grating._width
+        l = self.grating._length()
+        w = self.grating._width()
         beta = self.grating.beta
         
         beta_g = 90 + beta
@@ -1276,3 +1320,7 @@ class PGM(object):
         brfx = w/2
 
         return ((blbz, blbx), (brbz, brbx), (blfz, blfx), (brfz, brfx))
+    
+    @staticmethod
+    def undulator_size():
+        pass
