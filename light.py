@@ -63,7 +63,7 @@ class Ray3D(object):
     
     @vector.setter
     def vector(self, value):
-        self._vector = value.normalize()
+        self._vector = self._value / self.value.norm()
 
 class Image(object):
     """

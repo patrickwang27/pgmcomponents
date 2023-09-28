@@ -38,7 +38,7 @@ class Ray3D(object):
     """
     def __init__(self, position, vector):
         self._position = position
-        vector_mag = np.linalg.norm(vector)
+        vector_mag = vector.norm()
         if vector_mag == 0:
             raise ValueError("Vector magnitude cannot be zero")
         self._vector = vector / vector_mag
@@ -60,7 +60,7 @@ class Ray3D(object):
     
     @vector.setter
     def vector(self, value):
-        self._vector = value / np.linalg.norm(value)
+        self._vector = value.normalize()
 
 class Image(object):
     """
@@ -168,7 +168,7 @@ class Vector3D(object):
         return "Vector3D(x={}, y={}, z={})".format(self.x, self.y, self.z)
     
     def __add__(self, other):
-        return Vector3D(self.x + other[0], self.y + other[1], self.z + other[2])
+        return Vector3D(self.x + other.x, self.y + other.y, self.z + other.z)
     
     def __sub__(self, other):
         return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
@@ -453,14 +453,6 @@ class Plane(object):
     
     @point.setter
     def point(self, value):
-        self._point = np.array(value)
-
-    @property
-    def position(self):
-        return self._point
-    
-    @position.setter
-    def position(self, value):
         self._point = np.array(value)
 
     @property

@@ -300,14 +300,14 @@ class Grating(object):
             if not isinstance(ray, Ray3D):
                 raise TypeError("Expected Ray3D object")
             raydotplane = ray.vector.dot(self._grating_plane.normal)
-            angle = np.arccos(raydotplane/self._grating_plane.normal.norm())
+            angle = np.arccos(raydotplane/np.linalg.norm(self._grating_plane.normal))
             alpha = np.rad2deg(np.pi/2-angle)
-            beta = self.calc_beta(alpha, self._line_density, self._energy, self._order)
-            diff_ray = self.reflect(ray)
+            beta = self.compute_beta()
+            diff_ray = self.reflect(ray)[0]
             angle = -90 - beta - alpha
             diff_ray.vector[2] += np.cos(np.deg2rad(angle))
             diff_ray.vector[1] += np.sin(np.deg2rad(angle))
-            diff_ray.vector.normalize()
+            diff_ray.vector = diff_ray.vector/np.linalg.norm(diff_ray.vector)
             diffracted_rays.append(diff_ray)
         return diffracted_rays
     
@@ -336,7 +336,7 @@ class Grating(object):
         beta = 0 
 
         try:
-            wavelength = wavelength(energy)
+            wavelength = Grating.wavelength(energy)
             u = order*line_density*1000*wavelength - np.sin(np.deg2rad(alpha))
             beta = np.rad2deg(np.arcsin(u))
 
@@ -449,7 +449,7 @@ class Grating(object):
             if not isinstance(ray, Ray3D):
                 raise TypeError("Expected Ray3D object")
             try:
-                plane_intersection = self._grating_plane.intersectQ(ray)
+                _, plane_intersection = self._grating_plane.intersectQ(ray)
             except ValueError:
                 print(f'Ray of index {index} does not intersect grating, tread with caution!')
                 continue
@@ -888,7 +888,7 @@ class Plane_Mirror(object):
             if not isinstance(ray, Ray3D):
                 raise TypeError("Expected Ray3D object")
             try:
-                plane_intersection = self._plane.intersectQ(ray)
+                _, plane_intersection = self._plane.intersectQ(ray)
             except ValueError:
                 print(f'Ray of index {index} does not intersect mirror, tread with caution!')
                 continue
@@ -1070,6 +1070,65 @@ class PGM(object):
     def theta(self, value):
         self.theta = value
 
+    @property
+
+    def energy(self):
+        return self._energy
+    
+    @energy.setter
+    
+    def energy(self, value):
+        self._energy = value
+
+    @property
+    def grating(self):
+        return self._grating
+    
+    @grating.setter
+    def grating(self, value):
+        self._grating = value
+    
+    @property
+    def mirror(self):
+        return self._mirror
+    
+    @mirror.setter
+    def mirror(self, value):
+        self._mirror = value
+
+    @property
+    def rays(self):
+        return self._rays
+    
+    @rays.setter
+    def rays(self, value):
+        self._rays = value
+    
+    @property
+    def beam_offset(self):
+        return self._beam_offset
+    
+    @beam_offset.setter
+    def beam_offset(self, value):
+        self._beam_offset = value
+    
+    @property
+    def beam_width(self):
+        return self._beam_width
+    
+    @beam_width.setter
+    def beam_width(self, value):
+        self._beam_width = value
+    
+    @property
+    def beam_height(self):
+        return self._beam_height
+    
+    @beam_height.setter
+    def beam_height(self, value):
+        self._beam_height = value
+
+ 
     @classmethod
 
     def pgm_from_file(cls, filename):
@@ -1106,7 +1165,7 @@ class PGM(object):
         _ = self._grating.compute_corners()
 
         mirr_ray = self._mirror.reflect(*args)
-        grating_ray = self._grating.diffract(*mirr_ray)
+        grating_ray = self._grating.diffract(mirr_ray)
         mirror_intercept = [mirr_ray.position for mirr_ray in mirr_ray]
         grating_intercept = [grating_ray.position for grating_ray in grating_ray]
         
