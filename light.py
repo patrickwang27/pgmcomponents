@@ -132,7 +132,7 @@ def calc_beam_size(electron_size,
     if insertion_device == 'undulator':
         source_size = calc_source_size(electron_size, wavelength, length)
         source_div = calc_source_div(electron_div, wavelength, length)
-        return np.sqty(source_size**2 + (source_div*distance)**2)*1e3*num_of_sigmas
+        return np.sqrt(source_size**2 + (source_div*distance)**2)*1e3*num_of_sigmas
     else:
         raise NotImplementedError("Only undulator is currently supported")
         
@@ -158,7 +158,7 @@ def calc_source_size(electron_size, wavelength, length):
     float
         The RMS source size in m
     """
-    return np.sqty((electron_size*1e-6)**2 + (wavelength*length/(2*np.pi)**2))
+    return np.sqrt((electron_size*1e-6)**2 + (wavelength*length/(2*np.pi)**2))
 
 def calc_source_div(electron_div, wavelength, length):
     """
@@ -180,4 +180,4 @@ def calc_source_div(electron_div, wavelength, length):
     float
         The RMS source divergence in rad
     """
-    return np.sqty((electron_div*1e-6)**2 + (wavelength/(2*np.pi*length))**2)
+    return np.sqrt((electron_div*1e-6)**2 + (wavelength/(2*np.pi*length))**2)
