@@ -95,3 +95,89 @@ class Image(object):
     def __repr__(self):
         return "Image(width={}, height={}, h_div={}, v_div={})".format(self.width, self.height, self.h_div, self.v_div)
 
+def calc_beam_size(electron_size,
+                   electron_div,
+                   wavelength,
+                   distance,
+                   length,
+                   num_of_sigmas=3,
+                   insertion_device='undulator'
+                   ):
+    """
+    Calculate the beam size based on the electron size and divergence.
+
+    Parameters
+    ----------
+    electron_size : float
+        The electron size in um
+    electron_div : float
+        The electron divergence in urad
+    photon_energy : float
+        The photon energy in eV
+    distance : float
+        The distance from the source to the image plane in m
+    length : float
+        The length of the insertion device in m
+    num_of_sigmas : int
+        The number of sigmas to use when calculating the beam size
+    insertion_device : str
+        The type of insertion device, can be 'undulator' or 'wiggler', default is 'undulator'
+    
+    Returns
+    ----------
+    float
+        The RMS photon beam size at distance in mm
+
+    """
+    if insertion_device == 'undulator':
+        source_size = calc_source_size(electron_size, wavelength, length)
+        source_div = calc_source_div(electron_div, wavelength, length)
+        return np.sqty(source_size**2 + (source_div*distance)**2)*1e3*num_of_sigmas
+    else:
+        raise NotImplementedError("Only undulator is currently supported")
+        
+
+
+def calc_source_size(electron_size, wavelength, length):
+    """
+    Calculates the source size based on provided parameters.
+
+    Parameters
+    ----------
+    electron_size : float
+        The electron size in um
+
+    wavelength : float
+        The wavelength in nm
+    
+    length : float
+        The length of the insertion device in m
+    
+    Returns
+    ----------
+    float
+        The RMS source size in m
+    """
+    return np.sqty((electron_size*1e-6)**2 + (wavelength*length/(2*np.pi)**2))
+
+def calc_source_div(electron_div, wavelength, length):
+    """
+    Calculates the source divergence based on provided parameters.
+
+    Parameters
+    ----------
+    electron_div : float
+        The electron divergence in urad
+
+    wavelength : float
+        The wavelength in nm
+    
+    length : float
+        The length of the insertion device in m
+    
+    Returns
+    ----------
+    float
+        The RMS source divergence in rad
+    """
+    return np.sqty((electron_div*1e-6)**2 + (wavelength/(2*np.pi*length))**2)
