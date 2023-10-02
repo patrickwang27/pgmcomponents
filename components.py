@@ -19,6 +19,11 @@ import configparser
 from scipy.constants import c, h, e
 from geometry_elements import Plane, Point3D, Vector3D, Ray3D
 from scipy.spatial import ConvexHull
+from matplotlib.lines import Line2D
+
+
+
+
 class Grating(object):
     """
     A class for a simple grating
@@ -1128,51 +1133,6 @@ class PGM(object):
     def beam_height(self, value):
         self._beam_height = value
 
- 
-    @classmethod
-
-    def pgm_from_file(cls, filename):
-        """
-        Create a PGM from a file. 
-        See config_pgm.ini for an example.
-        The config file should contain a grating and a mirror section.
-
-        Parameters
-        ----------
-        filename : str
-            The name of the file to read from
-        """
-        pgm = cls()
-        pgm.read_file(filename)
-        return pgm
-
-    def propagate(self, *args):
-        """
-        Propagate rays through the PGM setup.
-
-        Parameters
-        ----------
-        *args : Ray3D
-            The rays to be propagated
-        
-        Returns
-        -------
-        propagated_rays : list
-            A list of propagated rays
-
-        """
-        _ = self._mirror.compute_corners()
-        _ = self._grating.compute_corners()
-
-        mirr_ray = self._mirror.reflect(*args)
-        grating_ray = self._grating.diffract(mirr_ray)
-        mirror_intercept = [mirr_ray.position for mirr_ray in mirr_ray]
-        grating_intercept = [grating_ray.position for grating_ray in grating_ray]
-        
-        self._mirror_intercept = mirror_intercept
-        self._grating_intercept = grating_intercept
-        return grating_ray, mirror_intercept, grating_intercept
-
     @property
     def grating(self):
         return self._grating
@@ -1229,7 +1189,51 @@ class PGM(object):
     def grating_intercept(self):
         return self._grating_intercept
     
-    
+    @classmethod
+
+    def pgm_from_file(cls, filename):
+        """
+        Create a PGM from a file. 
+        See config_pgm.ini for an example.
+        The config file should contain a grating and a mirror section.
+
+        Parameters
+        ----------
+        filename : str
+            The name of the file to read from
+        """
+        pgm = cls()
+        pgm.read_file(filename)
+        return pgm
+
+    def propagate(self, *args):
+        """
+        Propagate rays through the PGM setup.
+
+        Parameters
+        ----------
+        *args : Ray3D
+            The rays to be propagated
+        
+        Returns
+        -------
+        propagated_rays : list
+            A list of propagated rays
+
+        """
+        _ = self._mirror.compute_corners()
+        _ = self._grating.compute_corners()
+
+        mirr_ray = self._mirror.reflect(*args)
+        grating_ray = self._grating.diffract(mirr_ray)
+        mirror_intercept = [mirr_ray.position for mirr_ray in mirr_ray]
+        grating_intercept = [grating_ray.position for grating_ray in grating_ray]
+        
+        self._mirror_intercept = mirror_intercept
+        self._grating_intercept = grating_intercept
+        return grating_ray, mirror_intercept, grating_intercept
+
+
     def draw_sideview(self, ax):
         """
         Draws the setup on a y-z projection on a given axis.
@@ -1255,8 +1259,28 @@ class PGM(object):
         ax.fill(mirror_corners_yz[hull_mirror.vertices,0], mirror_corners_yz[hull_mirror.vertices,1], 'r')
         ax.fill(grating_corners_yz[hull_grating.vertices,0], grating_corners_yz[hull_grating.vertices,1], 'b')
 
+        grating_ray, mirror_int, grating_int = self.propagate(self.rays)
+        """
+        for index, ray in enumerate(grating_ray):
+            r_z = np.array([
+            self.rays[index].position.z,
+            mirror_int[index].z,
+            grating_int[index].z,
+            1000*grating_ray[index].vector[-1]
+            ])
+
+            r_x = np.array([
+            self.rays[index].position.y,
+            mirror_int[index].y,
+            grating_int[index].y,
+            1000*grating_ray[index].vector[-2]
+            ])
+
+            line = Line2D(r_z, r_x, color='green', linewidth=0.5)
+            ax.add_line(line)
+
         return 
-    
+        """
 
     def draw_topview(self, ax):
         """
