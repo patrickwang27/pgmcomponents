@@ -1217,15 +1217,21 @@ class PGM(object):
         
         Returns
         -------
-        propagated_rays : list
-            A list of propagated rays
+        grating_ray : list of Ray3D objects
+            A list of propagated rays originating at the grating intercept
+        
+        mirror_intercept : list of array_like
+            A list of the mirror intercepts
+
+        grating_intercept : list of array_like
+            A list of the grating intercepts
 
         """
         _ = self._mirror.compute_corners()
         _ = self._grating.compute_corners()
 
         mirr_ray = self._mirror.reflect(*args)
-        grating_ray = self._grating.diffract(mirr_ray)
+        grating_ray = self._grating.diffract(*mirr_ray)
         mirror_intercept = [mirr_ray.position for mirr_ray in mirr_ray]
         grating_intercept = [grating_ray.position for grating_ray in grating_ray]
         
@@ -1260,27 +1266,27 @@ class PGM(object):
         ax.fill(grating_corners_yz[hull_grating.vertices,0], grating_corners_yz[hull_grating.vertices,1], 'b')
 
         grating_ray, mirror_int, grating_int = self.propagate(self.rays)
-        """
+        
         for index, ray in enumerate(grating_ray):
             r_z = np.array([
             self.rays[index].position.z,
             mirror_int[index].z,
             grating_int[index].z,
-            1000*grating_ray[index].vector[-1]
+            grating_int[index].z + 1000*grating_ray[index].vector[-1]
             ])
 
             r_x = np.array([
             self.rays[index].position.y,
             mirror_int[index].y,
             grating_int[index].y,
-            1000*grating_ray[index].vector[-2]
+            grating_int[index].y + 1000*grating_ray[index].vector[-2]
             ])
 
             line = Line2D(r_z, r_x, color='green', linewidth=0.5)
             ax.add_line(line)
 
         return 
-        """
+        
 
     def draw_topview(self, ax):
         """
@@ -1331,28 +1337,31 @@ class PGM(object):
             [grating_rect[2][0] - self.grating.borders[3], grating_rect[2][1] - self.grating.borders[1]],
             [grating_rect[3][0] - self.grating.borders[3], grating_rect[3][1] + self.grating.borders[0]]])
         
-
+        
+        grating_ray, mirror_intercept, grating_intercept = self.propagate(self.rays)
 
         #Index denotes the ray i.e. mirror_intercept[0] is the ray_0
-        """
-        mirror_blx = self.mirror_intercept[3].x + self.mirror_width/2
+        
+        mirror_blx = self.mirror_intercept[3].x + self.mirror._width/2
         mirror_blz = self.mirror_intercept[2].z
         mirror_l = self.mirror_intercept[1].z - self.mirror_intercept[2].z
         mirror_w = self.mirror_intercept[4].x - self.mirror_intercept[3].x
+        print('anything?')
 
-        grating_blx = self.grating_intercept[3].x - self.grating_width/2
+        grating_blx = self.grating_intercept[3].x - self.grating._width/2
         grating_blz = self.grating_intercept[2].z
         grating_l = self.grating_intercept[1].z - self.grating_intercept[2].z
         grating_w = self.grating_intercept[4].x - self.grating_intercept[3].x
-        """
-
+        
+        rectangle = Rectangle((mirror_blz, mirror_blx), mirror_l, mirror_w, color='g', alpha=1)
+        ax.add_patch(rectangle)
         ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
         ax.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
         ax.fill(mirror_rect[:,0], mirror_rect[:,1], 'r',alpha=1)
         ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5)
         
+        
         #print(mirror_rect_hull.vertices)
-        print(ax.get_children())
         return
 
 
