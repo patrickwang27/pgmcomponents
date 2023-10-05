@@ -113,11 +113,12 @@ class Grating(object):
 
 
     def __repr__(self):
-        return "Grating(line_density={},\n energy={}, \n cff={}, \n order={}, \n dimensions={})".format(self.line_density, 
+        return "Grating(line_density={},\n energy={}, \n cff={}, \n order={}, \n dimensions={},\n borders={})".format(self.line_density, 
                                                                                              self.energy, 
                                                                                              self.cff, 
                                                                                              self.order, 
-                                                                                             self.dimensions)
+                                                                                             self.dimensions,
+                                                                                             self.borders)
     
     def read_file(self, filename):
         """
@@ -606,14 +607,17 @@ class Plane_Mirror(object):
         length={}, 
         width={}, 
         height={}, 
-        plane={})""".format(self.voffset,
+        plane={},
+        borders={})
+        """.format(self.voffset,
                             self.hoffset, 
                             self.axis_voffset, 
                             self.axis_hoffset, 
                             self._length(), 
                             self._width(), 
                             self._height(), 
-                            self.plane)
+                            self.plane,
+                            self.borders)
     
     def read_file(self, filename):
         """
@@ -686,6 +690,12 @@ class Plane_Mirror(object):
     
     @dimensions.setter
     def dimensions(self, value):
+        """
+        Sets the dimensions of the mirror.
+        The dimensions are specified as:
+        [length, width, height]
+
+        """
         self._dimensions = value
 
     @property
@@ -718,6 +728,16 @@ class Plane_Mirror(object):
     
     @borders.setter
     def borders(self, value):
+        """
+        Sets the borders of the mirror.
+        The borders are specified as:
+        |-----------Top------------|
+        |                          |
+         Left   Mirror Plane       Right
+        |                          |       ---> +z direction
+        |----------Bottom----------|
+        [top, bottom, left, right]
+        """
         if len(value) != 4:
             raise ValueError("Expected exactly four values for borders")
         self._borders = value
@@ -1065,25 +1085,32 @@ class PGM(object):
         self._beam_height = float(pgm_config['beam']['beam_height'])
     
 
+    def set_theta(self):
+        """
+        Set the angle of the grating.
+        """
+        self.mirror.theta = 0.5 * (self.grating.alpha-self.grating.beta)
+
     @property
 
     def theta(self):
-        return 0.5*(self.grating.alpha - self.grating.beta)
+        return self.mirror.theta
 
     @theta.setter
 
     def theta(self, value):
         self.theta = value
+        self.mirror.theta = value
 
     @property
 
     def energy(self):
-        return self._energy
+        return self.grating.energy
     
     @energy.setter
     
     def energy(self, value):
-        self._energy = value
+        self.grating.energy = value
 
     @property
     def grating(self):
@@ -1272,14 +1299,14 @@ class PGM(object):
             self.rays[index].position.z,
             mirror_int[index].z,
             grating_int[index].z,
-            grating_int[index].z + 1000*grating_ray[index].vector[-1]
+            grating_int[index].z + 1000*ray.vector[-1]
             ])
 
             r_x = np.array([
             self.rays[index].position.y,
             mirror_int[index].y,
             grating_int[index].y,
-            grating_int[index].y + 1000*grating_ray[index].vector[-2]
+            grating_int[index].y + 1000*ray.vector[-2]
             ])
 
             line = Line2D(r_z, r_x, color='green', linewidth=0.5)
@@ -1337,11 +1364,11 @@ class PGM(object):
             [grating_rect[2][0] - self.grating.borders[3], grating_rect[2][1] - self.grating.borders[1]],
             [grating_rect[3][0] - self.grating.borders[3], grating_rect[3][1] + self.grating.borders[0]]])
         
-        
+        """
         grating_ray, mirror_intercept, grating_intercept = self.propagate(self.rays)
-
+        """
         #Index denotes the ray i.e. mirror_intercept[0] is the ray_0
-        
+        """
         mirror_blx = self.mirror_intercept[3].x + self.mirror._width/2
         mirror_blz = self.mirror_intercept[2].z
         mirror_l = self.mirror_intercept[1].z - self.mirror_intercept[2].z
@@ -1355,7 +1382,8 @@ class PGM(object):
         
         rectangle = Rectangle((mirror_blz, mirror_blx), mirror_l, mirror_w, color='g', alpha=1)
         ax.add_patch(rectangle)
-        ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
+        """
+        ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'b',alpha=0.5)
         ax.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
         ax.fill(mirror_rect[:,0], mirror_rect[:,1], 'r',alpha=1)
         ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5)
