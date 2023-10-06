@@ -79,6 +79,9 @@ class Grating(object):
         |                          |      ----> +z direction
         |----------Bottom----------|
         [top, bottom, left, right]
+
+        Left - Right => Tangential
+        Top - Bottom => Sagittal
     Methods
     -------
     set_angles(alpha, beta)
@@ -1106,6 +1109,10 @@ class PGM(object):
 
     def energy(self):
         return self.grating.energy
+    
+    @property
+    def wavelength(self):
+        return 1239.8419843320025/self.energy
     
     @energy.setter
     
