@@ -149,7 +149,7 @@ def configuration_popup(title, key, element):
                [sg.HorizontalSeparator()], 
                [sg.Input(key=f'{key}_sagittal_borders', size=(10,1), default_text=sagittal_borders)], 
                [sg.Input(key=f'{key}_tangential_borders', size=(10,1), default_text=tangential_borders)]])],
-                [sg.Push(), sg.Button('Save'), sg.Button('Cancel')]
+                [sg.Push(), sg.Button('Cancel'), sg.Button('Save')]
                 ]]
 
     window = sg.Window(title, layout=layout, modal=True)
@@ -275,13 +275,9 @@ class Beam_Config(object):
             [sg.Push(), sg.Button('Cancel'),sg.Button('Save & Exit') ]
         ]]
 
-        check_fill = lambda: all([window_beam[key].get() != '' for key in ['electron_size_h', 
-                                                                           'electron_size_v', 
-                                                                           'electron_div_h', 
-                                                                           'electron_div_v', 
-                                                                           'id_length', 
-                                                                           'distance', 
-                                                                           'num_of_sigmas']])
+        config_keys = ['electron_size_h', 'electron_size_v', 'electron_div_h', 'electron_div_v', 'id_length', 'distance', 'num_of_sigmas']
+
+        check_fill = lambda: all([window_beam[key].get() != '' for key in config_keys])
         window_beam = sg.Window('Beam Configuration', layout=layout, modal=True, finalize=True)
 
         if self.calc:
@@ -293,8 +289,11 @@ class Beam_Config(object):
                 window_beam['id_length'].update(value=self.id_length)
                 window_beam['distance'].update(value=self.distance)
                 window_beam['num_of_sigmas'].update(value=self.num_of_sigmas)
-                window_beam['beam_size_h'].update(value=self.beam_size_h)
-                window_beam['beam_size_v'].update(value=self.beam_size_v)
+                if pgm.beam_width == self.beam_size_h and pgm.beam_height == self.beam_size_v:
+                    window_beam['beam_size_h'].update(value=self.beam_size_h, readonly=True)
+                    window_beam['beam_size_v'].update(value=self.beam_size_v, readonly=True)
+                else:
+                    raise ValueError('Beam size does not match calculated beam size.')
             except Exception as e:
                 sg.Popup('Invalid values', e)
         
@@ -307,7 +306,7 @@ class Beam_Config(object):
             window_beam['distance'].update(value=self.distance)
             window_beam['num_of_sigmas'].update(value=self.num_of_sigmas)
             window_beam['calculate_q'].update(value=False)
-            for key in ['electron_size_h', 'electron_size_v', 'electron_div_h', 'electron_div_v', 'id_length', 'distance', 'num_of_sigmas']:
+            for key in config_keys:
                 window_beam[key].update(readonly=True)
             window_beam['beam_size_h'].update(value=pgm.beam_width, readonly=False)
             window_beam['beam_size_v'].update(value=pgm.beam_height, readonly=False)
@@ -316,6 +315,105 @@ class Beam_Config(object):
 
         while True:
             event, values = window_beam.read()
+
+            if event == sg.WIN_CLOSED:
+                break
+
+            elif event == 'calculate_q':
+                if values['calculate_q']:
+                    for key in ['electron_size_h', 'electron_size_v', 'electron_div_h', 'electron_div_v', 'id_length', 'distance', 'num_of_sigmas']:
+                        window_beam[key].update(readonly=False)
+                    window_beam['beam_size_h'].update(readonly=True)
+                    window_beam['beam_size_v'].update(readonly=True)
+                else:
+                    for key in ['electron_size_h', 'electron_size_v', 'electron_div_h', 'electron_div_v', 'id_length', 'distance', 'num_of_sigmas']:
+                        window_beam[key].update(readonly=True)
+                    window_beam['beam_size_h'].update(readonly=False)
+                    window_beam['beam_size_v'].update(readonly=False)
+
+
+            elif event == 'Save & Exit':
+                if values['calculate_q']:
+                    try:
+                        self.electron_size_h = float(values['electron_size_h'])
+                        self.electron_size_v = float(values['electron_size_v'])
+                        self.electron_div_h = float(values['electron_div_h'])
+                        self.electron_div_v = float(values['electron_div_v'])
+                        self.id_length = float(values['id_length'])
+                        self.distance = float(values['distance'])
+                        self.num_of_sigmas = float(values['num_of_sigmas'])
+                        self.calc = True
+                        beam_size_h = calc_beam_size(self.electron_div_h,
+                                                     self.electron_div_h,
+                                                     pgm.wavelength,
+                                                     self.distance,
+                                                     self.id_length,
+                                                     num_of_sigmas=self.num_of_sigmas)
+                        beam_size_v = calc_beam_size(self.electron_div_v,
+                                                        self.electron_div_v,
+                                                        pgm.wavelength,
+                                                        self.distance,
+                                                        self.id_length,
+                                                        num_of_sigmas=self.num_of_sigmas)
+                        self.beam_size_h = beam_size_h
+                        self.beam_size_v = beam_size_v
+                        pgm.beam_width = beam_size_h
+                        pgm.beam_height = beam_size_v
+                        window_beam.close()
+                        break
+
+                    except Exception as e:
+                        sg.Popup('Invalid values', [[e],[traceback.format_exc()]])
+                        continue
+                else:
+
+                    try:
+                        pgm.beam_width = float(window_beam['beam_size_h'].get()) if window_beam['beam_size_h'].get() != '' else None
+                        pgm.beam_height = float(window_beam['beam_size_v'].get()) if window_beam['beam_size_v'].get() != '' else None
+                        self.calc = False
+                        self.electron_size_h = float(window_beam['electron_size_h'].get()) if window_beam['electron_size_h'].get() != '' else None
+                        self.electron_size_v = float(window_beam['electron_size_v'].get()) if window_beam['electron_size_v'].get() != '' else None
+                        self.electron_div_h = float(window_beam['electron_div_h'].get()) if window_beam['electron_div_h'].get() != '' else None
+                        self.electron_div_v = float(window_beam['electron_div_v'].get()) if window_beam['electron_div_v'].get() != '' else None
+                        self.id_length = float(window_beam['id_length'].get()) if window_beam['id_length'].get() != '' else None
+                        self.distance = float(window_beam['distance'].get()) if window_beam['distance'].get() != '' else None
+                        self.num_of_sigmas = float(window_beam['num_of_sigmas'].get()) if window_beam['num_of_sigmas'].get() != '' else None
+
+
+                        window_beam.close()
+                        break
+
+                        
+                    except ValueError:
+                        if sg.PopupOKCancel("Can't convert certain values to float. Discarding problematic values. Continue?") == 'OK':
+                            self.beam_size_h = values['beam_size_h']
+                            self.beam_size_v = values['beam_size_v']
+                            self.calc = False
+                            self.electron_size_h = ''
+                            self.electron_size_v = ''
+                            self.electron_div_h = ''
+                            self.electron_div_v = ''
+                            self.id_length = ''
+                            self.distance = ''
+                            self.num_of_sigmas = ''
+
+                            window_beam.close()
+                            break
+
+                        else:
+                            continue
+
+                    except Exception as e:
+                        sg.Popup('Invalid values', [[e],[traceback.format_exc()]])
+                        continue
+
+
+
+
+            elif event == 'Cancel':
+                window_beam.close()
+                break
+
             if check_fill() and values['calculate_q']:
                 try:
                     beam_size_h = calc_beam_size(float(values['electron_size_h']), 
@@ -334,84 +432,76 @@ class Beam_Config(object):
                     window_beam['beam_size_h'].update(value=round(beam_size_h, ndigits=3))
                     window_beam['beam_size_v'].update(value=round(beam_size_v, ndigits=3))
                     
+                    pass
+                    
                 except Exception as e:
                     sg.Popup('Invalid values', [[e],[traceback.format_exc()]])
-                    continue
+                    pass
 
-            if event == sg.WIN_CLOSED:
-                break
             
-            elif event == 'calculate_q':
-                if values['calculate_q']:
-                    for key in ['electron_size_h', 'electron_size_v', 'electron_div_h', 'electron_div_v', 'id_length', 'distance', 'num_of_sigmas']:
-                        window_beam[key].update(readonly=False)
-                    window_beam['beam_size_h'].update(readonly=True)
-                    window_beam['beam_size_v'].update(readonly=True)
-                else:
-                    for key in ['electron_size_h', 'electron_size_v', 'electron_div_h', 'electron_div_v', 'id_length', 'distance', 'num_of_sigmas']:
-                        window_beam[key].update(readonly=True)
-                    window_beam['beam_size_h'].update(readonly=False)
-                    window_beam['beam_size_v'].update(readonly=False)
-
-
-            elif event == 'Save & Exit':
-                try:
-                    electron_size_h = float(values['electron_size_h'])
-                    electron_size_v = float(values['electron_size_v'])
-                    electron_div_h = float(values['electron_div_h'])
-                    electron_div_v = float(values['electron_div_v'])
-                    id_length = float(values['id_length'])
-                    distance = float(values['distance'])
-                    num_of_sigmas = float(values['num_of_sigmas'])
-                except Exception as e:
-                    sg.Popup('Invalid values', e)
-                    continue
-                if values['calculate_q']:
-                    beam_size_h = calc_beam_size(electron_size_h, electron_div_h, id_length, distance, num_of_sigmas)
-                    beam_size_v = calc_beam_size(electron_size_v, electron_div_v, id_length, distance, num_of_sigmas)
-                else:
-                    beam_size_h = values['beam_size_h']
-                    beam_size_v = values['beam_size_v']
-                
-                try:
-                    window_beam['beam_size_h'].update(value=round(float(beam_size_h), ndigits=3))
-                    window_beam['beam_size_v'].update(value=round(float(beam_size_v), ndigits=3))
-
-                except Exception as e:
-                    sg.Popup('Invalid values', e)
-                    continue
-
-                self.electron_size_h = electron_size_h
-                self.electron_size_v = electron_size_v
-                self.electron_div_h = electron_div_h
-                self.electron_div_v = electron_div_v
-                self.id_length = id_length
-                self.distance = distance
-                self.num_of_sigmas = num_of_sigmas
-                self.beam_size_h = beam_size_h
-                self.beam_size_v = beam_size_v
-                pgm.beam_height = beam_size_v
-                pgm.beam_width = beam_size_h
-                self.calc = values['calculate_q']
-                window_beam.close()
-                break
-
-
-            elif event == 'Cancel':
-                window_beam.close()
-                break
+            
         return
+
+
+class OffsetsControl(object):
+    """
+    A class to provide the offsets control widget.
+
+    Attributes
+    ----------
+    values : dict
+        The default values of the control.
+        keys: 'beam_vertical', 'mirror_hoffset', 'mirror_voffset', 'mirror_axis_hoffset', 'mirror_axis_voffset'
+    key : str
+        The key of the control.
+    
+    Methods
+    -------
+    update(window, pgm, )
+    """
+
+    def __init__(self, values, key):
+        self.values = values
+        self.key = key
+
+        layout = [
+            [sg.Text('Beam Vertical Offset (b):'), sg.Push(), sg.Input(key=f'{key}_beam_vertical', size=(8,1), default_text=values['beam_vertical'], enable_events=True)],
+            [sg.Text('Mirror Horizontal Offset (a):'), sg.Push(), sg.Input(key=f'{key}_mirror_horizontal', size=(8,1), default_text=values['mirror_hoffset'], enable_events=True)],
+            [sg.HorizontalSeparator()],
+            [sg.Checkbox('Calculate Offsets?', key=f'{key}_calculate', default=True, enable_events=True)],
+            [sg.Text('Mirror Vertical Offset (c):'), sg.Push(), sg.Input(key=f'{key}_mirror_vertical', size=(8,1), default_text=values['mirror_voffset'], enable_events=True, readonly=True)],
+            [sg.Text('Mirror Axis Horizontal Offset (h):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_horizontal', size=(8,1), default_text=values['mirror_axis_hoffset'], enable_events=True, readonly=True)],
+            [sg.Text('Mirror Axis Vertical Offset (v):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_vertical', size=(8,1), default_text=values['mirror_axis_voffset'], enable_events=True, readonly=True)],
+            ]
+        self.frame = sg.Frame(title='Offsets', layout=layout)
+    
+    def updatepgm(self, window, pgm):
+        """
+        Update the values of the PGM object.
+        """
+        pgm.beam_offset = float(window[f'{self.key}_beam_vertical'].get())
+        pgm.mirror.hoffset = float(window[f'{self.key}_mirror_horizontal'].get())
+        pgm.pgm.mirror.voffset = float(window[f'{self.key}_mirror_vertical'].get())
+        pgm.mirror.axis_hoffset = float(window[f'{self.key}_mirror_axis_horizontal'].get())
+        pgm.mirror.axis_voffset = float(window[f'{self.key}_mirror_axis_vertical'].get())
+        return
+
+
 
 def main():
     beam = Beam_Config()
     mirror = Plane_Mirror.mirror_from_file('config_pgm.ini')
     grating = Grating.grating_from_file('config_pgm.ini')
     pgm=PGM(mirror=mirror, grating=grating)
+    offsetscontrol = OffsetsControl(pgm.values(), 'offsets_test')
     test = EPICScontrol('Energy (eV)', 1100, 10, 'test')
     window = sg.Window('EPICS Control', layout=[[test.frame], 
                                                 [sg.Button('OK'), 
                                                  sg.Button('Cancel'),
-                                                 sg.Button('Beam Config')]])
+                                                 sg.Button('Beam Config')],
+                                                 [offsetscontrol.frame]
+                                                 ])
+    
     while True:
         event, values = window.read()
         if event == sg.WIN_CLOSED:
@@ -431,7 +521,9 @@ def main():
 
         elif event == 'Beam Config':
             beam.window(pgm)
-            
+        
+
+
 
 if __name__ == "__main__":
     main()

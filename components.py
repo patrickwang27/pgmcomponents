@@ -1243,6 +1243,26 @@ class PGM(object):
     @cff.setter
     def cff(self, value):
         self.grating.cff = value
+    
+
+    def values(self):
+        dictionary = {'beam_vertical': self.beam_offset,
+                      'beam_width': self.beam_width,
+                      'beam_height': self.beam_height,
+                      'line_density': self.grating.line_density,
+                      'energy': self.grating.energy,
+                      'cff': self.grating.cff,
+                      'order': self.grating.order,
+                      'grating_dimensions': self.grating.dimensions,
+                      'grating.borders': self.grating.borders,
+                      'mirror_voffset': self.mirror.voffset,
+                      'mirror_hoffset': self.mirror.hoffset,
+                      'mirror_axis_voffset': self.mirror.axis_voffset,
+                      'mirror_axis_hoffset': self.mirror.axis_hoffset,
+                      'mirror_dimensions': self.mirror.dimensions,
+                      'mirror_theta': self.mirror.theta,
+                      'mirror_borders': self.mirror.borders}
+        return dictionary
 
     @classmethod
 

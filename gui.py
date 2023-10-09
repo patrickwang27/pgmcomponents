@@ -27,6 +27,7 @@ def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
     toolbar.update()
     figure_canvas_agg.get_tk_widget().pack(side='right', fill='both', expand=1)
 
+
 mirror = Plane_Mirror.mirror_from_file('config_pgm.ini')
 grating = Grating.grating_from_file('config_pgm.ini')
 pgm = PGM(mirror=mirror, grating=grating)
@@ -39,7 +40,7 @@ energy_control = EPICScontrol('Energy (eV)', 1000.,100., '-ENERGY-', pgm=pgm)
 cff_control = EPICScontrol('CFF', 2.25,0.01, '-CFF-',pgm=pgm)
 order_control = EPICScontrol('Order', 1,1, '-ORDER-',pgm=pgm)
 line_density_control = EPICScontrol('Line Density (l/mm)', 1000,100, '-LINE_DENSITY-',pgm=pgm)
-
+offsets_control = OffsetsControl(pgm.values(), '-OFFSETS-')
 up_events = {'-ENERGY-_up':energy_control, '-CFF-_up':cff_control, '-ORDER-_up':order_control, '-LINE_DENSITY-_up':line_density_control}
 down_events = {'-ENERGY-_down':energy_control, '-CFF-_down':cff_control, '-ORDER-_down':order_control, '-LINE_DENSITY-_down':line_density_control}
 
@@ -61,7 +62,8 @@ layout = [[
         [order_control.frame],
         [line_density_control.frame]
     ])],
-    [config_frame],
+    [config_frame, sg.Frame('Units',[[sg.Text('All units of distance are in mm\n unless othewise noted.')]])],
+    [offsets_control.frame],
     [sg.Button('Print')]
 ]]
 
