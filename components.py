@@ -145,15 +145,17 @@ class Grating(object):
         for var in variables:
             if var not in config['grating']:
                 raise ValueError("Missing parameter {} in grating file".format(var))
+            
+        items = [x for x in variables if x in config['grating'] and x != 'dimensions' and x != 'borders']
 
-        for key, value in list(config['grating'].items())[0:-1]:
+        for key, value in items:
             exec(f"self._{key} = float({value})")
             print(key)
             print(value)
         
         self._order = int(self._order)
         self._dimensions = np.array([float(x) for x in config['grating']['dimensions'].split(',')])
-
+        self._borders= np.array([float(x) for x in config['grating']['borders'].split(',')])
 
     @property
     def line_density(self):
@@ -644,15 +646,17 @@ class Plane_Mirror(object):
         for var in variables:
             if var not in config['mirror']:
                 raise ValueError("Missing parameter {} in mirror file".format(var))
-            
-        for key, value in list(config['mirror'].items())[0:-1]:
+        
+        items = [x for x in variables if x in config['mirror'] and x != 'dimensions' and x != 'borders']
+
+        for key, value in items:
             exec(f"self._{key} = float({value})")
             print(key)
             print(value)
         
         
         self._dimensions = np.array([float(x) for x in config['mirror']['dimensions'].split(',')])
-
+        self._borders= np.array([float(x) for x in config['mirror']['borders'].split(',')])
         
 
     @property
@@ -947,7 +951,15 @@ class PGM(object):
         The grating component of the PGM
     mirror : Plane_Mirror
         The mirror component of the PGM
-
+    rays : list
+        The rays to be propagated through the PGM
+    beam_offset : float
+        The vertical offset of the beam in mm
+    beam_width : float
+        The width of the beam in mm
+    beam_height : float
+        The height of the beam in mm
+    
     Methods
     -------
     read_file(filename)
@@ -1223,6 +1235,15 @@ class PGM(object):
     def grating_intercept(self):
         return self._grating_intercept
     
+    
+    @property
+    def cff(self):
+        return self.grating.cff
+    
+    @cff.setter
+    def cff(self, value):
+        self.grating.cff = value
+
     @classmethod
 
     def pgm_from_file(cls, filename):

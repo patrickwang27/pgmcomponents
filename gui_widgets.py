@@ -52,20 +52,25 @@ class EPICScontrol(object):
                               sg.Button(button_text='+',font=('Arial', 16),image_data=button_image, image_size=(20,30), auto_size_button=False,key=f"{key}_up")],
                 ]
         self.frame = sg.Frame(title=name, layout=layout)
+
+        self.properties = {'-ENERGY-':'energy', '-CFF-':'cff', '-ORDER-':'grating.order', '-LINE_DENSITY-':'grating.line_density'}
+
         return
 
-    def up(self, window):
+    def up(self, window, pgm):
         """
         Add increment to value, needs the window object to update the value.
         """
         window[self.key].update(value=round(float(window[self.key].get()) + float(window[f"{self.key}_inc"].get()), ndigits=3))
+        exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
         return
     
-    def down(self, window):
+    def down(self, window, pgm):
         """
         Subtract increment from value. Needs the window object to update the value.
         """
         window[self.key].update(value=round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3))
+        exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
         return
     
     def update(self, window):
@@ -73,6 +78,7 @@ class EPICScontrol(object):
         Update the value of the control.
         """
         window[self.key].update(value=self.value)
+        exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
         return
     
     def update_inc(self, window):
@@ -180,6 +186,9 @@ class Beam_Config(object):
 
     Methods
     -------
+    window(window, pgm)
+        Pops up a window for beam configuration.
+    
     
     """
 
@@ -198,7 +207,7 @@ class Beam_Config(object):
         return
 
 
-    def beam_config(self, window, pgm):
+    def window(self, pgm):
         """
         Pops up a window for beam configuration.
 
@@ -387,7 +396,7 @@ def main():
             break
 
         elif event == 'Beam Config':
-            beam.beam_config(window, pgm)
+            beam.window(pgm)
             
 
 if __name__ == "__main__":
