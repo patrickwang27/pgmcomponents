@@ -38,22 +38,26 @@ class EPICScontrol(object):
     
     """
 
-    def __init__(self, name, value, increments, key):
+    def __init__(self, name, value, increments, key, pgm=None):
         self.name = name
         self.value = value
         self.increments = increments
         self.key = key
         button_image=b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\rIDATx\x9cc````\x00\x00\x00\x05\x00\x01\xa5\xf6E@\x00\x00\x00\x00IEND\xaeB`\x82'
+        
+        self.properties = {'-ENERGY-':'energy', '-CFF-':'cff', '-ORDER-':'grating.order', '-LINE_DENSITY-':'grating.line_density'}
+
+        if pgm is not None:
+            self.value = eval(f"pgm.{self.properties[self.key]}")
 
         layout = [[sg.Button(button_text='―', key=f"{key}_down", font=('Arial', 10),image_data=button_image, image_size=(20,30)),
-                   sg.Column([[sg.Input(default_text=value, key=f"{key}", size=(8,1), font=('Arial', 14),justification='center')],
+                   sg.Column([[sg.Input(default_text=self.value, key=f"{key}", size=(8,1), font=('Arial', 14),justification='center')],
                               [sg.HorizontalSeparator()],
                               [sg.Push(), sg.Input(default_text=increments, key=f"{key}_inc", size=(8,1),justification='center'), sg.Push()]]),
                               sg.Button(button_text='+',font=('Arial', 16),image_data=button_image, image_size=(20,30), auto_size_button=False,key=f"{key}_up")],
                 ]
         self.frame = sg.Frame(title=name, layout=layout)
 
-        self.properties = {'-ENERGY-':'energy', '-CFF-':'cff', '-ORDER-':'grating.order', '-LINE_DENSITY-':'grating.line_density'}
 
         return
 
@@ -61,16 +65,34 @@ class EPICScontrol(object):
         """
         Add increment to value, needs the window object to update the value.
         """
-        window[self.key].update(value=round(float(window[self.key].get()) + float(window[f"{self.key}_inc"].get()), ndigits=3))
-        exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+        if self.key == "-ORDER-":
+            try:
+                window[self.key].update(value=int(float(window[self.key].get())) + int(float(window[f"{self.key}_inc"].get())))
+                exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+
+            except Exception as e:
+                sg.Popup('Order should be type int', e)
+            
+        else:
+            window[self.key].update(value=round(float(window[self.key].get()) + float(window[f"{self.key}_inc"].get()), ndigits=3))
+            exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
         return
     
     def down(self, window, pgm):
         """
         Subtract increment from value. Needs the window object to update the value.
         """
-        window[self.key].update(value=round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3))
-        exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+        if self.key == "-ORDER-":
+            try:
+                window[self.key].update(value=int(float(window[self.key].get()) - float(window[f'{self.key}_inc'].get())))
+                exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+
+            except Exception as e:
+                sg.Popup('Order should be type int', e)
+
+        else:
+            window[self.key].update(value=round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3))
+            exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
         return
     
     def update(self, window):
@@ -253,7 +275,13 @@ class Beam_Config(object):
             [sg.Push(), sg.Button('Cancel'),sg.Button('Save & Exit') ]
         ]]
 
-        check_fill = lambda: all([window_beam[key].get() != '' for key in ['electron_size_h', 'electron_size_v', 'electron_div_h', 'electron_div_v', 'id_length', 'distance', 'num_of_sigmas']])
+        check_fill = lambda: all([window_beam[key].get() != '' for key in ['electron_size_h', 
+                                                                           'electron_size_v', 
+                                                                           'electron_div_h', 
+                                                                           'electron_div_v', 
+                                                                           'id_length', 
+                                                                           'distance', 
+                                                                           'num_of_sigmas']])
         window_beam = sg.Window('Beam Configuration', layout=layout, modal=True, finalize=True)
 
         if self.calc:
@@ -271,6 +299,13 @@ class Beam_Config(object):
                 sg.Popup('Invalid values', e)
         
         else:
+            window_beam['electron_size_h'].update(value=self.electron_size_h)
+            window_beam['electron_size_v'].update(value=self.electron_size_v)
+            window_beam['electron_div_h'].update(value=self.electron_div_h)
+            window_beam['electron_div_v'].update(value=self.electron_div_v)
+            window_beam['id_length'].update(value=self.id_length)
+            window_beam['distance'].update(value=self.distance)
+            window_beam['num_of_sigmas'].update(value=self.num_of_sigmas)
             window_beam['calculate_q'].update(value=False)
             for key in ['electron_size_h', 'electron_size_v', 'electron_div_h', 'electron_div_v', 'id_length', 'distance', 'num_of_sigmas']:
                 window_beam[key].update(readonly=True)
@@ -281,7 +316,6 @@ class Beam_Config(object):
 
         while True:
             event, values = window_beam.read()
-            print(check_fill())
             if check_fill() and values['calculate_q']:
                 try:
                     beam_size_h = calc_beam_size(float(values['electron_size_h']), 
