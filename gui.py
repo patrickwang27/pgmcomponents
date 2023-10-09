@@ -62,7 +62,7 @@ layout = [[
         [order_control.frame],
         [line_density_control.frame]
     ])],
-    [config_frame, sg.Frame('Units',[[sg.Text('All units of distance are in mm\n unless othewise noted.')]])],
+    [config_frame, sg.Frame('Units',[[sg.Text('All units of distance are in mm\nunless othewise noted.')]])],
     [offsets_control.frame],
     [sg.Button('Print')]
 ]]
@@ -72,7 +72,10 @@ window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png')
 
 while True:
     event, values = window.read()
-    
+    pgm.energy = values['-ENERGY-']
+    pgm.cff = values['-CFF-']
+    pgm.order = values['-ORDER-']
+    pgm.grating.line_density = values['-LINE_DENSITY-']
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
     elif event == 'Beam':
@@ -91,6 +94,24 @@ while True:
         pass
     elif event == 'About...':
         sg.Popup(*['PGM Simulation', 'version 0.1', 'Patrick Wang'], 'About')
+    
+    elif event == '-OFFSETS-_calculate':
+        if values['-OFFSETS-_calculate']:
+            window['-OFFSETS-_mirror_vertical'].update(read_only=True)
+            window['-OFFSETS-_mirror_axis_vertical'].update(read_only=True)
+        
+        else:
+            window['-OFFSETS-_mirror_vertical'].update(read_only=False)
+            window['-OFFSETS-_mirror_axis_vertical'].update(read_only=False)
+
+    elif event == '-OFFSETS-_beam_vertical':
+        try:
+            pgm.beam_offset = float(values['-OFFSETS-_beam_vertical'])
+            
+            offsets_control.calcoffsets(window, pgm)
+        except ValueError:
+            pass
+
     elif event == 'Open workspace':
         pass
     elif event == 'Save':
@@ -101,6 +122,6 @@ while True:
         down_events[event].down(window, pgm)
 
     elif event == 'Print':
-        print(pgm.energy, pgm.cff, pgm.grating.line_density, pgm.grating.order)
+        print(pgm)
     
         

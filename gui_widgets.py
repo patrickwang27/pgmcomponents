@@ -470,10 +470,11 @@ class OffsetsControl(object):
             [sg.HorizontalSeparator()],
             [sg.Checkbox('Calculate Offsets?', key=f'{key}_calculate', default=True, enable_events=True)],
             [sg.Text('Mirror Vertical Offset (c):'), sg.Push(), sg.Input(key=f'{key}_mirror_vertical', size=(8,1), default_text=values['mirror_voffset'], enable_events=True, readonly=True)],
-            [sg.Text('Mirror Axis Horizontal Offset (h):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_horizontal', size=(8,1), default_text=values['mirror_axis_hoffset'], enable_events=True, readonly=True)],
+            [sg.Text('Mirror Axis Horizontal Offset (h):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_horizontal', size=(8,1), default_text=values['mirror_axis_hoffset'], enable_events=True, readonly=False)],
             [sg.Text('Mirror Axis Vertical Offset (v):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_vertical', size=(8,1), default_text=values['mirror_axis_voffset'], enable_events=True, readonly=True)],
             ]
         self.frame = sg.Frame(title='Offsets', layout=layout)
+        self._calculate = True
     
     def updatepgm(self, window, pgm):
         """
@@ -484,6 +485,26 @@ class OffsetsControl(object):
         pgm.pgm.mirror.voffset = float(window[f'{self.key}_mirror_vertical'].get())
         pgm.mirror.axis_hoffset = float(window[f'{self.key}_mirror_axis_horizontal'].get())
         pgm.mirror.axis_voffset = float(window[f'{self.key}_mirror_axis_vertical'].get())
+        return
+    
+    def calcoffsets(self, window, pgm):
+        """
+        Calculate the offsets.
+        """
+        self.mirror_voffset = float(window[f'{self.key}_beam_vertical'].get())
+        self.mirror_axis_voffset = self.mirror_voffset/2
+        pgm.mirror.voffset = self.mirror_voffset
+        pgm.mirror.axis_voffset = self.mirror_axis_voffset
+        window['-OFFSETS-_mirror_vertical'].update(value=self.mirror_voffset)
+        window['-OFFSETS-_mirror_axis_vertical'].update(value=self.mirror_axis_voffset)
+    
+    @property
+    def calculate(self):
+        return self._calculate
+    
+    @calculate.setter
+    def calculate(self, value):
+        self._calculate = value
         return
 
 

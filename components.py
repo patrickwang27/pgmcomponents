@@ -1046,7 +1046,11 @@ class PGM(object):
         self._beam_height = 0
 
     def __repr__(self):
-        return """PGM(grating={}, mirror={})""".format(self.grating, self.mirror)
+        return """PGM(grating={}, \nmirror={}, \nb={},\nbeam_width={},\nbeam_height={})""".format(self.grating, 
+                                                               self.mirror,
+                                                               self.beam_offset,
+                                                               self.beam_width,
+                                                               self.beam_height)
     
     def generate_rays(self):
         """
