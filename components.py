@@ -5,7 +5,7 @@ Based heavily in parts on the work of Matthew Hand's dls-optics-core package
 Author: Patrick Wang
 Email: patrick.wang@diamond.ac.uk
 
-Version: 0.1
+Version: 1.0
 Date: 2023-09-15
 
 """
@@ -138,7 +138,7 @@ class Grating(object):
         config = configparser.ConfigParser()
         config.read(filename)
         
-        if len(config['grating']) != 5:
+        if len(config['grating']) != 6:
             raise ValueError("Expected exactly five parameters in grating file")
 
         variables = ['line_density', 'energy', 'cff', 'order', 'dimensions']
@@ -148,7 +148,7 @@ class Grating(object):
             
         items = [x for x in variables if x in config['grating'] and x != 'dimensions' and x != 'borders']
 
-        for key, value in items:
+        for key, value in zip(items, config['grating'].values()):
             exec(f"self._{key} = float({value})")
             print(key)
             print(value)
@@ -639,7 +639,7 @@ class Plane_Mirror(object):
         config = configparser.ConfigParser()
         config.read(filename)
         
-        if len(config['mirror']) != 6:
+        if len(config['mirror']) != 7:
             raise ValueError("Expected exactly six parameters in mirror file")
 
         variables = ['voffset', 'hoffset', 'axis_voffset', 'axis_hoffset', 'dimensions', 'theta']
@@ -649,7 +649,7 @@ class Plane_Mirror(object):
         
         items = [x for x in variables if x in config['mirror'] and x != 'dimensions' and x != 'borders']
 
-        for key, value in items:
+        for key, value in zip(items, config['mirror'].values()):
             exec(f"self._{key} = float({value})")
             print(key)
             print(value)
