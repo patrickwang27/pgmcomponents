@@ -103,6 +103,14 @@ class EPICScontrol(object):
         exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
         return
     
+    def write(self, window, value, pgm):
+        """
+        Write a value to the control.
+        """
+        window[self.key].update(value=value)
+        exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+        return
+
     def update_inc(self, window):
         """
         Update the increment of the control.
@@ -505,6 +513,17 @@ class OffsetsControl(object):
     @calculate.setter
     def calculate(self, value):
         self._calculate = value
+        return
+    
+    def write(self, window, values):
+        """
+        Write values to the control.
+        """
+        window[f'{self.key}_beam_vertical'].update(value=values['beam_vertical'])
+        window[f'{self.key}_mirror_horizontal'].update(value=values['mirror_hoffset'])
+        window[f'{self.key}_mirror_vertical'].update(value=values['mirror_voffset'])
+        window[f'{self.key}_mirror_axis_horizontal'].update(value=values['mirror_axis_hoffset'])
+        window[f'{self.key}_mirror_axis_vertical'].update(value=values['mirror_axis_voffset'])
         return
 
 

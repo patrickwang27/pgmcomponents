@@ -5,7 +5,7 @@ from geometry_elements import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from gui_widgets import *
-
+import dill as pickle
 
 class Toolbar(NavigationToolbar2Tk):
 
@@ -32,7 +32,7 @@ mirror = Plane_Mirror.mirror_from_file('config_pgm.ini')
 grating = Grating.grating_from_file('config_pgm.ini')
 pgm = PGM(mirror=mirror, grating=grating)
 
-menu = [['File', ['Open workspace', 'Save', 'Exit']],
+menu = [['File', ['Open workspace', 'Save workspace', 'Exit']],
         ['Export', ['Export Mirror', 'Export Grating', 'Export Beams', 'Export All']],
         ['Help', 'About...'], ]
 
@@ -72,10 +72,10 @@ window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png')
 
 while True:
     event, values = window.read()
-    pgm.energy = values['-ENERGY-']
-    pgm.cff = values['-CFF-']
-    pgm.order = values['-ORDER-']
-    pgm.grating.line_density = values['-LINE_DENSITY-']
+    pgm.energy = float(values['-ENERGY-'])
+    pgm.cff = float(values['-CFF-'])
+    pgm.order = int(values['-ORDER-'])
+    pgm.grating.line_density = float(values['-LINE_DENSITY-'])
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
     elif event == 'Beam':
@@ -97,12 +97,12 @@ while True:
     
     elif event == '-OFFSETS-_calculate':
         if values['-OFFSETS-_calculate']:
-            window['-OFFSETS-_mirror_vertical'].update(read_only=True)
-            window['-OFFSETS-_mirror_axis_vertical'].update(read_only=True)
+            window['-OFFSETS-_mirror_vertical'].update(readonly=True)
+            window['-OFFSETS-_mirror_axis_vertical'].update(readonly=True)
         
         else:
-            window['-OFFSETS-_mirror_vertical'].update(read_only=False)
-            window['-OFFSETS-_mirror_axis_vertical'].update(read_only=False)
+            window['-OFFSETS-_mirror_vertical'].update(readonly=False)
+            window['-OFFSETS-_mirror_axis_vertical'].update(readonly=False)
 
     elif event == '-OFFSETS-_beam_vertical':
         try:
@@ -113,8 +113,40 @@ while True:
             pass
 
     elif event == 'Open workspace':
-        pass
-    elif event == 'Save':
+        pickle_file = sg.popup_get_file('Open workspace', file_types=(('PGM Workspace', '*.pgm'),))
+        if pickle_file:
+            with open(pickle_file, 'rb') as file:
+                pgm = pickle.load(file)
+                beam_config = pickle.load(file)
+                energy_control.write(window, pgm.energy, pgm)
+                cff_control.write(window, pgm.grating.cff, pgm)
+                order_control.write(window, pgm.grating.order, pgm)
+                line_density_control.write(window, pgm.grating.line_density, pgm)
+                offsets_control.write(window, pgm.values())
+        continue
+        
+    elif event == 'Save workspace':
+        save_layout = [[
+            [sg.Text('Save workspace as:')],
+            [sg.FolderBrowse('Select folder', key='-FOLDER-')],
+            [sg.Text('File Name:'), sg.Input(key='-FILENAME-')],
+            [sg.Button('Save'), sg.Button('Cancel')]
+        ]]
+        save_window = sg.Window('Save Workspace', save_layout, finalize=True)
+        while True:
+            event, values = save_window.read()
+            if event == sg.WIN_CLOSED or event == 'Cancel':
+                save_window.close()
+                break
+            elif event == 'Save':
+                filename = values['-FILENAME-']
+                folder = values['-FOLDER-']
+                with open(folder+'/'+filename+'.pgm', 'wb') as file:
+                    pickle.dump(pgm, file)
+                    pickle.dump(beam_config, file)
+                    save_window.close()
+                break
+            
         pass
     elif event in up_events.keys():
         up_events[event].up(window, pgm)
