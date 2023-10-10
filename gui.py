@@ -6,27 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from gui_widgets import *
 import dill as pickle
-
-class Toolbar(NavigationToolbar2Tk):
-
-    def __init__(self, *args, **kwargs):
-        super(Toolbar, self).__init__(*args, **kwargs)
-
-
-def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
-    if canvas.children:
-        for child in canvas.winfo_children():
-            child.destroy()
-    if canvas_toolbar.children:
-        for child in canvas_toolbar.winfo_children():
-            child.destroy()
-
-    figure_canvas_agg = FigureCanvasTkAgg(fig, master=canvas)
-    figure_canvas_agg.draw()
-    toolbar = Toolbar(figure_canvas_agg, canvas_toolbar)
-    toolbar.update()
-    figure_canvas_agg.get_tk_widget().pack(side='right', fill='both', expand=1)
-
+from time import sleep
+plt.ion
 
 mirror = Plane_Mirror.mirror_from_file('config_pgm.ini')
 grating = Grating.grating_from_file('config_pgm.ini')
@@ -46,6 +27,8 @@ down_events = {'-ENERGY-_down':energy_control, '-CFF-_down':cff_control, '-ORDER
 
 
 beam_config = Beam_Config()
+topview_widget = Topview_Widget(pgm, size=(1000,500))
+sideview_widget = Sideview_Widget(pgm, size=(1600,400))
 
 config_frame = sg.Frame('Config', [[
     sg.Button('Beam'), sg.Button('Mirror'), sg.Button('Grating')
@@ -55,27 +38,34 @@ config_frame = sg.Frame('Config', [[
 layout = [[
     [sg.Menu(menu)],
     [sg.Column([
-        [energy_control.frame],
-        [cff_control.frame]
+        [energy_control.frame, order_control.frame],
+        [cff_control.frame, line_density_control.frame],
+        [config_frame], [offsets_control.frame]
     ]), 
     sg.Column([
-        [order_control.frame],
-        [line_density_control.frame]
-    ])],
-    [config_frame, sg.Frame('Units',[[sg.Text('All units of distance are in mm\nunless othewise noted.')]])],
-    [offsets_control.frame],
-    [sg.Button('Print')]
+        [topview_widget.frame],
+    ])
+    ],
+    [sideview_widget.frame]
 ]]
 
-window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png')
-
+window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resizable=True)
 
 while True:
     event, values = window.read()
+    print(event)
     pgm.energy = float(values['-ENERGY-'])
     pgm.cff = float(values['-CFF-'])
     pgm.order = int(values['-ORDER-'])
     pgm.grating.line_density = float(values['-LINE_DENSITY-'])
+    _,_ = pgm.grating.compute_angles()
+    _=pgm.mirror.compute_corners()
+    _=pgm.grating.compute_corners()
+    pgm.set_theta()
+    _=pgm.mirror.compute_corners()
+    topview_widget.draw(window)
+    sideview_widget.draw(window)
+
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
     elif event == 'Beam':
@@ -109,6 +99,7 @@ while True:
             pgm.beam_offset = float(values['-OFFSETS-_beam_vertical'])
             
             offsets_control.calcoffsets(window, pgm)
+            pass
         except ValueError:
             pass
 
@@ -118,11 +109,12 @@ while True:
             with open(pickle_file, 'rb') as file:
                 pgm = pickle.load(file)
                 beam_config = pickle.load(file)
+                offsets_control_calculateq = pickle.load(file)
                 energy_control.write(window, pgm.energy, pgm)
                 cff_control.write(window, pgm.grating.cff, pgm)
                 order_control.write(window, pgm.grating.order, pgm)
                 line_density_control.write(window, pgm.grating.line_density, pgm)
-                offsets_control.write(window, pgm.values())
+                offsets_control.write(window, pgm.values(), calcq=offsets_control_calculateq)
         continue
         
     elif event == 'Save workspace':
@@ -144,6 +136,7 @@ while True:
                 with open(folder+'/'+filename+'.pgm', 'wb') as file:
                     pickle.dump(pgm, file)
                     pickle.dump(beam_config, file)
+                    pickle.dump(offsets_control.calculate, file)
                     save_window.close()
                 break
             
@@ -152,6 +145,7 @@ while True:
         up_events[event].up(window, pgm)
     elif event in down_events.keys():
         down_events[event].down(window, pgm)
+    
 
     elif event == 'Print':
         print(pgm)

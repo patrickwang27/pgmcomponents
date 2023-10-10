@@ -13,6 +13,11 @@ import PySimpleGUI as sg
 from components import *
 from light import calc_beam_size
 import traceback
+import matplotlib.pyplot as plt
+from mplwidgets import draw_figure_w_toolbar, Toolbar
+
+
+
 
 class EPICScontrol(object):
     """
@@ -35,6 +40,10 @@ class EPICScontrol(object):
         Add increment to value
     down(window)
         Subtract increment from value
+    update(window)
+        Update the displayed value of the control.
+    write(window, value, pgm)
+        Write a value to the control.
     
     """
 
@@ -68,14 +77,14 @@ class EPICScontrol(object):
         if self.key == "-ORDER-":
             try:
                 window[self.key].update(value=int(float(window[self.key].get())) + int(float(window[f"{self.key}_inc"].get())))
-                exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+                exec(f"pgm.{self.properties[self.key]} = int(window[self.key].get())")
 
             except Exception as e:
                 sg.Popup('Order should be type int', e)
             
         else:
             window[self.key].update(value=round(float(window[self.key].get()) + float(window[f"{self.key}_inc"].get()), ndigits=3))
-            exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+            exec(f"pgm.{self.properties[self.key]} = float(window[self.key].get())")
         return
     
     def down(self, window, pgm):
@@ -85,14 +94,14 @@ class EPICScontrol(object):
         if self.key == "-ORDER-":
             try:
                 window[self.key].update(value=int(float(window[self.key].get()) - float(window[f'{self.key}_inc'].get())))
-                exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+                exec(f"pgm.{self.properties[self.key]} = int(window[self.key].get())")
 
             except Exception as e:
                 sg.Popup('Order should be type int', e)
 
         else:
             window[self.key].update(value=round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3))
-            exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+            exec(f"pgm.{self.properties[self.key]} = float(window[self.key].get())")
         return
     
     def update(self, window):
@@ -105,10 +114,22 @@ class EPICScontrol(object):
     
     def write(self, window, value, pgm):
         """
-        Write a value to the control.
+        Subroutine to write the values of a known pgm to
+        the window.
+
+        Parameters
+        ----------
+        window : PySimpleGUI.Window
+            The main window.
+        value : float
+            The value to write to the control.
+        pgm : PGM
+            The PGM object.
+
         """
         window[self.key].update(value=value)
         exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+    
         return
 
     def update_inc(self, window):
@@ -218,6 +239,7 @@ class Beam_Config(object):
     -------
     window(window, pgm)
         Pops up a window for beam configuration.
+
     
     
     """
@@ -247,9 +269,6 @@ class Beam_Config(object):
             The main window.
         pgm : PGM
             The PGM object.
-
-        Returns
-        -------
 
         """
         
@@ -473,7 +492,7 @@ class OffsetsControl(object):
         self.key = key
 
         layout = [
-            [sg.Text('Beam Vertical Offset (b):'), sg.Push(), sg.Input(key=f'{key}_beam_vertical', size=(8,1), default_text=values['beam_vertical'], enable_events=True)],
+            [sg.Text('Beam Vertical Offset (b):'), sg.Push(), sg.Input(key=f'{key}_beam_vertical', size=(8,1), default_text=values['beam_vertical'], enable_events=True, )],
             [sg.Text('Mirror Horizontal Offset (a):'), sg.Push(), sg.Input(key=f'{key}_mirror_horizontal', size=(8,1), default_text=values['mirror_hoffset'], enable_events=True)],
             [sg.HorizontalSeparator()],
             [sg.Checkbox('Calculate Offsets?', key=f'{key}_calculate', default=True, enable_events=True)],
@@ -499,7 +518,7 @@ class OffsetsControl(object):
         """
         Calculate the offsets.
         """
-        self.mirror_voffset = float(window[f'{self.key}_beam_vertical'].get())
+        self.mirror_voffset = -1*float(window[f'{self.key}_beam_vertical'].get())
         self.mirror_axis_voffset = self.mirror_voffset/2
         pgm.mirror.voffset = self.mirror_voffset
         pgm.mirror.axis_voffset = self.mirror_axis_voffset
@@ -515,7 +534,7 @@ class OffsetsControl(object):
         self._calculate = value
         return
     
-    def write(self, window, values):
+    def write(self, window, values, calcq=True):
         """
         Write values to the control.
         """
@@ -524,8 +543,133 @@ class OffsetsControl(object):
         window[f'{self.key}_mirror_vertical'].update(value=values['mirror_voffset'])
         window[f'{self.key}_mirror_axis_horizontal'].update(value=values['mirror_axis_hoffset'])
         window[f'{self.key}_mirror_axis_vertical'].update(value=values['mirror_axis_voffset'])
+        window[f'{self.key}_calculate'].update(value=calcq)
+
         return
 
+
+class Topview_Widget(object):
+    """
+    A class to supply the GUI widget for a top-view
+    footprint plot of a given PGM.
+    
+    """
+    def __init__(self, pgm, key='-TOPVIEW-', size=(800, 400)):
+        
+        self._pgm = pgm
+        self._key = key
+        self._size = size
+        self.make_canvas()
+    
+    @property
+    def pgm(self):
+        return self._pgm
+    
+    @pgm.setter
+    def pgm(self, value):
+        self._pgm = value
+        return
+    
+    @property
+    def key(self):
+        return self._key
+    
+    @key.setter
+    def key(self, value):
+        self._key = value
+        self.make_canvas()
+        return
+    
+    @property
+    def size(self):
+        return self._size
+    
+    @size.setter
+    def size(self, value):
+        self._size = value
+        self.make_canvas()
+        return
+    
+    @property
+    def frame(self):
+        return sg.Frame(title='Topview', layout=[[self.canvas], [self.control_canvas]], element_justification='center')
+    
+
+    def make_canvas(self):
+        self.canvas = sg.Canvas(size = self.size, key = self.key)
+        self.control_canvas = sg.Canvas(key=f'{self.key}_control')
+    
+    def draw(self, window):
+        plt.figure(1)
+        plt.clf()
+        fig = plt.gcf()
+        DPI = fig.get_dpi()
+        fig.set_size_inches(self.size[0]/float(DPI), self.size[1]/float(DPI))
+        ax = fig.add_subplot(111)
+
+        self.pgm.draw_topview(ax)
+
+        draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
+
+
+class Sideview_Widget(object):
+
+    def __init__(self, pgm, key='-SIDEVIEW-', size=(800, 400)):
+        self._pgm = pgm
+        self._key = key
+        self._size = size
+        self.make_canvas()
+    
+    @property
+    def pgm(self):
+        return self._pgm
+    
+    @pgm.setter
+    def pgm(self, value):
+        self._pgm = value
+        return
+    
+    @property
+    def key(self):
+        return self._key
+    
+    @key.setter
+    def key(self, value):
+        self._key = value
+        self.make_canvas()
+        return
+    
+    @property
+    def size(self):
+        return self._size
+    
+    @size.setter
+    def size(self, value):
+        self._size = value
+        self.make_canvas()
+        return
+    
+    @property
+    def frame(self):
+        return sg.Frame(title='Sideview', layout=[[self.canvas], [self.control_canvas]], element_justification='center')
+    
+
+    def make_canvas(self):
+        self.canvas = sg.Canvas(size = self.size, key = self.key)
+        self.control_canvas = sg.Canvas(key=f'{self.key}_control')
+    
+    def draw(self, window):
+        plt.figure(2)
+        plt.clf()
+        fig = plt.gcf()
+        DPI = fig.get_dpi()
+        fig.set_size_inches(self.size[0]/float(DPI), self.size[1]/float(DPI))
+        ax = fig.add_subplot(111)
+        ax.set_aspect('equal')
+        self.pgm.draw_sideview(ax)
+        ax.set_xlim(-600,500)
+
+        draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
 
 
 def main():

@@ -1344,6 +1344,7 @@ class PGM(object):
         ax.fill(mirror_corners_yz[hull_mirror.vertices,0], mirror_corners_yz[hull_mirror.vertices,1], 'r')
         ax.fill(grating_corners_yz[hull_grating.vertices,0], grating_corners_yz[hull_grating.vertices,1], 'b')
 
+        self.generate_rays()
         grating_ray, mirror_int, grating_int = self.propagate(self.rays)
         
         for index, ray in enumerate(grating_ray):
@@ -1369,12 +1370,9 @@ class PGM(object):
 
     def draw_topview(self, ax):
         """
-        Draws the top-view (x-z projection) of the setup on a given axis.
+        Draws the top-view (x-z projection) of the setup on the current
+        axes.
 
-        Parameters
-        ----------
-        ax : matplotlib.axes
-            The axis to draw on
         """
 
         m_corners = self.mirror_corners()
