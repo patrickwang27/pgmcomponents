@@ -52,7 +52,10 @@ layout = [[
 window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resizable=True)
 
 while True:
-    window.find_element_with_focus().set_focus(force=True)
+    if window.find_element_with_focus() is None:
+        pass
+    else:
+        window.find_element_with_focus().set_focus(force=True)
     event, values = window.read()
 
     print(event)
