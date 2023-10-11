@@ -160,7 +160,7 @@ class EPICScontrol(object):
     
 
 
-def configuration_popup(title, key, element):
+def configuration_popup(title, key, element, window):
     """
     Creates a popup window for configuration of Plane_Mirror or Grating.
 
@@ -199,14 +199,14 @@ def configuration_popup(title, key, element):
                 [sg.Push(), sg.Button('Cancel'), sg.Button('Save')]
                 ]]
 
-    window = sg.Window(title, layout=layout, modal=True)
+    configwindow = sg.Window(title, layout=layout, modal=True)
     while True:
-        event, values = window.read()
+        event, values = configwindow.read()
         if event == sg.WIN_CLOSED or event == 'Cancel':
-            window.close()
+            configwindow.close()
             break
         elif event == 'Save':
-            window.close()
+            configwindow.close()
             try:
                 element.dimensions = np.array([float(values[f'{key}_length']), 
                                                float(values[f'{key}_width']), 
@@ -224,6 +224,7 @@ def configuration_popup(title, key, element):
                 print(e)
                 sg.Popup('Invalid borders', [[e],[traceback.format_exc()]])
                 continue
+            window.write_event_value('Update', key)
             break
             
     return values if event == 'Save' else None
@@ -277,7 +278,7 @@ class Beam_Config(object):
         return
 
 
-    def window(self, pgm):
+    def window(self, pgm, window):
         """
         Pops up a window for beam configuration.
 
@@ -405,6 +406,7 @@ class Beam_Config(object):
                         pgm.beam_width = beam_size_h
                         pgm.beam_height = beam_size_v
                         window_beam.close()
+                        window.write_event_value('Update', 'beam')
                         break
 
                     except Exception as e:
@@ -426,6 +428,7 @@ class Beam_Config(object):
 
 
                         window_beam.close()
+                        window.write_event_value('Update', 'beam')
                         break
 
                         
@@ -685,7 +688,12 @@ class Sideview_Widget(object):
         ax = fig.add_subplot(111)
         ax.set_aspect('equal')
         self.pgm.draw_sideview(ax)
+        xlim = ax.get_xlim()
+        ylim = ax.get_ylim()
         ax.set_xlim(-600,500)
+        ax.annotate(fr'$\alpha ={self.pgm.grating.alpha}^\circ$', (xlim[1], ylim[-1]))
+        ax.annotate(fr'$\beta ={self.pgm.grating.beta}^\circ$', (xlim[1], ylim[-1]-20))
+        ax.annotate(fr'$\theta ={self.pgm.mirror.theta}^\circ$', (xlim[1], ylim[-1]-40))
 
         draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
 

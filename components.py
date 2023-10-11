@@ -183,11 +183,11 @@ class Grating(object):
     
     @property
     def order(self):
-        return self._order
+        return int(self._order)
     
     @order.setter
     def order(self, value):
-        self._order = value
+        self._order = int(value)
     
     @property
     def alpha(self):   
@@ -275,7 +275,15 @@ class Grating(object):
             The diffraction angle in degrees
         
         """
+        
+        
         wavelength = self.wavelength(self.energy)
+        print(self.energy,
+              self.order,
+                self.line_density,
+                self.cff,
+               wavelength)
+        
         lambda_u = self.order*self.line_density*1000*wavelength/(1-self.cff**2)
         sin_alpha = lambda_u + np.sqrt(1+lambda_u**2*self.cff**2)
         self._alpha = np.rad2deg(np.arcsin(sin_alpha))
@@ -1364,6 +1372,12 @@ class PGM(object):
 
             line = Line2D(r_z, r_x, color='green', linewidth=0.5)
             ax.add_line(line)
+        
+        xlim = ax.get_xlim()
+        ylim = ax.get_ylim()
+
+        
+
 
         return 
         

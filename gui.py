@@ -62,7 +62,7 @@ while True:
     print(pgm)
     pgm.energy = float(values['-ENERGY-'])
     pgm.cff = float(values['-CFF-'])
-    pgm.order = int(values['-ORDER-'])
+    pgm.mirror.order = int(values['-ORDER-'])
     pgm.grating.line_density = float(values['-LINE_DENSITY-'])
     _,_ = pgm.grating.compute_angles()
     _=pgm.mirror.compute_corners()
@@ -94,11 +94,11 @@ while True:
 
 
     elif event == 'Beam':
-        beam_config.window(pgm)
+        beam_config.window(pgm, window)
     elif event == 'Mirror':
-        configuration_popup('Mirror Configuration', '-MIRROR-', pgm.mirror)
+        configuration_popup('Mirror Configuration', '-MIRROR-', pgm.mirror, window)
     elif event == 'Grating':
-        configuration_popup('Grating Configuration', '-GRATING-', pgm.grating)
+        configuration_popup('Grating Configuration', '-GRATING-', pgm.grating, window)
     elif event == 'Export Mirror':
         pass
     elif event == 'Export Grating':
@@ -125,6 +125,7 @@ while True:
             offsets_control.updatepgm(window,pgm)
             if values['-OFFSETS-_calculate']:
                 offsets_control.calcoffsets(window, pgm)
+                window.write_event_value('Update', None)
         else:
             window.find_element('-OFFSETS-_beam_vertical').set_focus(force=True)
             continue
