@@ -76,41 +76,59 @@ class EPICScontrol(object):
         """
         if self.key == "-ORDER-":
             try:
-                window[self.key].update(value=int(float(window[self.key].get())) + int(float(window[f"{self.key}_inc"].get())))
-                exec(f"pgm.{self.properties[self.key]} = int(window[self.key].get())")
+                updated = int(float(window[self.key].get())) + int(float(window[f"{self.key}_inc"].get()))
+                window[self.key].update(value=updated)
+                setattr(pgm, self.properties[self.key], updated)
 
             except Exception as e:
                 sg.Popup('Order should be type int', e)
             
         else:
-            window[self.key].update(value=round(float(window[self.key].get()) + float(window[f"{self.key}_inc"].get()), ndigits=3))
-            exec(f"pgm.{self.properties[self.key]} = float(window[self.key].get())")
+            updated = round(float(window[self.key].get()) + float(window[f"{self.key}_inc"].get()), ndigits=3)
+            window[self.key].update(value=updated)
+            setattr(pgm, self.properties[self.key], updated)
         return
     
     def down(self, window, pgm):
-        """
-        Subtract increment from value. Needs the window object to update the value.
-        """
-        if self.key == "-ORDER-":
-            try:
-                window[self.key].update(value=int(float(window[self.key].get()) - float(window[f'{self.key}_inc'].get())))
-                exec(f"pgm.{self.properties[self.key]} = int(window[self.key].get())")
+            """
+            Subtract the increment value from the current value of the widget.
+            If the widget is an order widget, the current value is converted to an integer before subtraction.
+            The updated value is then set as the new value of the widget and also updated in the corresponding attribute of the pgm object.
 
-            except Exception as e:
-                sg.Popup('Order should be type int', e)
+            :param window: The window object containing the widget.
+            :type window: PySimpleGUI.Window
+            :param pgm: The pgm object containing the attribute to be updated.
+            :type pgm: components.PGM
+            """
+            if self.key == "-ORDER-":
+                try:
+                    updated = int(float(window[self.key].get())) - int(float(window[f"{self.key}_inc"].get()))
+                    window[self.key].update(value=updated)
+                    setattr(pgm, self.properties[self.key], updated)
 
-        else:
-            window[self.key].update(value=round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3))
-            exec(f"pgm.{self.properties[self.key]} = float(window[self.key].get())")
-        return
+                except Exception as e:
+                    sg.Popup('Order should be type int', e)
+
+            else:
+                updated = round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3)
+                window[self.key].update(value=updated)
+                setattr(pgm, self.properties[self.key], updated)
+            return
     
-    def update(self, window):
-        """
-        Update the value of the control.
-        """
-        window[self.key].update(value=self.value)
-        exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
-        return
+    def update(self, window, pgm):
+            """
+            Update the value of the control.
+
+            Args:
+                window: The window object containing the control.
+                pgm: The program object containing the property to be updated.
+
+            Returns:
+                None
+            """
+            window[self.key].update(value=self.value)
+            setattr(pgm, self.properties[self.key], self.value)
+            return
     
     def write(self, window, value, pgm):
         """

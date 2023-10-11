@@ -40,7 +40,7 @@ layout = [[
     [sg.Column([
         [energy_control.frame, order_control.frame],
         [cff_control.frame, line_density_control.frame],
-        [config_frame], [offsets_control.frame]
+        [config_frame], [offsets_control.frame], [sg.B('Print')]
     ]), 
     sg.Column([
         [topview_widget.frame],
@@ -54,6 +54,7 @@ window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resi
 while True:
     event, values = window.read()
     print(event)
+    print(pgm)
     pgm.energy = float(values['-ENERGY-'])
     pgm.cff = float(values['-CFF-'])
     pgm.order = int(values['-ORDER-'])
