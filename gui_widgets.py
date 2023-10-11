@@ -510,13 +510,13 @@ class OffsetsControl(object):
         self.key = key
 
         layout = [
-            [sg.Text('Beam Vertical Offset (b):'), sg.Push(), sg.Input(key=f'{key}_beam_vertical', size=(8,1), default_text=values['beam_vertical'], enable_events=True, )],
-            [sg.Text('Mirror Horizontal Offset (a):'), sg.Push(), sg.Input(key=f'{key}_mirror_horizontal', size=(8,1), default_text=values['mirror_hoffset'], enable_events=True)],
+            [sg.Text('Beam Vertical Offset (b):'), sg.Push(), sg.Input(key=f'{key}_beam_vertical', size=(8,1), default_text=values['beam_vertical'], focus=True, enable_events=True )],
+            [sg.Text('Mirror Horizontal Offset (a):'), sg.Push(), sg.Input(key=f'{key}_mirror_horizontal', size=(8,1), default_text=values['mirror_hoffset'])],
             [sg.HorizontalSeparator()],
             [sg.Checkbox('Calculate Offsets?', key=f'{key}_calculate', default=True, enable_events=True)],
-            [sg.Text('Mirror Vertical Offset (c):'), sg.Push(), sg.Input(key=f'{key}_mirror_vertical', size=(8,1), default_text=values['mirror_voffset'], enable_events=True, readonly=True)],
-            [sg.Text('Mirror Axis Horizontal Offset (h):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_horizontal', size=(8,1), default_text=values['mirror_axis_hoffset'], enable_events=True, readonly=False)],
-            [sg.Text('Mirror Axis Vertical Offset (v):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_vertical', size=(8,1), default_text=values['mirror_axis_voffset'], enable_events=True, readonly=True)],
+            [sg.Text('Mirror Vertical Offset (c):'), sg.Push(), sg.Input(key=f'{key}_mirror_vertical', size=(8,1), default_text=values['mirror_voffset'] ,readonly=True)],
+            [sg.Text('Mirror Axis Horizontal Offset (h):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_horizontal', size=(8,1), default_text=values['mirror_axis_hoffset'], readonly=False)],
+            [sg.Text('Mirror Axis Vertical Offset (v):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_vertical', size=(8,1), default_text=values['mirror_axis_voffset'], readonly=True)],
             ]
         self.frame = sg.Frame(title='Offsets', layout=layout)
         self._calculate = True
@@ -527,7 +527,7 @@ class OffsetsControl(object):
         """
         pgm.beam_offset = float(window[f'{self.key}_beam_vertical'].get())
         pgm.mirror.hoffset = float(window[f'{self.key}_mirror_horizontal'].get())
-        pgm.pgm.mirror.voffset = float(window[f'{self.key}_mirror_vertical'].get())
+        pgm.mirror.voffset = float(window[f'{self.key}_mirror_vertical'].get())
         pgm.mirror.axis_hoffset = float(window[f'{self.key}_mirror_axis_horizontal'].get())
         pgm.mirror.axis_voffset = float(window[f'{self.key}_mirror_axis_vertical'].get())
         return
