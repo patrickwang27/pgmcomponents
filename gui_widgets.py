@@ -688,12 +688,14 @@ class Sideview_Widget(object):
         ax = fig.add_subplot(111)
         ax.set_aspect('equal')
         self.pgm.draw_sideview(ax)
+        ax.set_xlim(-300,300)
+        ax.set_ylim(-80,30)
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
-        ax.set_xlim(-600,500)
-        ax.annotate(fr'$\alpha ={self.pgm.grating.alpha}^\circ$', (xlim[1], ylim[-1]))
-        ax.annotate(fr'$\beta ={self.pgm.grating.beta}^\circ$', (xlim[1], ylim[-1]-20))
-        ax.annotate(fr'$\theta ={self.pgm.mirror.theta}^\circ$', (xlim[1], ylim[-1]-40))
+        
+        ax.annotate(fr'$\alpha ={self.pgm.grating.alpha:.3f}^\circ$', (xlim[1]-90, ylim[0]+50))
+        ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-90, ylim[0]+40))
+        ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-90, ylim[0]+30))
 
         draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
 

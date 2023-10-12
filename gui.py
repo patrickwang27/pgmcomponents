@@ -9,18 +9,20 @@ import dill as pickle
 from time import sleep
 plt.ion
 
-mirror = Plane_Mirror.mirror_from_file('config_pgm.ini')
-grating = Grating.grating_from_file('config_pgm.ini')
+mirror = Plane_Mirror(hoffset=50, voffset=0, dimensions=np.array([450,70,50]))
+grating = Grating(line_density=400, order = 1, cff=2., energy=250, dimensions=np.array([150,40,50]))
 pgm = PGM(mirror=mirror, grating=grating)
+pgm.beam_height= 5
+pgm.beam_width = 5
 
 menu = [['File', ['Open workspace', 'Save workspace', 'Exit']],
         ['Export', ['Export Mirror', 'Export Grating', 'Export Beams', 'Export All']],
         ['Help', 'About...'], ]
 
-energy_control = EPICScontrol('Energy (eV)', 1000.,100., '-ENERGY-', pgm=pgm)
-cff_control = EPICScontrol('CFF', 2.25,0.01, '-CFF-',pgm=pgm)
+energy_control = EPICScontrol('Energy (eV)', 250.,10., '-ENERGY-', pgm=pgm)
+cff_control = EPICScontrol('CFF', 2.,0.1, '-CFF-',pgm=pgm)
 order_control = EPICScontrol('Order', 1,1, '-ORDER-',pgm=pgm)
-line_density_control = EPICScontrol('Line Density (l/mm)', 1000,100, '-LINE_DENSITY-',pgm=pgm)
+line_density_control = EPICScontrol('Line Density (l/mm)', 400,100, '-LINE_DENSITY-',pgm=pgm)
 offsets_control = OffsetsControl(pgm.values(), '-OFFSETS-')
 up_events = {'-ENERGY-_up':energy_control, '-CFF-_up':cff_control, '-ORDER-_up':order_control, '-LINE_DENSITY-_up':line_density_control}
 down_events = {'-ENERGY-_down':energy_control, '-CFF-_down':cff_control, '-ORDER-_down':order_control, '-LINE_DENSITY-_down':line_density_control}
@@ -60,15 +62,79 @@ while True:
 
     print(event)
     print(pgm)
-    pgm.energy = float(values['-ENERGY-'])
-    pgm.cff = float(values['-CFF-'])
-    pgm.mirror.order = int(values['-ORDER-'])
-    pgm.grating.line_density = float(values['-LINE_DENSITY-'])
-    _,_ = pgm.grating.compute_angles()
-    _=pgm.mirror.compute_corners()
-    _=pgm.grating.compute_corners()
-    pgm.set_theta()
-    _=pgm.mirror.compute_corners()
+
+    energy_input = float(values['-ENERGY-'])
+    cff_input = float(values['-CFF-'])
+    order_input = int(values['-ORDER-'])
+    line_density_input = float(values['-LINE_DENSITY-'])
+    try:
+        val = float(energy_input)
+        if val > 0:
+            energy_control.write(window, float(energy_input), pgm)
+            pass
+        else:
+            sg.Popup('Error', 'Energy must be a positive number')
+            energy_control.write(window, 250, pgm)
+            continue
+    except ValueError:
+        sg.Popup('Error', 'Energy must be a positive number')
+        energy_control.write(window, 250, pgm)
+        continue
+
+    try:
+        val = float(cff_input)
+        if val > 0:
+            cff_control.write(window, float(cff_input), pgm)
+            pass
+        else:
+            sg.Popup('Error', 'CFF must be a positive number')
+            cff_control.write(window, 2, pgm)
+            continue
+    except ValueError:
+        sg.Popup('Error', 'CFF must be a positive number')
+        cff_control.write(window, 2, pgm)
+        continue
+
+    try:
+        val = int(order_input)
+        if val >= 0:
+            order_control.write(window, int(order_input), pgm)
+            pass
+        else:
+            sg.Popup('Error', 'Order must be a positive integer')
+            order_control.write(window, 1, pgm)
+            continue
+    except ValueError:
+        sg.Popup('Error', 'Order must be a positive integer')
+        order_control.write(window, 1, pgm)
+        continue
+
+    
+    try:
+        val = float(line_density_input)
+        if val > 0:
+            line_density_control.write(window, float(line_density_input), pgm)
+        else:
+            sg.Popup('Error', 'Line density must be a positive number')
+            line_density_control.write(window, 400, pgm)
+    except ValueError:
+        sg.Popup('Error', 'Line density must be a positive number')
+        line_density_control.write(window, 400, pgm)
+
+    pgm.energy = float(values['-ENERGY-']) if float(values['-ENERGY-']) > 0 else 1
+    pgm.cff = float(values['-CFF-']) if float(values['-CFF-']) > 0 else 1
+    pgm.mirror.order = int(values['-ORDER-']) if int(values['-ORDER-']) >= 0 else 1
+    pgm.grating.line_density = float(values['-LINE_DENSITY-']) if float(values['-LINE_DENSITY-']) > 0 else 1
+    try:
+        _,_ = pgm.grating.compute_angles()
+        _=pgm.mirror.compute_corners()
+        _=pgm.grating.compute_corners()
+        pgm.set_theta()
+        _=pgm.mirror.compute_corners()
+    except Exception as e:
+        sg.Popup('Error', e)
+        continue
+        
     topview_widget.draw(window)
     sideview_widget.draw(window)
 
