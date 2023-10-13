@@ -53,6 +53,21 @@ layout = [[
 
 window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resizable=True)
 
+
+_,_ = pgm.grating.compute_angles()
+_=pgm.mirror.compute_corners()
+_=pgm.grating.compute_corners()
+pgm.set_theta()
+_=pgm.mirror.compute_corners()
+
+        
+topview_widget.draw(window)
+sideview_widget.draw(window)
+_=pgm.mirror.compute_corners()
+_=pgm.grating.compute_corners()
+topview_widget.draw(window)
+sideview_widget.draw(window)
+
 while True:
     if window.find_element_with_focus() is None:
         pass
@@ -165,5 +180,4 @@ while True:
         up_events[event].up(window, pgm)
     elif event in down_events.keys():
         down_events[event].down(window, pgm)
-        
         
