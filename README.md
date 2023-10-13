@@ -11,3 +11,30 @@ Documentation located in ./docs/pgm-components as html files.
 Picture of a setup is shown below:
 
 ![Simple pgm diagram](demo.png "PGM-Components Demo")
+
+## Installation Instructions
+
+To install all required packages:
+
+`pip install requirements.txt`
+
+PySimpleGUI needs to be updated to the latest development version. This is done by issuing the following command:
+
+`python -m PySimpleGUI.PySimpleGUI upgrade`
+
+or
+
+open an interactive python session (i.e. conda prompt)
+
+```
+>>> from PySimpleGUI import main
+>>> main()
+```
+which should bring up the test harness:
+
+![Pysimplegui test harness](upgrade.png "PySimpleGUI Test Harness")
+
+and click the red button labelled "Upgrade PySimpleGUI from GitHub"
+
+then click yes.
+
