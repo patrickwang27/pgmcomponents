@@ -1,0 +1,13 @@
+# Ignore compiled files
+*.class
+*.o
+*.pyc
+
+# Ignore distribution files
+/gui.dist
+/gui.build
+/gui.onefile-build
+/*.exe
+/*.pgm
+/*.ipynb_checkpoints
+/*.ipynb
