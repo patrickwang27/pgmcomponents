@@ -735,6 +735,119 @@ def main():
             beam.window(pgm)
         
 
+def update_and_draw(window, 
+                    pgm, 
+                    values, 
+                    topview_widget, 
+                    sideview_widget, 
+                    energy_control, 
+                    cff_control, 
+                    order_control, 
+                    line_density_control):
+    """
+    Update the values of the PGM object and draw the
+    topview and sideview widgets.
+    
+    Parameters
+    ----------
+    window : PySimpleGUI.Window
+        The main window.
+    pgm : PGM
+        The PGM object.
+    values : dict
+        The values of the controls.
+    topview_widget : Topview_Widget
+        The topview widget.
+    sideview_widget : Sideview_Widget
+        The sideview widget.
+    energy_control : EPICScontrol
+        The energy control.
+    cff_control : EPICScontrol
+        The cff control.
+    order_control : EPICScontrol
+        The order control.
+    line_density_control : EPICScontrol
+        The line density control.
+
+    """
+
+    
+    energy_input = float(values['-ENERGY-'])
+    cff_input = float(values['-CFF-'])
+    order_input = int(values['-ORDER-'])
+    line_density_input = float(values['-LINE_DENSITY-'])
+    try:
+        val = float(energy_input)
+        if val > 0:
+            energy_control.write(window, float(energy_input), pgm)
+            pass
+        else:
+            sg.Popup('Error', 'Energy must be a positive number')
+            energy_control.write(window, 250, pgm)
+            return
+    except ValueError:
+        sg.Popup('Error', 'Energy must be a positive number')
+        energy_control.write(window, 250, pgm)
+        return
+
+    try:
+        val = float(cff_input)
+        if val > 0:
+            cff_control.write(window, float(cff_input), pgm)
+            pass
+        else:
+            sg.Popup('Error', 'CFF must be a positive number')
+            cff_control.write(window, 2, pgm)
+            return
+    except ValueError:
+        sg.Popup('Error', 'CFF must be a positive number')
+        cff_control.write(window, 2, pgm)
+        return
+
+    try:
+        val = int(order_input)
+        if val >= 0:
+            order_control.write(window, int(order_input), pgm)
+            pass
+        else:
+            sg.Popup('Error', 'Order must be a positive integer')
+            order_control.write(window, 1, pgm)
+            return
+    except ValueError:
+        sg.Popup('Error', 'Order must be a positive integer')
+        order_control.write(window, 1, pgm)
+        return
+
+    
+    try:
+        val = float(line_density_input)
+        if val > 0:
+            line_density_control.write(window, float(line_density_input), pgm)
+        else:
+            sg.Popup('Error', 'Line density must be a positive number')
+            line_density_control.write(window, 400, pgm)
+    except ValueError:
+        sg.Popup('Error', 'Line density must be a positive number')
+        line_density_control.write(window, 400, pgm)
+
+    pgm.energy = float(values['-ENERGY-']) if float(values['-ENERGY-']) > 0 else 1
+    pgm.cff = float(values['-CFF-']) if float(values['-CFF-']) > 0 else 1
+    pgm.mirror.order = int(values['-ORDER-']) if int(values['-ORDER-']) >= 0 else 1
+    pgm.grating.line_density = float(values['-LINE_DENSITY-']) if float(values['-LINE_DENSITY-']) > 0 else 1
+    try:
+        _,_ = pgm.grating.compute_angles()
+        _=pgm.mirror.compute_corners()
+        _=pgm.grating.compute_corners()
+        pgm.set_theta()
+        _=pgm.mirror.compute_corners()
+    except Exception as e:
+        sg.Popup('Error', e)
+        return
+        
+    topview_widget.draw(window)
+    sideview_widget.draw(window)
+
+    return
 
 
 if __name__ == "__main__":

@@ -158,7 +158,7 @@ def calc_source_size(electron_size, wavelength, length):
     float
         The RMS source size in m
     """
-    return np.sqrt((electron_size*1e-6)**2 + (wavelength*length/(2*np.pi)**2))
+    return np.sqrt((electron_size*1e-6)**2 + (wavelength*1e-9*length/(2*np.pi)**2))
 
 def calc_source_div(electron_div, wavelength, length):
     """
@@ -180,4 +180,4 @@ def calc_source_div(electron_div, wavelength, length):
     float
         The RMS source divergence in rad
     """
-    return np.sqrt((electron_div*1e-6)**2 + (wavelength/(2*np.pi*length))**2)
+    return np.sqrt((electron_div*1e-6)**2 + (wavelength*1e-9/(2*np.pi*length))**2)
