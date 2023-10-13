@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from mplwidgets import draw_figure_w_toolbar, Toolbar
 
 
-
+ 
 
 class EPICScontrol(object):
     """
