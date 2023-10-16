@@ -1370,7 +1370,7 @@ class PGM(object):
             grating_int[index].y + 1000*ray.vector[-2]
             ])
 
-            line = Line2D(r_z, r_x, color='green', linewidth=0.5)
+            line = Line2D(r_z, r_x, color='green', linewidth=1)
             ax.add_line(line)
         
         xlim = ax.get_xlim()

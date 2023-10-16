@@ -8,6 +8,7 @@ Email: patrick.wang@diamond.ac.uk
 Date: 2023-10-05
 
 """
+from turtle import back
 import numpy as np
 import PySimpleGUI as sg
 from components import *
@@ -617,7 +618,7 @@ class Topview_Widget(object):
     
 
     def make_canvas(self):
-        self.canvas = sg.Canvas(size = self.size, key = self.key)
+        self.canvas = sg.Canvas(size = self.size, key = self.key, background_color='white')
         self.control_canvas = sg.Canvas(key=f'{self.key}_control')
     
     def draw(self, window):
@@ -676,7 +677,7 @@ class Sideview_Widget(object):
     
 
     def make_canvas(self):
-        self.canvas = sg.Canvas(size = self.size, key = self.key)
+        self.canvas = sg.Canvas(size = self.size, key = self.key, background_color='white')
         self.control_canvas = sg.Canvas(key=f'{self.key}_control')
     
     def draw(self, window):
@@ -688,15 +689,28 @@ class Sideview_Widget(object):
         ax = fig.add_subplot(111)
         ax.set_aspect('equal')
         self.pgm.draw_sideview(ax)
-        ax.set_xlim(-300,300)
-        ax.set_ylim(-80,30)
+        y_low = self.pgm.grating.corners[0][1] - 30
+        y_high = self.pgm.grating.corners[5][1] + 10
+        x_low = self.pgm.grating.corners[0][2] - 75
+        x_high = self.pgm.grating.dimensions[0] + 50
+        print(x_low, x_high, y_low, y_high)
+        ax.set_xlim(x_low, x_high)
+        ax.set_ylim(y_low, y_high)
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
-        
-        ax.annotate(fr'$\alpha ={self.pgm.grating.alpha:.3f}^\circ$', (xlim[1]-90, ylim[0]+50))
-        ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-90, ylim[0]+40))
-        ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-90, ylim[0]+30))
-
+        ax.set_xticks(np.arange(xlim[0], xlim[1], 10), minor=True)
+        ax.grid(which='both', alpha=0.6, linewidth=0.8)
+        ax.annotate(fr'$\alpha ={self.pgm.grating.alpha:.3f}^\circ$', (xlim[1]-45, ylim[1]-10))
+        ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-45, ylim[1]-15))
+        ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-45, ylim[1]-20))
+        ax.annotate(fr'$b = {self.pgm.beam_offset}$ mm', (xlim[1]-45, ylim[1]-25))
+        ax.annotate(fr'$a = {self.pgm.mirror.hoffset}$ mm', (xlim[1]-45, ylim[1]-30))
+        ax.annotate(fr'$c = {self.pgm.mirror.voffset}$ mm', (xlim[1]-45, ylim[1]-35))
+        ax.annotate(fr'$h = {self.pgm.mirror.axis_hoffset}$ mm', (xlim[1]-45, ylim[1]-40))
+        ax.annotate(fr'$v = {self.pgm.mirror.axis_voffset}$ mm', (xlim[1]-45, ylim[1]-45))
+        ax.annotate(fr'Order = {self.pgm.grating.order}', (xlim[0]+5, ylim[1]-10))
+        ax.annotate(fr'Line Density = {self.pgm.grating.line_density} l/mm', (xlim[0]+5, ylim[1]-15))
+        ax.annotate(fr'Energy = {self.pgm.energy} eV', (xlim[0]+5, ylim[1]-20))
         draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
 
 
