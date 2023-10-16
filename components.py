@@ -1428,30 +1428,34 @@ class PGM(object):
             [grating_rect[2][0] - self.grating.borders[3], grating_rect[2][1] - self.grating.borders[1]],
             [grating_rect[3][0] - self.grating.borders[3], grating_rect[3][1] + self.grating.borders[0]]])
         
-        """
+        self.generate_rays()
+        
         grating_ray, mirror_intercept, grating_intercept = self.propagate(self.rays)
-        """
+        
         #Index denotes the ray i.e. mirror_intercept[0] is the ray_0
-        """
-        mirror_blx = self.mirror_intercept[3].x + self.mirror._width/2
-        mirror_blz = self.mirror_intercept[2].z
-        mirror_l = self.mirror_intercept[1].z - self.mirror_intercept[2].z
-        mirror_w = self.mirror_intercept[4].x - self.mirror_intercept[3].x
+        
+        mirror_blx = mirror_intercept[3].x + self.mirror._width()/2
+        mirror_blz = mirror_intercept[2].z
+        mirror_l = mirror_intercept[1].z - mirror_intercept[2].z
+        mirror_w = mirror_intercept[4].x - mirror_intercept[3].x
         print('anything?')
 
-        grating_blx = self.grating_intercept[3].x - self.grating._width/2
-        grating_blz = self.grating_intercept[2].z
-        grating_l = self.grating_intercept[1].z - self.grating_intercept[2].z
-        grating_w = self.grating_intercept[4].x - self.grating_intercept[3].x
+        grating_blx = grating_intercept[3].x - self.grating._width()/2
+        grating_blz = grating_intercept[2].z
+        grating_l = grating_intercept[1].z - grating_intercept[2].z
+        grating_w = grating_intercept[4].x - grating_intercept[3].x
         
-        rectangle = Rectangle((mirror_blz, mirror_blx), mirror_l, mirror_w, color='g', alpha=1)
-        ax.add_patch(rectangle)
-        """
+        
+        
         ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'b',alpha=0.5)
         ax.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
         ax.fill(mirror_rect[:,0], mirror_rect[:,1], 'r',alpha=1)
         ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5)
-        
+        rectangle = Rectangle((mirror_blz, mirror_blx), mirror_l, mirror_w, color='g', alpha=1)
+        ax.add_patch(rectangle)
+
+        rectangle = Rectangle((grating_blz, grating_blx), grating_l, grating_w, color='g', alpha=1)
+        ax.add_patch(rectangle)
         
         #print(mirror_rect_hull.vertices)
         return
