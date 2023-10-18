@@ -18,7 +18,7 @@ from matplotlib.collections import PatchCollection
 import configparser
 from scipy.constants import c, h, e
 from scipy.datasets import face
-from geometry_elements import Plane, Point3D, Vector3D, Ray3D
+from .geometry_elements import Plane, Point3D, Vector3D, Ray3D
 from scipy.spatial import ConvexHull
 from matplotlib.lines import Line2D
 

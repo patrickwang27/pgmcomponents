@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Usage &#8212; pgmcomponents 0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b3523f8e" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script src="_static/documentation_options.js?v=10f1778b"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to pgmcomponents’ documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="usage">
+<h1>Usage<a class="headerlink" href="#usage" title="Link to this heading">¶</a></h1>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">¶</a></h2>
+<p>To install pgmcomponents, simple run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>pgmcomponents
+</pre></div>
+</div>
+<p>If your local python installation is correctly configured,
+i.e. the directory where pip installs to is in your PATH,
+the following commands will be available in your console.</p>
+<p>The next step is to upgrade your pysimplegui to the latest
+development version from the official github repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pgmcomponents-upgrade
+</pre></div>
+</div>
+<p>Then, either use the provided API in a notebook environment:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pgmcomponents</span> <span class="kn">import</span> <span class="n">Plane_Mirror</span><span class="p">,</span> <span class="n">Grating</span><span class="p">,</span> <span class="n">PGM</span>
+
+<span class="c1"># create a plane mirror</span>
+<span class="n">mirror</span> <span class="o">=</span> <span class="n">Plane_Mirror</span><span class="p">(</span><span class="n">voffset</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                  <span class="n">hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                  <span class="n">axis_voffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                  <span class="n">axis_hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                  <span class="n">dimensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">450</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">50</span><span class="p">]),</span>
+                  <span class="n">theta</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span>
+                  <span class="n">plane</span><span class="o">=</span><span class="n">Plane</span><span class="p">(),</span>
+                  <span class="n">borders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="n">grating</span> <span class="o">=</span> <span class="n">Grating</span><span class="p">(</span><span class="n">line_density</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span>
+        <span class="n">energy</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span>
+        <span class="n">cff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">dimensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span>
+        <span class="n">borders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="n">pgm</span> <span class="o">=</span> <span class="n">PGM</span><span class="p">(</span><span class="n">grating</span><span class="o">=</span><span class="n">grating</span><span class="p">,</span> <span class="n">mirror</span><span class="o">=</span><span class="n">mirror</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or use the provided GUI front-end:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>pgmcomponents-gui
+</pre></div>
+</div>
+<p>The GUI front-end provides a simple wrapper for around the API. Its capabilities
+are currently limited to drawing figures and exporting them to a file but this is
+under active development.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pgmcomponents</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Usage</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to pgmcomponents’ documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Patrick Wang.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.5</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/usage.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

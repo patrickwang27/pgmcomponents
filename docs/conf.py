@@ -5,8 +5,11 @@
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
 
-project = 'PyGM'
+project = 'pgmcomponents'
 copyright = '2023, Patrick Wang'
 author = 'Patrick Wang'
 release = '0.2'
@@ -28,4 +31,8 @@ html_theme = 'alabaster'
 html_static_path = ['_static']
 
 extensions = [
-	'sphinx.ext.duration']
+	'sphinx.ext.duration',
+	'sphinx.ext.autodoc',
+    'sphinx.ext.doctest',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.napoleon']

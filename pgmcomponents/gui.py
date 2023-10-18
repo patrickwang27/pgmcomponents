@@ -1,11 +1,11 @@
 import PySimpleGUI as sg
 from colorama import init
 import numpy as np
-from components import *
-from geometry_elements import *
+from .components import *
+from .geometry_elements import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from gui_widgets import *
+from .gui_widgets import *
 import dill as pickle
 from time import sleep
 

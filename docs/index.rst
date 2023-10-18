@@ -3,10 +3,10 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to PyGM's documentation!
+Welcome to pgmcomponents' documentation!
 ================================
 
-**PyGM** is a Python library for performing simple ray tracing calculations for the
+**pgmcomponents** is a Python library for performing simple ray tracing calculations for the
 plane grating monochromator (PGM) used in soft X-ray beamlines. Its main capabilities are:
 
 - Performing ray tracing for a PGM with specified geometry
@@ -22,9 +22,17 @@ plane grating monochromator (PGM) used in soft X-ray beamlines. Its main capabil
 
 
 
+
 Indices and tables
 ==================
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+Contents
+========
+
+.. toctree::
+   usage
+   API
