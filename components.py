@@ -12,11 +12,12 @@ Date: 2023-09-15
 
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle, Rectangle, Polygon
+from matplotlib.patches import Rectangle, Patch 
 from matplotlib import axes
 from matplotlib.collections import PatchCollection
 import configparser
 from scipy.constants import c, h, e
+from scipy.datasets import face
 from geometry_elements import Plane, Point3D, Vector3D, Ray3D
 from scipy.spatial import ConvexHull
 from matplotlib.lines import Line2D
@@ -97,7 +98,13 @@ class Grating(object):
     reflect(*args)
         A method to 'reflect' rays off the grating
     """
-    def __init__(self, line_density=600, energy=250, cff=2, order=1, dimensions = np.array([1,1,1]), borders = np.array([0,0,0,0])):
+    def __init__(self, 
+                 line_density=600, 
+                 energy=250, 
+                 cff=2, 
+                 order=1, 
+                 dimensions = np.array([1,1,1]), 
+                 borders = np.array([0,0,0,0])):
 
         self._line_density=line_density
         self._energy=energy
@@ -215,7 +222,13 @@ class Grating(object):
             raise ValueError("Expected exactly three values for dimensions")
         self._dimensions = value
 
-
+    @property
+    def plane(self):
+        return self._grating_plane
+    
+    @plane.setter
+    def plane(self, value):
+        self._grating_plane = value if isinstance(value, Plane) else Plane()
     @property
     def borders(self):
         return self._borders
@@ -1169,7 +1182,7 @@ class PGM(object):
     
     @property
     def beam_offset(self):
-        return self._beam_offset
+        return -1*self._beam_offset
     
     @beam_offset.setter
     def beam_offset(self, value):
@@ -1375,6 +1388,11 @@ class PGM(object):
         
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
+        legend_entries = [
+            Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
+            Patch(facecolor=(0,0,1,0.5), edgecolor=(0,0,1,0.3), label='Grating'),
+        ]
+        ax.legend(handles=legend_entries, loc = 'lower right', fontsize=16, fancybox=True, shadow=True)
 
         
 
@@ -1438,7 +1456,7 @@ class PGM(object):
         mirror_blz = mirror_intercept[2].z
         mirror_l = mirror_intercept[1].z - mirror_intercept[2].z
         mirror_w = mirror_intercept[4].x - mirror_intercept[3].x
-        print('anything?')
+
 
         grating_blx = grating_intercept[3].x - self.grating._width()/2
         grating_blz = grating_intercept[2].z
@@ -1447,14 +1465,15 @@ class PGM(object):
         
         
         
+        
         ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'b',alpha=0.5)
         ax.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
         ax.fill(mirror_rect[:,0], mirror_rect[:,1], 'r',alpha=1)
         ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5)
-        rectangle = Rectangle((mirror_blz, mirror_blx), mirror_l, mirror_w, color='g', alpha=1)
+        rectangle = Rectangle((mirror_blz, mirror_blx - (self.mirror._width()/2+ self.grating._width())), mirror_l, mirror_w, color='g', alpha=1)
         ax.add_patch(rectangle)
 
-        rectangle = Rectangle((grating_blz, grating_blx), grating_l, grating_w, color='g', alpha=1)
+        rectangle = Rectangle((grating_blz, grating_blx + self.mirror._width()/2+ self.grating._width()/2), grating_l, grating_w, color='g', alpha=1)
         ax.add_patch(rectangle)
         
         #print(mirror_rect_hull.vertices)

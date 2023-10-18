@@ -18,6 +18,7 @@ import matplotlib.pyplot as plt
 from mplwidgets import draw_figure_w_toolbar, Toolbar
 
 
+
  
 
 class EPICScontrol(object):
@@ -295,7 +296,7 @@ class Beam_Config(object):
         layout = [[
             [sg.Column([
                 [sg.Checkbox('Calculate for ID beamline', key='calculate_q', default=True,enable_events=True)],
-                [sg.Text('Electron Horinzontal Size RMS (μm)')],
+                [sg.Text('Electron Horizontal Size RMS (μm)')],
                 [sg.Text('Electron Vertical Size RMS (μm)')],
                 [sg.Text('Electron Divergence Horizontal RMS (μrad)')],
                 [sg.Text('Electron Divergence Vertical RMS (μrad)')],
@@ -511,6 +512,7 @@ class OffsetsControl(object):
 
     def __init__(self, values, key):
         self.values = values
+        print('values:',values)
         self.key = key
 
         layout = [
@@ -529,7 +531,7 @@ class OffsetsControl(object):
         """
         Update the values of the PGM object.
         """
-        pgm.beam_offset = float(window[f'{self.key}_beam_vertical'].get())
+        pgm.beam_offset = -1*float(window[f'{self.key}_beam_vertical'].get())
         pgm.mirror.hoffset = float(window[f'{self.key}_mirror_horizontal'].get())
         pgm.mirror.voffset = float(window[f'{self.key}_mirror_vertical'].get())
         pgm.mirror.axis_hoffset = float(window[f'{self.key}_mirror_axis_horizontal'].get())
@@ -540,7 +542,7 @@ class OffsetsControl(object):
         """
         Calculate the offsets.
         """
-        self.mirror_voffset = -1*float(window[f'{self.key}_beam_vertical'].get())
+        self.mirror_voffset = float(window[f'{self.key}_beam_vertical'].get())
         self.mirror_axis_voffset = self.mirror_voffset/2
         pgm.mirror.voffset = self.mirror_voffset
         pgm.mirror.axis_voffset = self.mirror_axis_voffset
@@ -693,7 +695,6 @@ class Sideview_Widget(object):
         y_high = self.pgm.grating.corners[5][1] + 10
         x_low = self.pgm.grating.corners[0][2] - 75
         x_high = self.pgm.grating.dimensions[0] + 50
-        print(x_low, x_high, y_low, y_high)
         ax.set_xlim(x_low, x_high)
         ax.set_ylim(y_low, y_high)
         xlim = ax.get_xlim()
@@ -703,14 +704,17 @@ class Sideview_Widget(object):
         ax.annotate(fr'$\alpha ={self.pgm.grating.alpha:.3f}^\circ$', (xlim[1]-45, ylim[1]-10))
         ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-45, ylim[1]-15))
         ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-45, ylim[1]-20))
-        ax.annotate(fr'$b = {self.pgm.beam_offset}$ mm', (xlim[1]-45, ylim[1]-25))
-        ax.annotate(fr'$a = {self.pgm.mirror.hoffset}$ mm', (xlim[1]-45, ylim[1]-30))
-        ax.annotate(fr'$c = {self.pgm.mirror.voffset}$ mm', (xlim[1]-45, ylim[1]-35))
-        ax.annotate(fr'$h = {self.pgm.mirror.axis_hoffset}$ mm', (xlim[1]-45, ylim[1]-40))
-        ax.annotate(fr'$v = {self.pgm.mirror.axis_voffset}$ mm', (xlim[1]-45, ylim[1]-45))
+
+        ax.annotate(fr'$b = {self.pgm.beam_offset}$ mm', (xlim[1]-90, ylim[1]-10))
+        ax.annotate(fr'$a = {self.pgm.mirror.hoffset}$ mm', (xlim[1]-90, ylim[1]-15))
+        ax.annotate(fr'$c = {self.pgm.mirror.voffset}$ mm', (xlim[1]-90, ylim[1]-20))
+        ax.annotate(fr'$h = {self.pgm.mirror.axis_hoffset}$ mm', (xlim[1]-90, ylim[1]-25))
+        ax.annotate(fr'$v = {self.pgm.mirror.axis_voffset}$ mm', (xlim[1]-90, ylim[1]-30))
+
         ax.annotate(fr'Order = {self.pgm.grating.order}', (xlim[0]+5, ylim[1]-10))
         ax.annotate(fr'Line Density = {self.pgm.grating.line_density} l/mm', (xlim[0]+5, ylim[1]-15))
         ax.annotate(fr'Energy = {self.pgm.energy} eV', (xlim[0]+5, ylim[1]-20))
+        ax.annotate(fr'$c_{{ff}} = {self.pgm.grating.cff:.3}$', (xlim[0]+5, ylim[1]-25))
         draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
 
 
@@ -757,7 +761,8 @@ def update_and_draw(window,
                     energy_control, 
                     cff_control, 
                     order_control, 
-                    line_density_control):
+                    line_density_control,
+                    offsets_control):
     """
     Update the values of the PGM object and draw the
     topview and sideview widgets.
@@ -848,6 +853,13 @@ def update_and_draw(window,
     pgm.cff = float(values['-CFF-']) if float(values['-CFF-']) > 0 else 1
     pgm.mirror.order = int(values['-ORDER-']) if int(values['-ORDER-']) >= 0 else 1
     pgm.grating.line_density = float(values['-LINE_DENSITY-']) if float(values['-LINE_DENSITY-']) > 0 else 1
+    
+    offsets_control.updatepgm(window, pgm)
+    if values['-OFFSETS-_calculate']:
+        offsets_control.calcoffsets(window, pgm)
+    else:
+        offsets_control.updatepgm(window, pgm)
+
     try:
         _,_ = pgm.grating.compute_angles()
         _=pgm.mirror.compute_corners()
@@ -861,6 +873,37 @@ def update_and_draw(window,
     topview_widget.draw(window)
     sideview_widget.draw(window)
 
+    return
+
+
+def initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control):
+    """
+    Draw the topview and sideview widgets.
+    
+    Parameters
+    ----------
+    window : PySimpleGUI.Window
+        The main window.
+    pgm : PGM
+        The PGM object.
+    topview_widget : Topview_Widget
+        The topview widget.
+    sideview_widget : Sideview_Widget
+        The sideview widget.
+    offsets_control : OffsetsControl
+        The offsets control widget.
+    """
+    pgm.generate_rays()
+    offsets_control.calcoffsets(window, pgm)
+    offsets_control.updatepgm(window, pgm)
+    _,_ = pgm.grating.compute_angles()
+    _=pgm.mirror.compute_corners()
+    _=pgm.grating.compute_corners()
+    pgm.set_theta()
+    _=pgm.mirror.compute_corners()
+
+    topview_widget.draw(window)
+    sideview_widget.draw(window)
     return
 
 

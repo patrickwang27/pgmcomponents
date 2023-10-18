@@ -174,6 +174,8 @@ class Vector3D(object):
         return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
     
     def __mul__(self, other):
+        if isinstance(other, (int, float)):
+            return Vector3D(self.x*other, self.y*other, self.z*other)
         return self.x*other.x + self.y*other.y + self.z*other.z
     
     def __div__(self, other):

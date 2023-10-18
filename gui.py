@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+from colorama import init
 import numpy as np
 from components import *
 from geometry_elements import *
@@ -7,25 +8,28 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from gui_widgets import *
 import dill as pickle
 from time import sleep
-plt.ion
 
 mirror = Plane_Mirror(hoffset=50, voffset=0, dimensions=np.array([450,70,50]))
 grating = Grating(line_density=400, order = 1, cff=2., energy=250, dimensions=np.array([150,40,50]))
 pgm = PGM(mirror=mirror, grating=grating)
 pgm.beam_height= 5
 pgm.beam_width = 5
+pgm.beam_offset = 20
 
 menu = [['File', ['Open workspace', 'Save workspace', 'Exit']],
         ['Export', ['Export Mirror', 'Export Grating', 'Export Beams', 'Export All']],
         ['Help', 'About...'], ]
 
 energy_control = EPICScontrol('Energy (eV)', 250.,10., '-ENERGY-', pgm=pgm)
-cff_control = EPICScontrol('CFF', 2.,0.1, '-CFF-',pgm=pgm)
+cff_control = EPICScontrol(u'Cff', 2.,0.1, '-CFF-',pgm=pgm)
 order_control = EPICScontrol('Order', 1,1, '-ORDER-',pgm=pgm)
 line_density_control = EPICScontrol('Line Density (l/mm)', 400,100, '-LINE_DENSITY-',pgm=pgm)
-offsets_control = OffsetsControl(pgm.values(), '-OFFSETS-')
+offset_defaults = pgm.values()
+offset_defaults['beam_vertical'] = 20
+offsets_control = OffsetsControl(offset_defaults, '-OFFSETS-')
 up_events = {'-ENERGY-_up':energy_control, '-CFF-_up':cff_control, '-ORDER-_up':order_control, '-LINE_DENSITY-_up':line_density_control}
 down_events = {'-ENERGY-_down':energy_control, '-CFF-_down':cff_control, '-ORDER-_down':order_control, '-LINE_DENSITY-_down':line_density_control}
+
 
 
 beam_config = Beam_Config()
@@ -68,17 +72,20 @@ _=pgm.grating.compute_corners()
 topview_widget.draw(window)
 sideview_widget.draw(window)
 
+initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control)
+print(pgm)
 while True:
+    event, values = window.read()
+    print(pgm)
+    update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
     if window.find_element_with_focus() is None:
         pass
     else:
         window.find_element_with_focus().set_focus(force=True)
-    event, values = window.read()
 
-    print(event)
-    print(pgm)
 
-    update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control)
+    
+
 
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
@@ -115,7 +122,7 @@ while True:
     elif event == 'Export All':
         pass
     elif event == 'About...':
-        sg.Popup(*['PGM Simulation', 'version 0.1', 'Patrick Wang'], 'About')
+        sg.Popup(*['PGM Simulation', 'version 0.2', 'Patrick Wang'], 'About')
     
     elif event == '-OFFSETS-_calculate':
         if values['-OFFSETS-_calculate']:
