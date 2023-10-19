@@ -11,12 +11,14 @@ Date: 2023-10-05
 from turtle import back
 import numpy as np
 import PySimpleGUI as sg
-from .components import *
-from .light import calc_beam_size
+from pyrsistent import v
+from components import *
+from light import calc_beam_size
 import traceback
 import matplotlib.pyplot as plt
-from .mplwidgets import draw_figure_w_toolbar, Toolbar
-
+from mplwidgets import draw_figure_w_toolbar, Toolbar
+from colorama import Fore, Back, Style, init
+from time import sleep
 
 
  
@@ -72,26 +74,31 @@ class EPICScontrol(object):
 
         return
 
-    def up(self, window, pgm):
+    def up(self, window, values, pgm):
         """
         Add increment to value, needs the window object to update the value.
         """
         if self.key == "-ORDER-":
             try:
-                updated = int(float(window[self.key].get())) + int(float(window[f"{self.key}_inc"].get()))
+                updated = int(float(values[self.key])) + int(float(values[f"{self.key}_inc"]))
+                values[self.key] = updated
                 window[self.key].update(value=updated)
+                window.write_event_value('Update', self.key)
                 setattr(pgm, self.properties[self.key], updated)
 
             except Exception as e:
                 sg.Popup('Order should be type int', e)
             
         else:
-            updated = round(float(window[self.key].get()) + float(window[f"{self.key}_inc"].get()), ndigits=3)
+            updated = round(float(values[self.key]) + float(values[f"{self.key}_inc"]), ndigits=3)
+            values[self.key] = updated
             window[self.key].update(value=updated)
+            window.write_event_value('Update', self.key)
             setattr(pgm, self.properties[self.key], updated)
+            
         return
     
-    def down(self, window, pgm):
+    def down(self, window, values, pgm):
             """
             Subtract the increment value from the current value of the widget.
             If the widget is an order widget, the current value is converted to an integer before subtraction.
@@ -105,7 +112,9 @@ class EPICScontrol(object):
             if self.key == "-ORDER-":
                 try:
                     updated = int(float(window[self.key].get())) - int(float(window[f"{self.key}_inc"].get()))
+                    values[self.key] = updated
                     window[self.key].update(value=updated)
+                    window.write_event_value('Update', values)
                     setattr(pgm, self.properties[self.key], updated)
 
                 except Exception as e:
@@ -113,7 +122,9 @@ class EPICScontrol(object):
 
             else:
                 updated = round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3)
+                values[self.key] = updated
                 window[self.key].update(value=updated)
+                window.write_event_value('Update', values)
                 setattr(pgm, self.properties[self.key], updated)
             return
     
@@ -790,7 +801,7 @@ def update_and_draw(window,
 
     """
 
-    
+    print(Fore.RED+ 'updated in fn' + Style.RESET_ALL)
     energy_input = float(values['-ENERGY-'])
     cff_input = float(values['-CFF-'])
     order_input = int(values['-ORDER-'])
@@ -803,11 +814,11 @@ def update_and_draw(window,
         else:
             sg.Popup('Error', 'Energy must be a positive number')
             energy_control.write(window, 250, pgm)
-            return
+            pass
     except ValueError:
         sg.Popup('Error', 'Energy must be a positive number')
         energy_control.write(window, 250, pgm)
-        return
+        pass
 
     try:
         val = float(cff_input)
@@ -817,11 +828,11 @@ def update_and_draw(window,
         else:
             sg.Popup('Error', 'CFF must be a positive number')
             cff_control.write(window, 2, pgm)
-            return
+            pass
     except ValueError:
         sg.Popup('Error', 'CFF must be a positive number')
         cff_control.write(window, 2, pgm)
-        return
+        pass
 
     try:
         val = int(order_input)
@@ -831,23 +842,26 @@ def update_and_draw(window,
         else:
             sg.Popup('Error', 'Order must be a positive integer')
             order_control.write(window, 1, pgm)
-            return
+            pass
     except ValueError:
         sg.Popup('Error', 'Order must be a positive integer')
         order_control.write(window, 1, pgm)
-        return
+        pass
 
     
     try:
         val = float(line_density_input)
         if val > 0:
             line_density_control.write(window, float(line_density_input), pgm)
+            pass
         else:
             sg.Popup('Error', 'Line density must be a positive number')
             line_density_control.write(window, 400, pgm)
+            pass
     except ValueError:
         sg.Popup('Error', 'Line density must be a positive number')
         line_density_control.write(window, 400, pgm)
+        pass
 
     pgm.energy = float(values['-ENERGY-']) if float(values['-ENERGY-']) > 0 else 1
     pgm.cff = float(values['-CFF-']) if float(values['-CFF-']) > 0 else 1

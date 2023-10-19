@@ -20,7 +20,13 @@ plane grating monochromator (PGM) used in soft X-ray beamlines. Its main capabil
    :maxdepth: 2
    :caption: Contents:
 
+This library has an API for programmatic interaction as well as a GUI front-end for interactive
+use. The GUI is based on PySimpleGUI's wrap of tk-inter.
 
+You may wish to start with the :doc:`usage` section for installation instructions.
+
+If you wish to use the API, see :doc:`tutorial` for an step-by-step guide on how to use the
+library and produce diagrams.
 
 
 Indices and tables
@@ -35,4 +41,4 @@ Contents
 
 .. toctree::
    usage
-   API
+   tutorial

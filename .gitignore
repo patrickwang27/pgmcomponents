@@ -12,5 +12,6 @@
 /*.ipynb_checkpoints
 /*.ipynb
 /dist
-/__pycache__
+/__pycache__/**
 /trash
+/docs/**

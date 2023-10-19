@@ -12,7 +12,7 @@ Date: 2023-09-15
 """
 
 import numpy as np
-from .geometry_elements import Plane, Point3D, Vector3D
+from geometry_elements import Plane, Point3D, Vector3D
 
 
 class Ray3D(object):

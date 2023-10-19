@@ -1,13 +1,13 @@
 import PySimpleGUI as sg
 from colorama import init
 import numpy as np
-from .components import *
-from .geometry_elements import *
+from components import *
+from geometry_elements import *
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from .gui_widgets import *
+from gui_widgets import *
 import dill as pickle
-from time import sleep
+from colorama import Fore
 
 mirror = Plane_Mirror(hoffset=50, voffset=0, dimensions=np.array([450,70,50]))
 grating = Grating(line_density=400, order = 1, cff=2., energy=250, dimensions=np.array([150,40,50]))
@@ -76,7 +76,10 @@ initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control)
 print(pgm)
 while True:
     event, values = window.read()
+    print(event)
+    print(values)
     print(pgm)
+    print(Fore.RED + 'Place 1' + Fore.RESET)
     update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
     if window.find_element_with_focus() is None:
         pass
@@ -90,7 +93,15 @@ while True:
     if event == sg.WIN_CLOSED or event == 'Exit':
         break
 
+    elif event in up_events.keys():
+        up_events[event].up(window, values, pgm)
+        pass
+
+    elif event in down_events.keys():
+        down_events[event].down(window, values, pgm)
+
     if event == 'Update':
+        print(Fore.RED + 'updated in loop')
         pgm.energy = float(values['-ENERGY-'])
         pgm.cff = float(values['-CFF-'])
         pgm.order = int(values['-ORDER-'])
@@ -183,8 +194,5 @@ while True:
                 break
             
         pass
-    elif event in up_events.keys():
-        up_events[event].up(window, pgm)
-    elif event in down_events.keys():
-        down_events[event].down(window, pgm)
+
         

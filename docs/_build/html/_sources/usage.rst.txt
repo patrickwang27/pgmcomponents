@@ -1,4 +1,4 @@
-Usage
+Installation and Usage
 =====
 
 Installation
@@ -54,3 +54,17 @@ or use the provided GUI front-end:
 The GUI front-end provides a simple wrapper for around the API. Its capabilities
 are currently limited to drawing figures and exporting them to a file but this is 
 under active development.
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+
+
+Contents
+========
+
+.. toctree::
+   usage
+   tutorial
