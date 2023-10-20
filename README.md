@@ -1,4 +1,5 @@
 # PGM-Components Package
+[![Documentation Status](https://readthedocs.org/projects/pgmcomponents/badge/?version=latest)](https://pgmcomponents.readthedocs.io/en/latest/?badge=latest)
 
 The pgm-components package provides the class PGM for use in simple ray tracing calculations.
 
@@ -14,27 +15,16 @@ Picture of a setup is shown below:
 
 ## Installation Instructions
 
-To install all required packages:
+To install, download the latest release and unzip.
 
-`pip install requirements.txt`
+In the root directory of pgmcomponents, run:
+`$ python -m pip install -e .`
 
-PySimpleGUI needs to be updated to the latest development version. This is done by issuing the following command:
+Before using the GUI for the first time, run:
+`$ pgmcomponents-upgrade`
+follow popup instructions to upgrade PySimpleGUI.
 
-`python -m PySimpleGUI.PySimpleGUI upgrade`
+To run the GUI:
+`$ pgmcomponents`
 
-or
-
-open an interactive python session (i.e. conda prompt)
-
-```
->>> from PySimpleGUI import main
->>> main()
-```
-which should bring up the test harness:
-
-![Pysimplegui test harness](upgrade.png "PySimpleGUI Test Harness")
-
-and click the red button labelled "Upgrade PySimpleGUI from GitHub"
-
-then click yes.
 
