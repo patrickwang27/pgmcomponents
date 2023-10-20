@@ -12,11 +12,11 @@ from turtle import back
 import numpy as np
 import PySimpleGUI as sg
 from pyrsistent import v
-from components import *
-from light import calc_beam_size
+from pgmcomponents.elements import *
+from pgmcomponents.geometry.light import calc_beam_size
 import traceback
 import matplotlib.pyplot as plt
-from mplwidgets import draw_figure_w_toolbar, Toolbar
+from pgmcomponents.gui.mplwidgets import draw_figure_w_toolbar, Toolbar
 from colorama import Fore, Back, Style, init
 from time import sleep
 

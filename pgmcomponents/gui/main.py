@@ -1,13 +1,14 @@
 import PySimpleGUI as sg
-from colorama import init
+from colorama import init, Fore
 import numpy as np
-from components import *
-from geometry_elements import *
+import dill as pickle
+
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from gui_widgets import *
-import dill as pickle
-from colorama import Fore
+from pgmcomponents.elements import *
+from pgmcomponents.geometry import *
+from pgmcomponents.gui import *
+
 
 mirror = Plane_Mirror(hoffset=50, voffset=0, dimensions=np.array([450,70,50]))
 grating = Grating(line_density=400, order = 1, cff=2., energy=250, dimensions=np.array([150,40,50]))
@@ -71,7 +72,7 @@ _=pgm.mirror.compute_corners()
 _=pgm.grating.compute_corners()
 topview_widget.draw(window)
 sideview_widget.draw(window)
-
+pgm.generate_rays()
 initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control)
 print(pgm)
 while True:
