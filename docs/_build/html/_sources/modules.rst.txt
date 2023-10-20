@@ -4,4 +4,7 @@ pgmcomponents
 .. toctree::
    :maxdepth: 4
 
-   pgmcomponents
+   elements
+   geometry
+   gui
+   gui

@@ -1,0 +1,47 @@
+Metadata-Version: 2.1
+Name: pgmcomponents
+Version: 0.2
+Summary: X-ray tracing for plane grating monochromator
+Author-email: Patrick Wang <patrick.wang@diamond.ac.uk>
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy>=1.23.0
+Requires-Dist: scipy>=1.8.1
+Requires-Dist: matplotlib>=3.5.2
+Requires-Dist: pysimplegui>=4.60.0
+Requires-Dist: dill>=0.3.6
+
+# PGM-Components Package
+[![Documentation Status](https://readthedocs.org/projects/pgmcomponents/badge/?version=latest)](https://pgmcomponents.readthedocs.io/en/latest/?badge=latest)
+
+The pgm-components package provides the class PGM for use in simple ray tracing calculations.
+
+The package also contains a linear algebra library for simple manipulation of 3D geometrical objects. These are provided by geometry_elements.py
+
+See documentation html for more details.
+
+Documentation located in ./docs/pgm-components as html files.
+
+Picture of a setup is shown below:
+
+![Simple pgm diagram](demo.png "PGM-Components Demo")
+
+## Installation Instructions
+
+To install, download the latest release and unzip.
+
+In the root directory of pgmcomponents, run:
+`$ python -m pip install -e .`
+
+Before using the GUI for the first time, run:
+`$ pgmcomponents-upgrade`
+follow popup instructions to upgrade PySimpleGUI.
+
+To run the GUI:
+`$ pgmcomponents`
+
+
