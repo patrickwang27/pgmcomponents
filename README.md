@@ -1,13 +1,10 @@
 # PGM-Components Package
 [![Documentation Status](https://readthedocs.org/projects/pgmcomponents/badge/?version=latest)](https://pgmcomponents.readthedocs.io/en/latest/?badge=latest)
-
+[![Static Badge](https://img.shields.io/badge/stable-v0.2-blue)](https://github.com/patrickwang27/pgmcomponents/releases)
 The pgm-components package provides the class PGM for use in simple ray tracing calculations.
 
 The package also contains a linear algebra library for simple manipulation of 3D geometrical objects. These are provided by geometry_elements.py
 
-See documentation html for more details.
-
-Documentation located in ./docs/pgm-components as html files.
 
 Picture of a setup is shown below:
 
@@ -15,16 +12,17 @@ Picture of a setup is shown below:
 
 ## Installation Instructions
 
-To install, download the latest release and unzip.
+To install, download the latest [release](https://github.com/patrickwang27/pgmcomponents/releases) and run the following command in the directory containing setup.py:
 
-In the root directory of pgmcomponents, run:
-`$ python -m pip install -e .`
-
-Before using the GUI for the first time, run:
-`$ pgmcomponents-upgrade`
-follow popup instructions to upgrade PySimpleGUI.
-
+```bash
+pip install pgmcomponents-some-version.tar.gz
+```
 To run the GUI:
-`$ pgmcomponents`
-
+```bash
+python -m pgmcomponents.gui.main
+```
+or
+```bash
+pgm-gui
+```
 
