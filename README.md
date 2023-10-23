@@ -1,6 +1,7 @@
 # PGM-Components Package
 [![Documentation Status](https://readthedocs.org/projects/pgmcomponents/badge/?version=latest)](https://pgmcomponents.readthedocs.io/en/latest/?badge=latest)
 [![Static Badge](https://img.shields.io/badge/stable-v0.2-blue)](https://github.com/patrickwang27/pgmcomponents/releases)
+
 The pgm-components package provides the class PGM for use in simple ray tracing calculations.
 
 The package also contains a linear algebra library for simple manipulation of 3D geometrical objects. These are provided by geometry_elements.py
