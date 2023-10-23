@@ -12,13 +12,13 @@ from turtle import back
 import numpy as np
 import PySimpleGUI as sg
 from pyrsistent import v
-from pgmcomponents.elements import *
-from pgmcomponents.geometry.light import calc_beam_size
+from pgmcomponents.geometry import calc_beam_size
 import traceback
 import matplotlib.pyplot as plt
 from pgmcomponents.gui.mplwidgets import draw_figure_w_toolbar, Toolbar
 from colorama import Fore, Back, Style, init
 from time import sleep
+from pgmcomponents.elements import *
 
 
  
@@ -801,7 +801,7 @@ def update_and_draw(window,
 
     """
 
-    print(Fore.RED+ 'updated in fn' + Style.RESET_ALL)
+    print(Fore.RED + 'updated in fn' + Style.RESET_ALL)
     energy_input = float(values['-ENERGY-'])
     cff_input = float(values['-CFF-'])
     order_input = int(values['-ORDER-'])
@@ -887,7 +887,7 @@ def update_and_draw(window,
     topview_widget.draw(window)
     sideview_widget.draw(window)
 
-    return
+    pass
 
 
 def initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control):

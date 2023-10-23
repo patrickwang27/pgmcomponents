@@ -11,7 +11,6 @@
 /*.pgm
 /*.ipynb_checkpoints
 /*.ipynb
-/dist
 /__pycache__/**
 /trash
 /venv
