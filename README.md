@@ -1,6 +1,6 @@
 # PGM-Components Package
 [![Documentation Status](https://readthedocs.org/projects/pgmcomponents/badge/?version=latest)](https://pgmcomponents.readthedocs.io/en/latest/?badge=latest)
-![Static Badge](https://img.shields.io/badge/unstable-v0.2-blue?labelColor=red&color=blue)
+[![Static Badge](https://img.shields.io/badge/unstable-v0.2-blue?labelColor=red&color=blue)](https://github.com/patrickwang27/pgmcomponents/releases)
 
 
 The pgm-components package provides the class PGM for use in simple ray tracing calculations.
