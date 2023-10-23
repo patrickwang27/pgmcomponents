@@ -9,7 +9,7 @@ The package also contains a linear algebra library for simple manipulation of 3D
 
 Picture of a setup is shown below:
 
-![Simple pgm diagram](demo.png "PGM-Components Demo")
+![Simple pgm diagram](gui.png "PGM-Components Demo")
 
 ## Installation Instructions
 
