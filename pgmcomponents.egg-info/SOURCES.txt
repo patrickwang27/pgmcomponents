@@ -5,6 +5,7 @@ pgmcomponents/__init__.py
 pgmcomponents.egg-info/PKG-INFO
 pgmcomponents.egg-info/SOURCES.txt
 pgmcomponents.egg-info/dependency_links.txt
+pgmcomponents.egg-info/entry_points.txt
 pgmcomponents.egg-info/requires.txt
 pgmcomponents.egg-info/top_level.txt
 pgmcomponents/elements/__init__.py
