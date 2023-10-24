@@ -35,10 +35,21 @@
 <h1>Welcome to pgmcomponents’s documentation!<a class="headerlink" href="#welcome-to-pgmcomponents-s-documentation" title="Link to this heading">¶</a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This project is under active development. If you spot issues, please report them on the <a href="#id1"><span class="problematic" id="id2">`github issues page &lt;https://github.com/patrickwang27/pgmcomponents/issues &gt;`_</span></a>.</p>
+<p>This project is under active development. If you spot issues, please report them on the <a class="reference external" href="https://github.com/patrickwang27/pgmcomponents/issues">github issues page</a>.</p>
 </div>
 <p>This is the documentation for pgmcomponents, a python library for simple ray tracing simulations for soft X-ray
 plane grating monochromators.</p>
+<p>The library contains an application programming interface (API) and a graphical user interface fron-end.</p>
+<p>To install, visit the <a class="reference external" href="https://github.com/patrickwang27/pgmcomponents/releases">releases page</a> and download the latest release.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>pgmcomponents-version_number.tar.gz
+</pre></div>
+</div>
+<p>The API is documented below, it can be accessed via:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pgmcomponents.elements</span> <span class="kn">import</span> <span class="n">Plane_Mirror</span><span class="p">,</span> <span class="n">Grating</span><span class="p">,</span> <span class="n">PGM</span>
+<span class="kn">from</span> <span class="nn">pgmcomponents.geometry</span> <span class="kn">import</span> <span class="n">Ray3D</span><span class="p">,</span> <span class="n">Point3D</span><span class="p">,</span> <span class="n">Vector3D</span><span class="p">,</span> <span class="n">Plane</span><span class="p">,</span> <span class="n">calc_beam_size</span>
+</pre></div>
+</div>
+<p>This could be done in a notebook environment for interactive programming. For an example workflow please see <span class="xref std std-ref">example</span>.</p>
 <div class="toctree-wrapper compound">
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
