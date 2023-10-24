@@ -28,7 +28,6 @@ The API is documented below, it can be accessed via:
 
 This could be done in a notebook environment for interactive programming. For an example workflow please see :ref:`example`.
 
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
