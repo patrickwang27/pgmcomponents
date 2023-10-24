@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>pgmcomponents.gui package &#8212; pgmcomponents 0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b3523f8e" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=039e1c02" />
+    <script src="_static/documentation_options.js?v=10f1778b"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="pgmcomponents-gui-package">
+<h1>pgmcomponents.gui package<a class="headerlink" href="#pgmcomponents-gui-package" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+</section>
+<section id="module-pgmcomponents.gui.gui_widgets">
+<span id="pgmcomponents-gui-gui-widgets-module"></span><h2>pgmcomponents.gui.gui_widgets module<a class="headerlink" href="#module-pgmcomponents.gui.gui_widgets" title="Link to this heading">¶</a></h2>
+<p>gui_widgets.py</p>
+<p>Provides a set of widgets for use in the GUI.</p>
+<p>Author: Patrick Wang
+Email: <a class="reference external" href="mailto:patrick&#46;wang&#37;&#52;&#48;diamond&#46;ac&#46;uk">patrick<span>&#46;</span>wang<span>&#64;</span>diamond<span>&#46;</span>ac<span>&#46;</span>uk</a>
+Date: 2023-10-05</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.gui_widgets.</span></span><span class="sig-name descname"><span class="pre">EPICScontrol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">increments</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A EPICS like control widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol.name" title="Link to this definition">¶</a></dt>
+<dd><p>The name of the control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol.value" title="Link to this definition">¶</a></dt>
+<dd><p>The default value of the control</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol.increments">
+<span class="sig-name descname"><span class="pre">increments</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol.increments" title="Link to this definition">¶</a></dt>
+<dd><p>The default increment value of the control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol.key">
+<span class="sig-name descname"><span class="pre">key</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol.key" title="Link to this definition">¶</a></dt>
+<dd><p>The key of the control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol.up">
+<span class="sig-name descname"><span class="pre">up</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol.up" title="Link to this definition">¶</a></dt>
+<dd><p>Add increment to value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol.down">
+<span class="sig-name descname"><span class="pre">down</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol.down" title="Link to this definition">¶</a></dt>
+<dd><p>Subtract increment from value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol.update" title="Link to this definition">¶</a></dt>
+<dd><p>Update the displayed value of the control.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol.write" title="Link to this definition">¶</a></dt>
+<dd><p>Write a value to the control.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-name descname"><span class="pre">up</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dd><p>Add increment to value, needs the window object to update the value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id1">
+<span class="sig-name descname"><span class="pre">down</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<dd><p>Subtract the increment value from the current value of the widget.
+If the widget is an order widget, the current value is converted to an integer before subtraction.
+The updated value is then set as the new value of the widget and also updated in the corresponding attribute of the pgm object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window</strong> (<em>PySimpleGUI.Window</em>) – The window object containing the widget.</p></li>
+<li><p><strong>pgm</strong> (<em>components.PGM</em>) – The pgm object containing the attribute to be updated.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id2" title="Link to this definition">¶</a></dt>
+<dd><p>Update the value of the control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window</strong> – The window object containing the control.</p></li>
+<li><p><strong>pgm</strong> – The program object containing the property to be updated.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id3">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
+<dd><p>Subroutine to write the values of a known pgm to
+the window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window</strong> (<em>PySimpleGUI.Window</em>) – The main window.</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value to write to the control.</p></li>
+<li><p><strong>pgm</strong> (<a class="reference internal" href="pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM" title="pgmcomponents.elements.pgm.PGM"><em>PGM</em></a>) – The PGM object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.EPICScontrol.update_inc">
+<span class="sig-name descname"><span class="pre">update_inc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.EPICScontrol.update_inc" title="Link to this definition">¶</a></dt>
+<dd><p>Update the increment of the control.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.configuration_popup">
+<span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.gui_widgets.</span></span><span class="sig-name descname"><span class="pre">configuration_popup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">title</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.configuration_popup" title="Link to this definition">¶</a></dt>
+<dd><p>Creates a popup window for configuration of Plane_Mirror or Grating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>title</strong> (<em>str</em>) – The title of the popup window.</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – The key of the element.</p></li>
+<li><p><strong>element</strong> (<a class="reference internal" href="pgmcomponents.elements.html#pgmcomponents.elements.mirror.Plane_Mirror" title="pgmcomponents.elements.mirror.Plane_Mirror"><em>Plane_Mirror</em></a><em> or </em><a class="reference internal" href="pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating" title="pgmcomponents.elements.grating.Grating"><em>Grating</em></a>) – The element to configure. Either ‘Plane_Mirror’ or ‘Grating’.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>values</strong> – A dictionary of values for the element.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.gui_widgets.</span></span><span class="sig-name descname"><span class="pre">Beam_Config</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Provides a class for beam configuration.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.electron_size_h">
+<span class="sig-name descname"><span class="pre">electron_size_h</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.electron_size_h" title="Link to this definition">¶</a></dt>
+<dd><p>The electron horizontal size RMS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.electron_size_v">
+<span class="sig-name descname"><span class="pre">electron_size_v</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.electron_size_v" title="Link to this definition">¶</a></dt>
+<dd><p>The electron vertical size RMS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.electron_div_h">
+<span class="sig-name descname"><span class="pre">electron_div_h</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.electron_div_h" title="Link to this definition">¶</a></dt>
+<dd><p>The electron horizontal divergence RMS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.electron_div_v">
+<span class="sig-name descname"><span class="pre">electron_div_v</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.electron_div_v" title="Link to this definition">¶</a></dt>
+<dd><p>The electron vertical divergence RMS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.id_length">
+<span class="sig-name descname"><span class="pre">id_length</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.id_length" title="Link to this definition">¶</a></dt>
+<dd><p>The length of the insertion device.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.distance">
+<span class="sig-name descname"><span class="pre">distance</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.distance" title="Link to this definition">¶</a></dt>
+<dd><p>The distance from the insertion device to the image plane.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.num_of_sigmas">
+<span class="sig-name descname"><span class="pre">num_of_sigmas</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.num_of_sigmas" title="Link to this definition">¶</a></dt>
+<dd><p>The number of sigmas to include in the beam size calculation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.beam_size_h">
+<span class="sig-name descname"><span class="pre">beam_size_h</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.beam_size_h" title="Link to this definition">¶</a></dt>
+<dd><p>The horizontal beam size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.beam_size_v">
+<span class="sig-name descname"><span class="pre">beam_size_v</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.beam_size_v" title="Link to this definition">¶</a></dt>
+<dd><p>The vertical beam size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Beam_Config.window">
+<span class="sig-name descname"><span class="pre">window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Beam_Config.window" title="Link to this definition">¶</a></dt>
+<dd><p>Pops up a window for beam configuration.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id4">
+<span class="sig-name descname"><span class="pre">window</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
+<dd><p>Pops up a window for beam configuration.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window</strong> (<em>PySimpleGUI.Window</em>) – The main window.</p></li>
+<li><p><strong>pgm</strong> (<a class="reference internal" href="pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM" title="pgmcomponents.elements.pgm.PGM"><em>PGM</em></a>) – The PGM object.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.OffsetsControl">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.gui_widgets.</span></span><span class="sig-name descname"><span class="pre">OffsetsControl</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.OffsetsControl" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to provide the offsets control widget.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.OffsetsControl.values">
+<span class="sig-name descname"><span class="pre">values</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.OffsetsControl.values" title="Link to this definition">¶</a></dt>
+<dd><p>The default values of the control.
+keys: ‘beam_vertical’, ‘mirror_hoffset’, ‘mirror_voffset’, ‘mirror_axis_hoffset’, ‘mirror_axis_voffset’</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.OffsetsControl.key">
+<span class="sig-name descname"><span class="pre">key</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.OffsetsControl.key" title="Link to this definition">¶</a></dt>
+<dd><p>The key of the control.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.OffsetsControl.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.OffsetsControl.update" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.OffsetsControl.updatepgm">
+<span class="sig-name descname"><span class="pre">updatepgm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.OffsetsControl.updatepgm" title="Link to this definition">¶</a></dt>
+<dd><p>Update the values of the PGM object.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.OffsetsControl.calcoffsets">
+<span class="sig-name descname"><span class="pre">calcoffsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.OffsetsControl.calcoffsets" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the offsets.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.OffsetsControl.calculate">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calculate</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.OffsetsControl.calculate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.OffsetsControl.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calcq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.OffsetsControl.write" title="Link to this definition">¶</a></dt>
+<dd><p>Write values to the control.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Topview_Widget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.gui_widgets.</span></span><span class="sig-name descname"><span class="pre">Topview_Widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-TOPVIEW-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(800,</span> <span class="pre">400)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Topview_Widget" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to supply the GUI widget for a top-view
+footprint plot of a given PGM.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Topview_Widget.pgm">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pgm</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Topview_Widget.pgm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Topview_Widget.key">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">key</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Topview_Widget.key" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Topview_Widget.size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Topview_Widget.size" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Topview_Widget.frame">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frame</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Topview_Widget.frame" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Topview_Widget.make_canvas">
+<span class="sig-name descname"><span class="pre">make_canvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Topview_Widget.make_canvas" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Topview_Widget.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Topview_Widget.draw" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Sideview_Widget">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.gui_widgets.</span></span><span class="sig-name descname"><span class="pre">Sideview_Widget</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'-SIDEVIEW-'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(800,</span> <span class="pre">400)</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Sideview_Widget" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Sideview_Widget.pgm">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">pgm</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Sideview_Widget.pgm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Sideview_Widget.key">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">key</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Sideview_Widget.key" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Sideview_Widget.size">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Sideview_Widget.size" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Sideview_Widget.frame">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">frame</span></span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Sideview_Widget.frame" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Sideview_Widget.make_canvas">
+<span class="sig-name descname"><span class="pre">make_canvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Sideview_Widget.make_canvas" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.Sideview_Widget.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.Sideview_Widget.draw" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.main">
+<span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.gui_widgets.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.main" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.update_and_draw">
+<span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.gui_widgets.</span></span><span class="sig-name descname"><span class="pre">update_and_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topview_widget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sideview_widget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cff_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_density_control</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets_control</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.update_and_draw" title="Link to this definition">¶</a></dt>
+<dd><p>Update the values of the PGM object and draw the
+topview and sideview widgets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window</strong> (<em>PySimpleGUI.Window</em>) – The main window.</p></li>
+<li><p><strong>pgm</strong> (<a class="reference internal" href="pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM" title="pgmcomponents.elements.pgm.PGM"><em>PGM</em></a>) – The PGM object.</p></li>
+<li><p><strong>values</strong> (<em>dict</em>) – The values of the controls.</p></li>
+<li><p><strong>topview_widget</strong> (<a class="reference internal" href="#pgmcomponents.gui.gui_widgets.Topview_Widget" title="pgmcomponents.gui.gui_widgets.Topview_Widget"><em>Topview_Widget</em></a>) – The topview widget.</p></li>
+<li><p><strong>sideview_widget</strong> (<a class="reference internal" href="#pgmcomponents.gui.gui_widgets.Sideview_Widget" title="pgmcomponents.gui.gui_widgets.Sideview_Widget"><em>Sideview_Widget</em></a>) – The sideview widget.</p></li>
+<li><p><strong>energy_control</strong> (<a class="reference internal" href="#pgmcomponents.gui.gui_widgets.EPICScontrol" title="pgmcomponents.gui.gui_widgets.EPICScontrol"><em>EPICScontrol</em></a>) – The energy control.</p></li>
+<li><p><strong>cff_control</strong> (<a class="reference internal" href="#pgmcomponents.gui.gui_widgets.EPICScontrol" title="pgmcomponents.gui.gui_widgets.EPICScontrol"><em>EPICScontrol</em></a>) – The cff control.</p></li>
+<li><p><strong>order_control</strong> (<a class="reference internal" href="#pgmcomponents.gui.gui_widgets.EPICScontrol" title="pgmcomponents.gui.gui_widgets.EPICScontrol"><em>EPICScontrol</em></a>) – The order control.</p></li>
+<li><p><strong>line_density_control</strong> (<a class="reference internal" href="#pgmcomponents.gui.gui_widgets.EPICScontrol" title="pgmcomponents.gui.gui_widgets.EPICScontrol"><em>EPICScontrol</em></a>) – The line density control.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pgmcomponents.gui.gui_widgets.initial_draw">
+<span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.gui_widgets.</span></span><span class="sig-name descname"><span class="pre">initial_draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">window</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pgm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">topview_widget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sideview_widget</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets_control</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.gui_widgets.initial_draw" title="Link to this definition">¶</a></dt>
+<dd><p>Draw the topview and sideview widgets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>window</strong> (<em>PySimpleGUI.Window</em>) – The main window.</p></li>
+<li><p><strong>pgm</strong> (<a class="reference internal" href="pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM" title="pgmcomponents.elements.pgm.PGM"><em>PGM</em></a>) – The PGM object.</p></li>
+<li><p><strong>topview_widget</strong> (<a class="reference internal" href="#pgmcomponents.gui.gui_widgets.Topview_Widget" title="pgmcomponents.gui.gui_widgets.Topview_Widget"><em>Topview_Widget</em></a>) – The topview widget.</p></li>
+<li><p><strong>sideview_widget</strong> (<a class="reference internal" href="#pgmcomponents.gui.gui_widgets.Sideview_Widget" title="pgmcomponents.gui.gui_widgets.Sideview_Widget"><em>Sideview_Widget</em></a>) – The sideview widget.</p></li>
+<li><p><strong>offsets_control</strong> (<a class="reference internal" href="#pgmcomponents.gui.gui_widgets.OffsetsControl" title="pgmcomponents.gui.gui_widgets.OffsetsControl"><em>OffsetsControl</em></a>) – The offsets control widget.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-pgmcomponents.gui.main">
+<span id="pgmcomponents-gui-main-module"></span><h2>pgmcomponents.gui.main module<a class="headerlink" href="#module-pgmcomponents.gui.main" title="Link to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pgmcomponents.gui.main.main">
+<span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.main.main" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pgmcomponents.gui.mplwidgets">
+<span id="pgmcomponents-gui-mplwidgets-module"></span><h2>pgmcomponents.gui.mplwidgets module<a class="headerlink" href="#module-pgmcomponents.gui.mplwidgets" title="Link to this heading">¶</a></h2>
+<p>File supplies necessary mpl widgets for
+gui_widgets.py</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pgmcomponents.gui.mplwidgets.draw_figure_w_toolbar">
+<span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.mplwidgets.</span></span><span class="sig-name descname"><span class="pre">draw_figure_w_toolbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">canvas</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">canvas_toolbar</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.mplwidgets.draw_figure_w_toolbar" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.gui.mplwidgets.Toolbar">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.gui.mplwidgets.</span></span><span class="sig-name descname"><span class="pre">Toolbar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.gui.mplwidgets.Toolbar" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">NavigationToolbar2Tk</span></code></p>
+</dd></dl>
+
+</section>
+<section id="module-pgmcomponents.gui">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pgmcomponents.gui" title="Link to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">pgmcomponents</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Patrick Wang.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="_sources/pgmcomponents.gui.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
