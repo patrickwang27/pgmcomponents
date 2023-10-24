@@ -24,7 +24,7 @@ release = '0.2'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    'sphinx.ext.autodoc',
+    'autoapi.extension',
     'sphinx.ext.napoleon',  # For numpy-style docstrings
     'sphinx.ext.viewcode',
     'sphinx.ext.intersphinx',
@@ -57,5 +57,6 @@ intersphinx_mapping = {
 }
 
 # If you want to sort members by group (e.g., attributes, methods), you can set:
-autodoc_member_order = 'groupwise'
 
+
+autoapi_dirs = ['../pgmcomponents']

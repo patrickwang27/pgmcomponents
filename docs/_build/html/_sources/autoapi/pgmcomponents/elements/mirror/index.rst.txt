@@ -1,0 +1,216 @@
+:py:mod:`pgmcomponents.elements.mirror`
+=======================================
+
+.. py:module:: pgmcomponents.elements.mirror
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.elements.mirror.Plane_Mirror
+
+
+
+
+.. py:class:: Plane_Mirror(voffset=20, hoffset=0, axis_voffset=0, axis_hoffset=0, dimensions=np.array([450, 70, 50]), theta=45, plane=Plane(), borders=np.array([0, 0, 0, 0]))
+
+
+   Bases: :py:obj:`object`
+
+   A class for a simple plane mirror.
+
+   :param dimensions: The dimensions of the mirror in mm
+   :type dimensions: array_like
+   :param position: The position of the mirror
+   :type position: Point3D
+   :param normal: The normal vector of the mirror
+   :type normal: Vector3D
+   :param orientation:
+   :type orientation: Vector3D
+
+   .. attribute:: dimensions
+
+      The dimensions of the mirror in mm
+
+      :type: array_like
+
+   .. attribute:: position
+
+      The position of the mirror
+
+      :type: Point3D
+
+   .. attribute:: normal
+
+      The normal vector of the mirror
+
+      :type: Vector3D
+
+   .. attribute:: orientation
+
+      The orientation of the mirror
+
+      :type: Vector3D
+
+   .. attribute:: corners
+
+      The corners of the grating in the global coordinate system:
+      [bottom left back,
+      bottom right back,
+      bottom left front,
+      bottom right front,
+      top left back,
+      top right back,
+      top left front,
+      top right front]
+
+      :type: array_like
+
+   .. attribute:: plane
+
+      The plane of the mirror
+
+      :type: Plane
+
+   .. attribute:: borders
+
+       Specifies the borders for a realistic plane mirror:
+       borders : array_like
+       Specifies the borders of a realistic grating component.
+       |-----------Top------------|
+       |                          |
+      Left   Mirror Plane       Right
+       |                          |       ---> +z direction
+       |----------Bottom----------|
+       [top, bottom, left, right]
+
+      :type: array_like
+
+   .. method:: set_position(position)
+
+      Set the position of the mirror
+
+   .. method:: set_normal(normal)
+
+      Set the normal vector of the mirror
+
+   .. method:: set_orientation(orientation)
+
+      Set the orientation of the mirror
+
+   .. method:: set_dimensions(*args)
+
+      Set the dimensions of the mirror
+
+   .. method:: set_offsets(voffset, hoffset, axis_voffset, axis_hoffset)
+
+      Set the offsets of the mirror
+
+   .. method:: compute_corners()
+
+      Compute the corners of the mirror in the global coordinate system,
+
+   .. py:property:: voffset
+
+
+   .. py:property:: hoffset
+
+
+   .. py:property:: axis_voffset
+
+
+   .. py:property:: axis_hoffset
+
+
+   .. py:property:: dimensions
+
+
+   .. py:property:: plane
+
+
+   .. py:property:: theta
+
+
+   .. py:property:: corners
+
+
+   .. py:property:: borders
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: read_file(filename)
+
+      Read mirror parameters from a file.
+      See config_pgm.ini for an example.
+      A config_file may contain more than one sections, but only the
+      mirror section will be read.
+
+      :param filename: The name of the file to read from
+      :type filename: str
+
+
+   .. py:method:: set_position(position)
+
+
+   .. py:method:: set_normal(normal)
+
+
+   .. py:method:: set_dimensions(*args)
+
+      Set the dimensions of the mirror.
+
+      :param \*args: Either one or three arguments for the dimensions
+      :type \*args: array_like
+
+      :raises ValueError: If the number of arguments is not one or three
+
+
+   .. py:method:: set_offsets(voffset, hoffset, axis_voffset, axis_hoffset)
+
+
+   .. py:method:: compute_corners()
+
+      Compute the corners of the mirror in the global coordinate system,
+      in addition to the plane and normal of the mirror.
+
+
+      :returns: **corners** -- The corners of the mirror in the global coordinate system
+      :rtype: array_like
+
+
+   .. py:method:: draw(ax)
+
+
+   .. py:method:: mirror_from_file(filename)
+      :classmethod:
+
+      Create a mirror from a file.
+      See config_pgm.ini for an example.
+      A config_file may contain more than one sections, but only the
+      mirror section will be read.
+
+      :param filename: The name of the file to read from
+      :type filename: str
+
+
+   .. py:method:: reflect(*args)
+
+      A method to reflect rays off the mirror.
+
+      :param \*args: The rays to be reflected
+      :type \*args: Ray3D
+
+      :returns: **reflected_rays** -- A list of reflected rays
+      :rtype: list
+
+
+

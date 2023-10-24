@@ -1,0 +1,17 @@
+:py:mod:`pgmcomponents`
+=======================
+
+.. py:module:: pgmcomponents
+
+
+Subpackages
+-----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+   elements/index.rst
+   geometry/index.rst
+   gui/index.rst
+
+

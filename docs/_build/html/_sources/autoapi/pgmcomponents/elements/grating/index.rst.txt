@@ -1,0 +1,258 @@
+:py:mod:`pgmcomponents.elements.grating`
+========================================
+
+.. py:module:: pgmcomponents.elements.grating
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.elements.grating.Grating
+
+
+
+
+.. py:class:: Grating(line_density=600, energy=250, cff=2, order=1, dimensions=np.array([1, 1, 1]), borders=np.array([0, 0, 0, 0]))
+
+
+   Bases: :py:obj:`object`
+
+   A class for a simple grating
+
+   Based on the work of Matthew Hand
+
+   :param line_density: The line density of the grating in lines per mm
+   :type line_density: float
+   :param energy: The energy of the incident beam in eV
+   :type energy: float
+   :param cff: The fixed focus constant of the grating
+   :type cff: float
+   :param order: The diffraction order of the grating
+   :type order: int
+   :param dimensions: The dimensions of the grating in mm [length, width, height],
+                      dimensions are also accessible with lambda functions as:
+                      self._length(), self._width(), self._height()
+   :type dimensions: array_like
+
+   .. attribute:: line_density
+
+      The line density of the grating in lines per mm
+
+      :type: float
+
+   .. attribute:: energy
+
+      The energy of the incident beam in eV
+
+      :type: float
+
+   .. attribute:: cff
+
+      The fixed focus constant of the grating
+
+      :type: float
+
+   .. attribute:: order
+
+      The diffraction order of the grating
+
+      :type: int
+
+   .. attribute:: alpha
+
+      The incident angle of the beam in degrees
+
+      :type: float
+
+   .. attribute:: beta
+
+      The diffraction angle of the beam in degrees
+
+      :type: float
+
+   .. attribute:: dimensions
+
+      The dimensions of the grating in mm
+
+      :type: array_like
+
+   .. attribute:: corners
+
+      The corners of the grating in the global coordinate system:
+      [bottom left back,
+      bottom right back,
+      bottom left front,
+      bottom right front,
+      top left back,
+      top right back,
+      top left front,
+      top right front]
+
+      :type: array_like
+
+   .. attribute:: borders
+
+       Specifies the borders of a realistic grating component.
+       |-----------Top------------|
+       |                          |
+      Left   Grating Plane      Right
+       |                          |      ----> +z direction
+       |----------Bottom----------|
+       [top, bottom, left, right]
+
+       Left - Right => Tangential
+       Top - Bottom => Sagittal
+
+      :type: array_like
+
+   .. method:: set_angles(alpha, beta)
+
+      Set the incident and diffraction angles of the grating
+
+   .. method:: wavelength()
+
+      Calculate the wavelength of the beam in Angstroms
+
+   .. method:: compute_corners()
+
+      Compute the corners of the grating in the global coordinate system
+
+   .. method:: diffract(*args)
+
+      A method to diffract rays off the grating
+
+   .. method:: compute_beta(alpha, line_density, energy, order)
+
+      Calculate the diffraction angle beta from the incident angle alpha
+
+   .. method:: reflect(*args)
+
+      A method to 'reflect' rays off the grating
+
+
+   .. py:property:: line_density
+
+
+   .. py:property:: energy
+
+
+   .. py:property:: cff
+
+
+   .. py:property:: order
+
+
+   .. py:property:: alpha
+
+
+   .. py:property:: beta
+
+
+   .. py:property:: dimensions
+
+
+   .. py:property:: plane
+
+
+   .. py:property:: borders
+
+
+   .. py:property:: corners
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: read_file(filename)
+
+      Read grating parameters from a file.
+      See config_pgm.ini for an example.
+      A config_file may contain more than one sections, but only the
+      grating section will be read.
+
+      :param filename: The name of the file to read from
+      :type filename: str
+
+
+   .. py:method:: set_angles(alpha, beta)
+
+
+   .. py:method:: compute_beta()
+
+
+   .. py:method:: compute_angles()
+
+      Compute the incident and diffraction angles of the grating.
+      The incident angle is calculated from the diffraction angle
+      using the fixed focus constant.
+
+      :returns: * **alpha** (*float*) -- The incident angle in degrees
+                * **beta** (*float*) -- The diffraction angle in degrees
+
+
+   .. py:method:: diffract(*args)
+
+      A method to diffract rays off the grating.
+
+      :param rays: The rays to be diffracted
+      :type rays: list
+
+      :returns: **diffracted_rays** -- A list of diffracted rays
+      :rtype: list
+
+
+   .. py:method:: calc_beta(alpha, line_density, energy, order)
+      :staticmethod:
+
+      Calculate the diffraction angle beta from the incident angle alpha.
+
+      :param alpha: The incident angle in degrees
+      :type alpha: float
+      :param line_density: The line density of the grating in lines per mm
+      :type line_density: float
+      :param energy: The energy of the incident beam in eV
+      :type energy: float
+      :param order: The diffraction order of the grating
+      :type order: int
+
+      :returns: **beta** -- The diffraction angle in degrees
+      :rtype: float
+
+
+   .. py:method:: wavelength(energy)
+
+
+   .. py:method:: compute_corners()
+
+
+   .. py:method:: reflect(*args)
+
+      A method to reflect rays off the grating.
+
+      :param \*args: The rays to be reflected
+      :type \*args: Ray3D
+
+      :returns: **reflected_rays** -- A list of reflected rays
+      :rtype: list
+
+
+   .. py:method:: grating_from_file(filename)
+      :classmethod:
+
+      Create a grating from a file.
+      See config_pgm.ini for an example.
+      A config_file may contain more than one sections, but only the
+      grating section will be read.
+
+      :param filename: The name of the file to read from
+      :type filename: str
+
+
+
