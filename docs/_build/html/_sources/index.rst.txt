@@ -5,10 +5,16 @@
 
 Welcome to pgmcomponents's documentation!
 =========================================
+.. note::
+   This project is under active development. If you spot issues, please report them on the `github issues page <https://github.com/patrickwang27/pgmcomponents/issues >`_.
+
+This is the documentation for pgmcomponents, a python library for simple ray tracing simulations for soft X-ray 
+plane grating monochromators.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+
 
 
 
