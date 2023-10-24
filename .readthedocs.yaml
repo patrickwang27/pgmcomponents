@@ -32,6 +32,6 @@ sphinx:
  python:
     install:
       - method: pip
-        path: ./dist/pgmcomponents-*.tar.gz
-        
+        path: ./dist/pgmcomponents-0.2.tar.gz
+
 
