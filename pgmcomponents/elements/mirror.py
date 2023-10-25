@@ -292,7 +292,7 @@ class Plane_Mirror(object):
     def set_normal(self, normal: Vector3D):
         self._plane.normal = normal
 
-    def set_dimensions(self, *args: float | List[float]):
+    def set_dimensions(self, *args):
         """
         Set the dimensions of the mirror.
 
@@ -435,7 +435,7 @@ class Plane_Mirror(object):
         mirror.read_file(filename)
         return mirror
 
-    def reflect(self, *args: Ray3D | List[Ray3D])-> List[Ray3D]:
+    def reflect(self, *args) -> list:
         """
         A method to reflect rays off the mirror.
 

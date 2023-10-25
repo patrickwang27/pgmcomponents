@@ -326,7 +326,7 @@ class Grating(object):
 
         return self._alpha, self._beta
 
-    def diffract(self, *args: Ray3D | List[Ray3D])-> List[Ray3D]:
+    def diffract(self, *args)-> list:
         """
         A method to diffract rays off the grating.
 
@@ -502,7 +502,7 @@ class Grating(object):
 
         return self._corners
 
-    def reflect(self, *args: Ray3D | List[Ray3D])-> List[Ray3D]:
+    def reflect(self, *args)-> list:
         """
         A method to reflect rays off the grating.
 
