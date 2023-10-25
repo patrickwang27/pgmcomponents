@@ -6,8 +6,22 @@ gui_widgets.py
 
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from PySimpleGUI import Canvas
 
 def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
+    """
+    Method to draw on a given canvas and toolbar.
+
+    Parameters
+    ----------
+    canvas : Canvas
+        Canvas to draw on.
+    fig : Figure
+        Figure to draw.
+    canvas_toolbar : Canvas
+        Canvas to draw toolbar on.
+    
+    """
     if canvas.children:
         for child in canvas.winfo_children():
             child.destroy()

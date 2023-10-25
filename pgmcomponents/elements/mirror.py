@@ -1,4 +1,5 @@
 
+from ast import List
 import numpy as np
 from pgmcomponents.geometry import Point3D, Vector3D, Plane, Ray3D
 import configparser
@@ -9,13 +10,33 @@ class Plane_Mirror(object):
 
     Parameters
     ----------
-    dimensions : array_like
-        The dimensions of the mirror in mm
-    position : Point3D
-        The position of the mirror
-    normal : Vector3D
-        The normal vector of the mirror
-    orientation : Vector3D
+    voffset : float, optional
+        The vertical offset of the mirror in mm
+    hoffset : float, optional
+        The horizontal offset of the mirror in mm
+    axis_voffset : float, optional
+        The vertical offset of the mirror axis in mm
+    axis_hoffset : float, optional
+        The horizontal offset of the mirror axis in mm
+    dimensions : array_like, optional
+        The dimensions of the mirror in mm [length, width, height]
+        Dimensions are also accessible with lambda functions as:
+        self._length(), self._width(), self._height()
+    theta : float, optional
+        The angle of the mirror in degrees
+    plane : Plane, optional
+        The plane of the mirror
+    borders: array_like, optional
+        Specifies the borders for a realistic plane mirror:
+        borders : array_like
+        Specifies the borders of a realistic grating component.
+        |-----------Top------------|
+        |                          |
+       Left   Mirror Plane       Right
+        |                          |       ---> +z direction
+        |----------Bottom----------|        
+        [top, bottom, left, right]
+    
 
     Attributes
     ----------
@@ -116,6 +137,8 @@ class Plane_Mirror(object):
         self._theta = theta
         _ = self.compute_corners()
         self._borders = borders
+
+
     def __repr__(self):
         return """Plane_Mirror(voffset={}, 
         hoffset={}, 
@@ -136,6 +159,7 @@ class Plane_Mirror(object):
                             self.plane,
                             self.borders)
     
+
     def read_file(self, filename):
         """
         Read mirror parameters from a file. 
@@ -262,13 +286,13 @@ class Plane_Mirror(object):
         self._borders = value
 
 
-    def set_position(self, position):
+    def set_position(self, position: Point3D):
         self._plane.position = position
 
-    def set_normal(self, normal):
+    def set_normal(self, normal: Vector3D):
         self._plane.normal = normal
 
-    def set_dimensions(self, *args):
+    def set_dimensions(self, *args: float | List[float]):
         """
         Set the dimensions of the mirror.
 
@@ -296,7 +320,7 @@ class Plane_Mirror(object):
         self._axis_voffset = axis_voffset
         self._axis_hoffset = axis_hoffset
 
-    def compute_corners(self):
+    def compute_corners(self)-> np.ndarray:
         """
         Compute the corners of the mirror in the global coordinate system,
         in addition to the plane and normal of the mirror.
@@ -304,8 +328,18 @@ class Plane_Mirror(object):
 
         Returns
         -------
-        corners : array_like
+        corners : np.ndarray
             The corners of the mirror in the global coordinate system
+            [bottom left back,
+            bottom right back,
+            bottom left front,
+            bottom right front,
+            top left back,
+            top right back,
+            top left front,
+            top right front]
+        
+        
         """
         cot = lambda x: 1/np.tan(x)
         theta = np.deg2rad(self.theta)
@@ -383,9 +417,6 @@ class Plane_Mirror(object):
 
         return self._corners
 
-    def draw(self, ax):
-        pass
-
     @classmethod
 
     def mirror_from_file(cls, filename):
@@ -404,7 +435,7 @@ class Plane_Mirror(object):
         mirror.read_file(filename)
         return mirror
 
-    def reflect(self, *args):
+    def reflect(self, *args: Ray3D | List[Ray3D])-> List[Ray3D]:
         """
         A method to reflect rays off the mirror.
 
@@ -415,7 +446,7 @@ class Plane_Mirror(object):
 
         Returns
         -------
-        reflected_rays : list
+        reflected_rays : list of Ray3D
             A list of reflected rays
 
         """

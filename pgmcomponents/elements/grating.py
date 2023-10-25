@@ -1,3 +1,4 @@
+from ast import List
 import numpy as np
 import configparser
 from pgmcomponents.geometry import Point3D, Plane, Ray3D, Vector3D
@@ -25,6 +26,17 @@ class Grating(object):
         The dimensions of the grating in mm [length, width, height],
         dimensions are also accessible with lambda functions as:
         self._length(), self._width(), self._height()
+    borders : array_like
+        Specifies the borders of a realistic grating component.
+        |-----------Top------------|
+        |                          |
+       Left   Grating Plane      Right
+        |                          |      ----> +z direction
+        |----------Bottom----------|
+        [top, bottom, left, right]
+
+        Left - Right => Tangential
+        Top - Bottom => Sagittal
     
     Attributes
     ----------
@@ -222,6 +234,22 @@ class Grating(object):
 
 
     def set_angles(self, alpha, beta):
+        """
+        Set the incident and diffraction angles of the grating.
+
+        Parameters
+        ----------
+        alpha : float
+            The incident angle in degrees
+        beta : float 
+            The diffraction angle in degrees
+
+        Raises
+        ------
+        ValueError
+            If the wavelength is zero
+
+        """
         wavelength = (np.sin(np.deg2rad(alpha)) + np.sin(np.deg2rad(beta))) / (self.line_density*1000*self._order)
         
         try:
@@ -242,6 +270,20 @@ class Grating(object):
         raise AttributeError("Corners should be calculated via compute_corners().")
 
     def compute_beta(self):
+        """
+        Compute the diffraction angle beta from the incident angle alpha.
+
+        Returns
+        -------
+        beta : float
+            The diffraction angle in degrees
+        
+        Raises
+        ------
+        ValueError
+            If the wavelength is zero
+        
+        """
         beta = 0
         try:
             wavelength = self.wavelength(self.energy)
@@ -284,19 +326,24 @@ class Grating(object):
 
         return self._alpha, self._beta
 
-    def diffract(self, *args):
+    def diffract(self, *args: Ray3D | List[Ray3D])-> List[Ray3D]:
         """
         A method to diffract rays off the grating.
 
         Parameters
         ----------
-        rays : list
+        *args : Ray3D or list of Ray3D
             The rays to be diffracted
 
         Returns
         -------
-        diffracted_rays : list
+        diffracted_rays : list of Ray3D
             A list of diffracted rays
+
+        Raises
+        ------
+        TypeError
+            If the rays are not Ray3D objects
 
         """
         diffracted_rays = []
@@ -344,6 +391,12 @@ class Grating(object):
         -------
         beta : float
             The diffraction angle in degrees
+        
+        Raises
+        ------ 
+        ValueError
+            If the wavelength is zero
+        
         """
         beta = 0 
 
@@ -360,7 +413,23 @@ class Grating(object):
     def wavelength(self, energy):
         return h*c/(e*energy)
     
-    def compute_corners(self):
+    def compute_corners(self)-> np.ndarray:
+        """
+        Compute the corners of the grating in the global coordinate system.
+
+        Returns
+        -------
+        corners : array_like
+            The corners of the grating in the global coordinate system:
+            [bottom left back, 
+            bottom right back, 
+            bottom left front, 
+            bottom right front,
+            top left back,
+            top right back,
+            top left front,
+            top right front]
+        """
         
         beta = np.deg2rad(self._beta)
         beta_g = np.deg2rad(self._beta + 90)
@@ -433,13 +502,13 @@ class Grating(object):
 
         return self._corners
 
-    def reflect(self, *args):
+    def reflect(self, *args: Ray3D | List[Ray3D])-> List[Ray3D]:
         """
         A method to reflect rays off the grating.
 
         Parameters
         ----------
-        *args : Ray3D
+        *args : Ray3D or list of Ray3D
             The rays to be reflected
 
         Returns

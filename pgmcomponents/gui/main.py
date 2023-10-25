@@ -1,4 +1,13 @@
-from turtle import update
+"""
+Main program for PGM simulation GUI.
+
+
+Author: Patrick Wang, 2023
+Email: patrick.wang@diamond.ac.uk
+Version = 0.2.2
+
+"""
+
 import PySimpleGUI as sg
 from PySimpleGUI.PySimpleGUI import _upgrade_gui as upgrade
 from colorama import init, Fore

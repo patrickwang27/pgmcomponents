@@ -27,7 +27,7 @@ class EPICScontrol(object):
     """
     A EPICS like control widget.
 
-    Attributes
+    Parameters
     ----------
     name : str
         The name of the control.
@@ -37,6 +37,9 @@ class EPICScontrol(object):
         The default increment value of the control.
     key : str
         The key of the control.
+    pgm : PGM
+        The PGM object.
+
 
     Methods
     -------
@@ -51,7 +54,7 @@ class EPICScontrol(object):
     
     """
 
-    def __init__(self, name, value, increments, key, pgm=None):
+    def __init__(self, name: str, value: float, increments: float, key: str, pgm=None) -> None:
         self.name = name
         self.value = value
         self.increments = increments
@@ -74,8 +77,21 @@ class EPICScontrol(object):
 
         return
 
-    def up(self, window, values, pgm):
+    def up(self, window: sg.Window, values: dict, pgm: PGM) -> None:
         """
+        Parameters
+        ----------
+        window : PySimpleGUI.Window
+            The window object containing the control.
+        values : dict
+            The values of the window.
+        pgm : PGM
+            The PGM object.
+        
+        Returns
+        -------
+        None
+
         Add increment to value, needs the window object to update the value.
         """
         if self.key == "-ORDER-":
@@ -98,16 +114,20 @@ class EPICScontrol(object):
             
         return
     
-    def down(self, window, values, pgm):
+    def down(self, window: sg.Window, values: dict, pgm: PGM) -> None:
             """
             Subtract the increment value from the current value of the widget.
             If the widget is an order widget, the current value is converted to an integer before subtraction.
             The updated value is then set as the new value of the widget and also updated in the corresponding attribute of the pgm object.
 
-            :param window: The window object containing the widget.
-            :type window: PySimpleGUI.Window
-            :param pgm: The pgm object containing the attribute to be updated.
-            :type pgm: components.PGM
+            Parameters
+            ----------
+            window : PySimpleGUI.Window
+                The window object containing the control.
+            values : dict
+                The values of the window.
+            pgm : PGM
+                The PGM object.
             """
             if self.key == "-ORDER-":
                 try:
@@ -128,22 +148,26 @@ class EPICScontrol(object):
                 setattr(pgm, self.properties[self.key], updated)
             return
     
-    def update(self, window, pgm):
+    def update(self, window: sg.Window, pgm: PGM) -> None:
             """
             Update the value of the control.
 
-            Args:
-                window: The window object containing the control.
-                pgm: The program object containing the property to be updated.
+            Parameters
+            ----------
 
-            Returns:
-                None
+            window: The window object containing the control.
+            pgm: The program object containing the property to be updated.
+
+            Returns
+            -------
+
+            None
             """
             window[self.key].update(value=self.value)
             setattr(pgm, self.properties[self.key], self.value)
             return
     
-    def write(self, window, value, pgm):
+    def write(self, window: sg.Window, value: dict, pgm: PGM)-> None:
         """
         Subroutine to write the values of a known pgm to
         the window.
@@ -163,9 +187,19 @@ class EPICScontrol(object):
     
         return
 
-    def update_inc(self, window):
+    def update_inc(self, window: sg.Window)-> None:
         """
         Update the increment of the control.
+
+        Parameters
+        ----------
+        window : PySimpleGUI.Window
+            The window object containing the control.
+        
+        Returns
+        -------
+        None
+
         """
         window[f"{self.key}_inc"].update(value=self.increments)
         return
@@ -173,7 +207,7 @@ class EPICScontrol(object):
     
 
 
-def configuration_popup(title, key, element, window):
+def configuration_popup(title: str, key: str, element: Plane_Mirror | Grating, window)-> dict:
     """
     Creates a popup window for configuration of Plane_Mirror or Grating.
 
@@ -291,7 +325,7 @@ class Beam_Config(object):
         return
 
 
-    def window(self, pgm, window):
+    def window(self, pgm: PGM, window: sg.Window)-> None:
         """
         Pops up a window for beam configuration.
 
@@ -890,7 +924,11 @@ def update_and_draw(window,
     pass
 
 
-def initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control):
+def initial_draw(window: sg.Window, 
+                 pgm:PGM, 
+                 topview_widget:Topview_Widget, 
+                 sideview_widget:Sideview_Widget, 
+                 offsets_control:OffsetsControl)-> None:
     """
     Draw the topview and sideview widgets.
     
