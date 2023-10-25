@@ -11,7 +11,7 @@ Date: 2023-09-15
 """
 import numpy as np
 #from .light import Ray3D as Ray3DLight
-
+from colorama import Fore
 
 class Ray3D(object):
     """
@@ -493,9 +493,8 @@ class Plane(object):
         Point3D or None
             The point of intersection if the plane intersects the other plane or ray3d, None otherwise
         """
-        print(f'IntersectQ Ran! Other of type:{type(other)}')
+    
         if isinstance(other, Plane):
-            print('here?')
             return not np.isclose(self.normal.dot(other.normal), 1.0, atol=atol), None
 
         elif isinstance(other, Ray3D):
@@ -503,12 +502,11 @@ class Plane(object):
                 w = other.position - self.point
                 fac = -self.normal.dot(w) / self.normal.dot(other.vector)
                 plane_intersect = w + fac * other.vector + self.point
-                print('or here?')
                 return True, plane_intersect
             
             else:
                 raise ValueError("The plane and ray are parallel")    
-        print('Not handled!')
+        print(Fore.RED + 'Not handled!' + Fore.RESET)
 
 
 

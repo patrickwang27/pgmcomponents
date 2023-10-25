@@ -25,7 +25,8 @@ def main():
 
     version = sg.__version__
     version_str = version.split('.')
-
+    print(Fore.GREEN,"Welcome to pgm-gui!", Fore.RESET)
+    print("Checking PySimpleGUI version...")
     if len(version_str) <= 3:
         print(Fore.RED + "PySimpleGUI is not up-to-date, see popup!" + Fore.RESET)
         response = sg.PopupOKCancel(f"Your PySimpleGUI version is {version}\nThis program requires version the github dev version.\n Press OK to begin upgrade sequence.")
@@ -35,6 +36,7 @@ def main():
             exit()
         else:
             sg.Popup('Proceeding, but program will potentially break!')
+    print('Initialising PGM...')
     mirror = Plane_Mirror(hoffset=50, voffset=0, dimensions=np.array([450,70,50]))
     grating = Grating(line_density=400, order = 1, cff=2., energy=250, dimensions=np.array([150,40,50]))
     pgm = PGM(mirror=mirror, grating=grating)
@@ -45,7 +47,7 @@ def main():
     menu = [['File', ['Open workspace', 'Save workspace', 'Exit']],
             ['Export', ['Export Mirror', 'Export Grating', 'Export Beams', 'Export All']],
             ['Help', 'About...'], ]
-
+    print("Initialising control widgets...")
     energy_control = EPICScontrol('Energy (eV)', 250.,10., '-ENERGY-', pgm=pgm)
     cff_control = EPICScontrol(u'Cff', 2.,0.1, '-CFF-',pgm=pgm)
     order_control = EPICScontrol('Order', 1,1, '-ORDER-',pgm=pgm)
@@ -56,7 +58,7 @@ def main():
     up_events = {'-ENERGY-_up':energy_control, '-CFF-_up':cff_control, '-ORDER-_up':order_control, '-LINE_DENSITY-_up':line_density_control}
     down_events = {'-ENERGY-_down':energy_control, '-CFF-_down':cff_control, '-ORDER-_down':order_control, '-LINE_DENSITY-_down':line_density_control}
 
-
+    print("Initialising widgets...")
 
     beam_config = Beam_Config()
     topview_widget = Topview_Widget(pgm, size=(1000,500))
@@ -80,7 +82,7 @@ def main():
         ],
         [sideview_widget.frame]
     ]]
-
+    print("Initialising window...")
     window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resizable=True)
 
 
@@ -100,13 +102,9 @@ def main():
     #sideview_widget.draw(window)
     pgm.generate_rays()
     initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control)
-    print(pgm)
+    print("Initialisation complete!")
     while True:
         event, values = window.read()
-        print(event)
-        print(values)
-        print(pgm)
-        print(Fore.RED + 'Place 1' + Fore.RESET)
         update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
         if window.find_element_with_focus() is None:
             pass
