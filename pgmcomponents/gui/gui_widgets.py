@@ -6,6 +6,7 @@ Provides a set of widgets for use in the GUI.
 Author: Patrick Wang
 Email: patrick.wang@diamond.ac.uk
 Date: 2023-10-05
+Version = 0.2.2
 
 """
 from turtle import back
@@ -19,7 +20,7 @@ from pgmcomponents.gui.mplwidgets import draw_figure_w_toolbar, Toolbar
 from colorama import Fore, Back, Style, init
 from time import sleep
 from pgmcomponents.elements import *
-
+from __future__ import annotations
 
  
 
