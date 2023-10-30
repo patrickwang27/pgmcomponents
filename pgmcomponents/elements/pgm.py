@@ -10,7 +10,6 @@ from pgmcomponents.geometry import Plane, Point3D, Vector3D, Ray3D
 from scipy.spatial import ConvexHull
 from matplotlib.lines import Line2D
 from pgmcomponents.elements import Plane_Mirror, Grating
-from __future__ import annotations
 
 class PGM(object):
     """

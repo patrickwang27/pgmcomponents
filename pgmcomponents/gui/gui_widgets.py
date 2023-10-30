@@ -21,7 +21,6 @@ from pgmcomponents.gui.mplwidgets import draw_figure_w_toolbar, Toolbar
 from colorama import Fore, Back, Style, init
 from time import sleep
 from pgmcomponents.elements import *
-from __future__ import annotations
 
  
 
