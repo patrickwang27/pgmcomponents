@@ -8,6 +8,7 @@ Email: patrick.wang@diamond.ac.uk
 Date: 2023-10-05
 
 """
+from __future__ import annotations
 from turtle import back
 import numpy as np
 import PySimpleGUI as sg
@@ -957,6 +958,8 @@ def initial_draw(window: sg.Window,
     topview_widget.draw(window)
     sideview_widget.draw(window)
     return
+
+
 
 
 if __name__ == "__main__":

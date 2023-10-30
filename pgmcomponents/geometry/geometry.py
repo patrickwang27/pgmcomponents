@@ -9,6 +9,7 @@ Version: 0.1
 Date: 2023-09-15
 
 """
+from __future__ import division, print_function
 import numpy as np
 #from .light import Ray3D as Ray3DLight
 from colorama import Fore

@@ -1,3 +1,4 @@
+from __future__ import annotations
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Patch 
@@ -439,7 +440,22 @@ class PGM(object):
             grating_int[index].y + 1000*ray.vector[-2]
             ])
 
-            line = Line2D(r_z, r_x, color='green', linewidth=1)
+            line = Line2D(r_z, r_x, color='green', linewidth=1, label='Dispersed Rays')
+            ax.add_line(line)
+        
+        zero_order_rays = self.grating.reflect(self.rays)
+        for index, ray in enumerate(zero_order_rays):
+            r_z = np.array([
+            grating_int[index].z,
+            grating_int[index].z + 1000*ray.vector[-1]
+            ])
+
+            r_x = np.array([
+            grating_int[index].y,
+            grating_int[index].y + 1000*ray.vector[-2]
+            ])
+
+            line = Line2D(r_z, r_x, color='gray', linewidth=1, label='Zero Order Reflections')
             ax.add_line(line)
         
         xlim = ax.get_xlim()
