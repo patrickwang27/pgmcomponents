@@ -4,7 +4,7 @@ import numpy as np
 import configparser
 from pgmcomponents.geometry import Point3D, Plane, Ray3D, Vector3D
 from scipy.constants import c, h, e
-
+from __future__ import annotations
 
 
 class Grating(object):

@@ -5,7 +5,7 @@ used in ray tracing of X-ray optics.
 Author: Patrick Wang
 Email: patrick.wang@diamond.ac.uk
 
-Version: 0.1
+Version: 0.2.2
 Date: 2023-09-15
 
 """

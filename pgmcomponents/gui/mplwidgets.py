@@ -2,6 +2,8 @@
 File supplies necessary mpl widgets for
 gui_widgets.py
 
+version: 0.2.2
+
 """
 
 import matplotlib.pyplot as plt

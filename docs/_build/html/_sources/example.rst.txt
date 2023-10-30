@@ -31,3 +31,26 @@ Example
     fig, ax = plt.subplots()
     pgm.draw_topview(ax)
     fig.savefig('topview.png')
+
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents:
+
+   pgmcomponents.elements
+   pgmcomponents.geometry
+   pgmcomponents.gui
+   pgmcomponents
+   example
+   acknowledgements
+
+
+
+
+
+Indices and tables
+==================
+
+* :ref:`genindex`
+* :ref:`modindex`
+* :ref:`search`
