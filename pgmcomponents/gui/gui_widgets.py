@@ -127,7 +127,7 @@ class EPICScontrol(object):
                 The window object containing the control.
             values : dict
                 The values of the window.
-            pgm : PGM
+            pgm : PGM20
                 The PGM object.
             """
             if self.key == "-ORDER-":
@@ -437,6 +437,7 @@ class Beam_Config(object):
                         self.distance = float(values['distance'])
                         self.num_of_sigmas = float(values['num_of_sigmas'])
                         self.calc = True
+                        print('Wavelength is ', pgm.wavelength)
                         beam_size_h = calc_beam_size(self.electron_div_h,
                                                      self.electron_div_h,
                                                      pgm.wavelength,
@@ -580,7 +581,7 @@ class OffsetsControl(object):
         pgm.beam_offset = -1*float(window[f'{self.key}_beam_vertical'].get())
         pgm.mirror.hoffset = float(window[f'{self.key}_mirror_horizontal'].get())
         pgm.mirror.voffset = float(window[f'{self.key}_mirror_vertical'].get())
-        pgm.mirror.axis_hoffset = float(window[f'{self.key}_mirror_axis_horizontal'].get())
+        pgm.mirror.axis_hoffset =float(window[f'{self.key}_mirror_axis_horizontal'].get())
         pgm.mirror.axis_voffset = float(window[f'{self.key}_mirror_axis_vertical'].get())
         return
     
@@ -662,7 +663,7 @@ class Topview_Widget(object):
     
     @property
     def frame(self):
-        return sg.Frame(title='Topview', layout=[[self.canvas], [self.control_canvas]], element_justification='center')
+        return sg.Frame(title='Footprint View', layout=[[self.canvas], [self.control_canvas]], element_justification='center')
     
 
     def make_canvas(self):
@@ -721,7 +722,7 @@ class Sideview_Widget(object):
     
     @property
     def frame(self):
-        return sg.Frame(title='Sideview', layout=[[self.canvas], [self.control_canvas]], element_justification='center')
+        return sg.Frame(title='Side View', layout=[[self.canvas], [self.control_canvas]], element_justification='center')
     
 
     def make_canvas(self):
@@ -751,7 +752,7 @@ class Sideview_Widget(object):
         ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-45, ylim[1]-15))
         ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-45, ylim[1]-20))
 
-        ax.annotate(fr'$b = {self.pgm.beam_offset}$ mm', (xlim[1]-90, ylim[1]-10))
+        ax.annotate(fr'$b = {np.abs(self.pgm.beam_offset)}$ mm', (xlim[1]-90, ylim[1]-10))
         ax.annotate(fr'$a = {self.pgm.mirror.hoffset}$ mm', (xlim[1]-90, ylim[1]-15))
         ax.annotate(fr'$c = {self.pgm.mirror.voffset}$ mm', (xlim[1]-90, ylim[1]-20))
         ax.annotate(fr'$h = {self.pgm.mirror.axis_hoffset}$ mm', (xlim[1]-90, ylim[1]-25))

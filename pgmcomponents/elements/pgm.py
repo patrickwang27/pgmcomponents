@@ -535,17 +535,27 @@ class PGM(object):
         grating_w = grating_intercept[4].x - grating_intercept[3].x
         
         
+        beam_footprint_dimensions = np.array([mirror_l, mirror_w, grating_l, grating_w])
         
-        
-        ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'b',alpha=0.5)
+        ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
         ax.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
-        ax.fill(mirror_rect[:,0], mirror_rect[:,1], 'r',alpha=1)
-        ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5)
+        ax.fill(mirror_rect[:,0], mirror_rect[:,1], 'r',alpha=1, label='Mirror')
+        ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5, label='Grating')
         rectangle = Rectangle((mirror_blz, mirror_blx - (self.mirror._width()/2+ self.grating._width())), mirror_l, mirror_w, color='g', alpha=1)
         ax.add_patch(rectangle)
-
+        legend_entries = [
+            Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
+            Patch(facecolor=(0,0,1,0.5), edgecolor=(0,0,1,0.3), label='Grating'),
+            Patch(facecolor=(0,1,0,0.5), edgecolor=(0,1,0,0.3), label='Beam Footprint'),
+        ]
+        ax.legend(handles=legend_entries, loc = 'upper left', fontsize=16, fancybox=True, shadow=True)
+        ax.annotate('Beam Footprint', xy=(mirror_blz + mirror_l/2, mirror_blx - (self.mirror._width()/2+ self.grating._width()) + mirror_w/2), xytext=(mirror_blz + mirror_l/2, mirror_blx - (self.mirror._width()/2+ self.grating._width()) + mirror_w/2), fontsize=16, color='g')
+        rows = ['Beam width on mirror (mm)', 'Beam height on mirror (mm)', 'Beam width on grating (mm)', 'Beam height on grating (mm)']
+        columns = ['Value']
+        
         rectangle = Rectangle((grating_blz, grating_blx + self.mirror._width()/2+ self.grating._width()/2), grating_l, grating_w, color='g', alpha=1)
         ax.add_patch(rectangle)
+
         
         #print(mirror_rect_hull.vertices)
         return
