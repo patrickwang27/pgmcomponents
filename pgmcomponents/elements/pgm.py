@@ -549,8 +549,7 @@ class PGM(object):
             Patch(facecolor=(0,1,0,0.5), edgecolor=(0,1,0,0.3), label='Beam Footprint'),
         ]
         ax.legend(handles=legend_entries, loc = 'upper left', fontsize=16, fancybox=True, shadow=True)
-        ax.annotate('Beam Footprint', xy=(mirror_blz + mirror_l/2, mirror_blx - (self.mirror._width()/2+ self.grating._width()) + mirror_w/2), xytext=(mirror_blz + mirror_l/2, mirror_blx - (self.mirror._width()/2+ self.grating._width()) + mirror_w/2), fontsize=16, color='g')
-        rows = ['Beam width on mirror (mm)', 'Beam height on mirror (mm)', 'Beam width on grating (mm)', 'Beam height on grating (mm)']
+    
         columns = ['Value']
         
         rectangle = Rectangle((grating_blz, grating_blx + self.mirror._width()/2+ self.grating._width()/2), grating_l, grating_w, color='g', alpha=1)
