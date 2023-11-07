@@ -21,6 +21,7 @@ from pgmcomponents.geometry import *
 from pgmcomponents.gui import *
 import os
 
+
 def main():
 
     version = sg.__version__
@@ -162,7 +163,7 @@ def main():
             else:
                 window['-OFFSETS-_mirror_vertical'].update(readonly=False)
                 window['-OFFSETS-_mirror_axis_vertical'].update(readonly=False)
-        
+            """
         elif event == '-OFFSETS-_beam_vertical':
             if values['-OFFSETS-_beam_vertical'] not in ['',' ', '-']:
                 window.find_element('-OFFSETS-_beam_vertical').set_focus(force=True)
@@ -173,7 +174,7 @@ def main():
             else:
                 window.find_element('-OFFSETS-_beam_vertical').set_focus(force=True)
                 continue
-        
+            """
         elif event == 'Open workspace':
             pickle_file = sg.popup_get_file('Open workspace', file_types=(('PGM Workspace', '*.pgm'),))
             if pickle_file:
