@@ -461,7 +461,7 @@ class PGM(object):
         ylim = ax.get_ylim()
         legend_entries = [
             Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
-            Patch(facecolor=(0,0,1,0.5), edgecolor=(0,0,1,0.3), label='Grating'),
+            Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
         ]
         ax.legend(handles=legend_entries, loc = 'lower right', fontsize=16, fancybox=True, shadow=True)
 
@@ -545,8 +545,8 @@ class PGM(object):
         ax.add_patch(rectangle)
         legend_entries = [
             Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
-            Patch(facecolor=(0,0,1,0.5), edgecolor=(0,0,1,0.3), label='Grating'),
-            Patch(facecolor=(0,1,0,0.5), edgecolor=(0,1,0,0.3), label='Beam Footprint'),
+            Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
+            Patch(facecolor=(0,1,0,1), edgecolor=(0,1,0,0.3), label='Beam Footprint'),
         ]
         ax.legend(handles=legend_entries, loc = 'upper left', fontsize=16, fancybox=True, shadow=True)
     

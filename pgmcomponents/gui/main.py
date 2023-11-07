@@ -83,7 +83,7 @@ def main():
         [sideview_widget.frame]
     ]]
     print("Initialising window...")
-    window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resizable=True)
+    window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resizable=True, return_keyboard_events=True)
 
 
     _,_ = pgm.grating.compute_angles()
@@ -103,9 +103,17 @@ def main():
     pgm.generate_rays()
     initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control)
     print("Initialisation complete!")
+    update_events = [
+        '-ENERGY-_up', '-ENERGY-_down', '-CFF-_up', '-CFF-_down', '-ORDER-_up', '-ORDER-_down', '-LINE_DENSITY-_up', '-LINE_DENSITY-_down', '-OFFSETS-_beam_vertical', '-OFFSETS-_mirror_vertical', '-OFFSETS-_mirror_axis_vertical', '-OFFSETS-_calculate',
+        "Return:36", "KP_Enter:104"
+    ]
     while True:
         event, values = window.read()
-        update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
+        print(event)
+        if event in update_events:
+
+            update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
+        
         if window.find_element_with_focus() is None:
             pass
         else:
