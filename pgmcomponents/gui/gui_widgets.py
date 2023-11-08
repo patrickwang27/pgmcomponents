@@ -14,14 +14,14 @@ from turtle import back
 import numpy as np
 import PySimpleGUI as sg
 from pyrsistent import v
-from pgmcomponents.geometry import calc_beam_size
+from pgmcomponents.geometry import calc_beam_size, calc_source_div, calc_source_size
 import traceback
 import matplotlib.pyplot as plt
 from pgmcomponents.gui.mplwidgets import draw_figure_w_toolbar, Toolbar
 from colorama import Fore, Back, Style, init
 from time import sleep
 from pgmcomponents.elements import *
-
+import inspect
  
 
 class EPICScontrol(object):
@@ -326,6 +326,8 @@ class Beam_Config(object):
         return
 
 
+    
+
     def window(self, pgm: PGM, window: sg.Window)-> None:
         """
         Pops up a window for beam configuration.
@@ -437,27 +439,21 @@ class Beam_Config(object):
                         self.distance = float(values['distance'])
                         self.num_of_sigmas = float(values['num_of_sigmas'])
                         self.calc = True
-                        print('Wavelength is ', pgm.wavelength)
-                        print('Distance is ', self.distance)
-                        print('ID length is ', self.id_length)
-                        print('Number of sigmas is ', self.num_of_sigmas)
-                        print('Electron size h is ', self.electron_size_h)
-                        print('Electron size v is ', self.electron_size_v)
-                        print('Electron div h is ', self.electron_div_h)
-                        print('Electron div v is ', self.electron_div_v)
-    
-                        beam_size_h = calc_beam_size(self.electron_div_h,
-                                                     self.electron_div_h,
+                        beam_size_h = calc_beam_size(float(values['electron_size_h']),
+                                                     float(values['electron_div_h']),
                                                      pgm.wavelength,
-                                                     self.distance,
-                                                     self.id_length,
-                                                     num_of_sigmas=self.num_of_sigmas)
-                        beam_size_v = calc_beam_size(self.electron_div_v,
-                                                        self.electron_div_v,
-                                                        pgm.wavelength,
-                                                        self.distance,
-                                                        self.id_length,
-                                                        num_of_sigmas=self.num_of_sigmas)
+                                                     float(values['distance']),
+                                                     float(values['id_length']),
+                                                     num_of_sigmas=float(values['num_of_sigmas']))
+                        print('save Beam size h is ', beam_size_h)
+                        beam_size_v = calc_beam_size(float(values['electron_size_v']),
+                                                    float(values['electron_div_v']),
+                                                    pgm.wavelength,
+                                                    float(values['distance']),
+                                                    float(values['id_length']),
+                                                    num_of_sigmas=float(values['num_of_sigmas']))
+                        
+                        print('save Beam size v is ', beam_size_v)
                         self.beam_size_h = beam_size_h
                         self.beam_size_v = beam_size_v
                         pgm.beam_width = beam_size_h
@@ -521,12 +517,24 @@ class Beam_Config(object):
 
             if check_fill() and values['calculate_q']:
                 try:
+                    print("called in second loop")
+                    print('Wavelength is ', pgm.wavelength)
+                    print('Distance is ', float(values['distance']))
+                    print('ID length is ', float(values['id_length']))
+                    print('Number of sigmas is ', float(values['num_of_sigmas']))
+                    print('Electron size h is ', float(values['electron_size_h']))
+                    print('Electron size v is ', float(values['electron_size_v']))
+                    print('Electron div h is ', float(values['electron_div_h']))
+                    print('Electron div v is ', float(values['electron_div_v']))
+
                     beam_size_h = calc_beam_size(float(values['electron_size_h']), 
                                                 float(values['electron_div_h']), 
                                                 pgm.wavelength, 
                                                 float(values['distance']),
                                                 float(values['id_length']), 
                                                 num_of_sigmas=float(values['num_of_sigmas']))
+                    print('tick Beam size h is ', beam_size_h)
+                    
                     beam_size_v = calc_beam_size(float(values['electron_size_v']),
                                                 float(values['electron_div_v']), 
                                                 pgm.wavelength, 
@@ -536,7 +544,11 @@ class Beam_Config(object):
                     
                     window_beam['beam_size_h'].update(value=round(beam_size_h, ndigits=3))
                     window_beam['beam_size_v'].update(value=round(beam_size_v, ndigits=3))
-                    
+                    self.beam_size_h = beam_size_h
+                    self.beam_size_v = beam_size_v
+                    pgm.beam_height = beam_size_v
+                    pgm.beam_width = beam_size_h
+                    print('tick Beam size v is ', beam_size_v)
                     pass
                     
                 except Exception as e:

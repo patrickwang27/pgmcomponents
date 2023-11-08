@@ -542,14 +542,13 @@ class Image(object):
     def __repr__(self):
         return "Image(width={}, height={}, h_div={}, v_div={})".format(self.width, self.height, self.h_div, self.v_div)
 
-def calc_beam_size(electron_size,
-                   electron_div,
-                   wavelength,
-                   distance,
-                   length,
+def calc_beam_size(electron_size: float,
+                   electron_div: float,
+                   wavelength: float,
+                   distance: float,
+                   length: float,
                    num_of_sigmas=3,
-                   insertion_device='undulator'
-                   ):
+                   insertion_device='undulator') -> float:
     """
     Calculate the beam size based on the electron size and divergence.
 
@@ -585,7 +584,7 @@ def calc_beam_size(electron_size,
         
 
 
-def calc_source_size(electron_size, wavelength, length):
+def calc_source_size(electron_size: float, wavelength:float, length:float)-> float:
     """
     Calculates the source size based on provided parameters.
 
@@ -607,7 +606,7 @@ def calc_source_size(electron_size, wavelength, length):
     """
     return np.sqrt((electron_size*1e-6)**2 + (wavelength*1e-9*length/(2*np.pi**2)))
 
-def calc_source_div(electron_div, wavelength, length):
+def calc_source_div(electron_div: float, wavelength: float, length: float)-> float:
     """
     Calculates the source divergence based on provided parameters.
 

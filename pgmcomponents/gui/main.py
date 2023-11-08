@@ -111,6 +111,7 @@ def main():
     while True:
         event, values = window.read()
         print(event)
+        print(pgm.beam_height, pgm.beam_width, pgm.beam_offset)
         if event in update_events:
 
             update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
