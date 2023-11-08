@@ -1,0 +1,217 @@
+:py:mod:`pgmcomponents.elements.pgm`
+====================================
+
+.. py:module:: pgmcomponents.elements.pgm
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.elements.pgm.PGM
+
+
+
+
+.. py:class:: PGM(grating=None, mirror=None, **kwargs)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a PGM setup.
+
+   :param grating: The grating component of the PGM
+   :type grating: Grating
+   :param mirror: The mirror component of the PGM
+   :type mirror: Plane_Mirror
+
+   .. attribute:: grating
+
+      The grating component of the PGM
+
+      :type: Grating
+
+   .. attribute:: mirror
+
+      The mirror component of the PGM
+
+      :type: Plane_Mirror
+
+   .. attribute:: rays
+
+      The rays to be propagated through the PGM
+
+      :type: list
+
+   .. attribute:: beam_offset
+
+      The vertical offset of the beam in mm
+
+      :type: float
+
+   .. attribute:: beam_width
+
+      The width of the beam in mm
+
+      :type: float
+
+   .. attribute:: beam_height
+
+      The height of the beam in mm
+
+      :type: float
+
+   .. method:: read_file(filename)
+
+      Read PGM parameters from a file.
+      See config_pgm.ini for an example.
+      The config file should contain a grating and a mirror section.
+
+   .. method:: propagate(*args)
+
+      Propagate rays through the PGM setup.
+
+   .. method:: draw_sideview(ax)
+
+      Draws the setup on a y-z projection on a given axis.
+
+   .. method:: draw_topview(ax)
+
+      Draws the setup on a x-z projection on a given axis, along with the beam footprints.
+
+
+   .. py:property:: theta
+
+
+   .. py:property:: energy
+
+
+   .. py:property:: wavelength
+
+
+   .. py:property:: grating
+
+
+   .. py:property:: mirror
+
+
+   .. py:property:: rays
+
+
+   .. py:property:: beam_offset
+
+
+   .. py:property:: beam_width
+
+
+   .. py:property:: beam_height
+
+
+   .. py:property:: grating
+
+
+   .. py:property:: mirror
+
+
+   .. py:property:: rays
+
+
+   .. py:property:: beam_offset
+
+
+   .. py:property:: beam_width
+
+
+   .. py:property:: beam_height
+
+
+   .. py:property:: mirror_intercept
+
+
+   .. py:property:: grating_intercept
+
+
+   .. py:property:: cff
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: generate_rays()
+
+      Generate rays for the PGM setup.
+
+
+   .. py:method:: read_file(filename)
+
+      Read PGM parameters from a file.
+      See config_pgm.ini for an example.
+      The config file should contain a grating and a mirror section.
+
+      :param filename: The name of the file to read from
+      :type filename: str
+
+
+   .. py:method:: set_theta()
+
+      Set the angle of the grating.
+
+
+   .. py:method:: values()
+
+
+   .. py:method:: pgm_from_file(filename)
+      :classmethod:
+
+      Create a PGM from a file.
+      See config_pgm.ini for an example.
+      The config file should contain a grating and a mirror section.
+
+      :param filename: The name of the file to read from
+      :type filename: str
+
+
+   .. py:method:: propagate(*args)
+
+      Propagate rays through the PGM setup.
+
+      :param \*args: The rays to be propagated
+      :type \*args: Ray3D
+
+      :returns: * **grating_ray** (*list of Ray3D objects*) -- A list of propagated rays originating at the grating intercept
+                * **mirror_intercept** (*list of array_like*) -- A list of the mirror intercepts
+                * **grating_intercept** (*list of array_like*) -- A list of the grating intercepts
+
+
+   .. py:method:: draw_sideview(ax)
+
+      Draws the setup on a y-z projection on a given axis.
+
+      :param ax: The axis to draw on
+      :type ax: matplotlib.axes
+
+
+   .. py:method:: draw_topview(ax)
+
+      Draws the top-view (x-z projection) of the setup on the current
+      axes.
+
+
+
+   .. py:method:: mirror_corners()
+
+
+   .. py:method:: grating_corners()
+
+
+   .. py:method:: undulator_size()
+      :staticmethod:
+
+
+

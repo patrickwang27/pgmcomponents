@@ -1,0 +1,368 @@
+:py:mod:`pgmcomponents.gui.gui_widgets`
+=======================================
+
+.. py:module:: pgmcomponents.gui.gui_widgets
+
+.. autoapi-nested-parse::
+
+   gui_widgets.py
+
+   Provides a set of widgets for use in the GUI.
+
+   Author: Patrick Wang
+   Email: patrick.wang@diamond.ac.uk
+   Date: 2023-10-05
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.gui.gui_widgets.EPICScontrol
+   pgmcomponents.gui.gui_widgets.Beam_Config
+   pgmcomponents.gui.gui_widgets.OffsetsControl
+   pgmcomponents.gui.gui_widgets.Topview_Widget
+   pgmcomponents.gui.gui_widgets.Sideview_Widget
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.gui.gui_widgets.configuration_popup
+   pgmcomponents.gui.gui_widgets.main
+   pgmcomponents.gui.gui_widgets.update_and_draw
+   pgmcomponents.gui.gui_widgets.initial_draw
+
+
+
+.. py:class:: EPICScontrol(name, value, increments, key, pgm=None)
+
+
+   Bases: :py:obj:`object`
+
+   A EPICS like control widget.
+
+   .. attribute:: name
+
+      The name of the control.
+
+      :type: str
+
+   .. attribute:: value
+
+      The default value of the control
+
+      :type: float
+
+   .. attribute:: increments
+
+      The default increment value of the control.
+
+      :type: float
+
+   .. attribute:: key
+
+      The key of the control.
+
+      :type: str
+
+   .. method:: up(window)
+
+      Add increment to value
+
+   .. method:: down(window)
+
+      Subtract increment from value
+
+   .. method:: update(window)
+
+      Update the displayed value of the control.
+
+   .. method:: write(window, value, pgm)
+
+      Write a value to the control.
+
+   .. py:method:: up(window, values, pgm)
+
+      Add increment to value, needs the window object to update the value.
+
+
+   .. py:method:: down(window, values, pgm)
+
+      Subtract the increment value from the current value of the widget.
+      If the widget is an order widget, the current value is converted to an integer before subtraction.
+      The updated value is then set as the new value of the widget and also updated in the corresponding attribute of the pgm object.
+
+      :param window: The window object containing the widget.
+      :type window: PySimpleGUI.Window
+      :param pgm: The pgm object containing the attribute to be updated.
+      :type pgm: components.PGM
+
+
+   .. py:method:: update(window, pgm)
+
+      Update the value of the control.
+
+      :param window: The window object containing the control.
+      :param pgm: The program object containing the property to be updated.
+
+      :returns: None
+
+
+   .. py:method:: write(window, value, pgm)
+
+      Subroutine to write the values of a known pgm to
+      the window.
+
+      :param window: The main window.
+      :type window: PySimpleGUI.Window
+      :param value: The value to write to the control.
+      :type value: float
+      :param pgm: The PGM object.
+      :type pgm: PGM
+
+
+   .. py:method:: update_inc(window)
+
+      Update the increment of the control.
+
+
+
+.. py:function:: configuration_popup(title, key, element, window)
+
+   Creates a popup window for configuration of Plane_Mirror or Grating.
+
+   :param title: The title of the popup window.
+   :type title: str
+   :param key: The key of the element.
+   :type key: str
+   :param element: The element to configure. Either 'Plane_Mirror' or 'Grating'.
+   :type element: Plane_Mirror or Grating
+
+   :returns: **values** -- A dictionary of values for the element.
+   :rtype: dict
+
+
+.. py:class:: Beam_Config
+
+
+   Bases: :py:obj:`object`
+
+   Provides a class for beam configuration.
+
+   .. attribute:: electron_size_h
+
+      The electron horizontal size RMS.
+
+      :type: float
+
+   .. attribute:: electron_size_v
+
+      The electron vertical size RMS.
+
+      :type: float
+
+   .. attribute:: electron_div_h
+
+      The electron horizontal divergence RMS.
+
+      :type: float
+
+   .. attribute:: electron_div_v
+
+      The electron vertical divergence RMS.
+
+      :type: float
+
+   .. attribute:: id_length
+
+      The length of the insertion device.
+
+      :type: float
+
+   .. attribute:: distance
+
+      The distance from the insertion device to the image plane.
+
+      :type: float
+
+   .. attribute:: num_of_sigmas
+
+      The number of sigmas to include in the beam size calculation.
+
+      :type: float
+
+   .. attribute:: beam_size_h
+
+      The horizontal beam size.
+
+      :type: float
+
+   .. attribute:: beam_size_v
+
+      The vertical beam size.
+
+      :type: float
+
+   .. method:: window(window, pgm)
+
+      Pops up a window for beam configuration.
+
+   .. py:method:: window(pgm, window)
+
+      Pops up a window for beam configuration.
+
+      :param window: The main window.
+      :type window: PySimpleGUI.Window
+      :param pgm: The PGM object.
+      :type pgm: PGM
+
+
+
+.. py:class:: OffsetsControl(values, key)
+
+
+   Bases: :py:obj:`object`
+
+   A class to provide the offsets control widget.
+
+   .. attribute:: values
+
+      The default values of the control.
+      keys: 'beam_vertical', 'mirror_hoffset', 'mirror_voffset', 'mirror_axis_hoffset', 'mirror_axis_voffset'
+
+      :type: dict
+
+   .. attribute:: key
+
+      The key of the control.
+
+      :type: str
+
+   .. method:: update(window, pgm, )
+
+
+
+   .. py:property:: calculate
+
+
+   .. py:method:: updatepgm(window, pgm)
+
+      Update the values of the PGM object.
+
+
+   .. py:method:: calcoffsets(window, pgm)
+
+      Calculate the offsets.
+
+
+   .. py:method:: write(window, values, calcq=True)
+
+      Write values to the control.
+
+
+
+.. py:class:: Topview_Widget(pgm, key='-TOPVIEW-', size=(800, 400))
+
+
+   Bases: :py:obj:`object`
+
+   A class to supply the GUI widget for a top-view
+   footprint plot of a given PGM.
+
+
+   .. py:property:: pgm
+
+
+   .. py:property:: key
+
+
+   .. py:property:: size
+
+
+   .. py:property:: frame
+
+
+   .. py:method:: make_canvas()
+
+
+   .. py:method:: draw(window)
+
+
+
+.. py:class:: Sideview_Widget(pgm, key='-SIDEVIEW-', size=(800, 400))
+
+
+   Bases: :py:obj:`object`
+
+   .. py:property:: pgm
+
+
+   .. py:property:: key
+
+
+   .. py:property:: size
+
+
+   .. py:property:: frame
+
+
+   .. py:method:: make_canvas()
+
+
+   .. py:method:: draw(window)
+
+
+
+.. py:function:: main()
+
+
+.. py:function:: update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
+
+   Update the values of the PGM object and draw the
+   topview and sideview widgets.
+
+   :param window: The main window.
+   :type window: PySimpleGUI.Window
+   :param pgm: The PGM object.
+   :type pgm: PGM
+   :param values: The values of the controls.
+   :type values: dict
+   :param topview_widget: The topview widget.
+   :type topview_widget: Topview_Widget
+   :param sideview_widget: The sideview widget.
+   :type sideview_widget: Sideview_Widget
+   :param energy_control: The energy control.
+   :type energy_control: EPICScontrol
+   :param cff_control: The cff control.
+   :type cff_control: EPICScontrol
+   :param order_control: The order control.
+   :type order_control: EPICScontrol
+   :param line_density_control: The line density control.
+   :type line_density_control: EPICScontrol
+
+
+.. py:function:: initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control)
+
+   Draw the topview and sideview widgets.
+
+   :param window: The main window.
+   :type window: PySimpleGUI.Window
+   :param pgm: The PGM object.
+   :type pgm: PGM
+   :param topview_widget: The topview widget.
+   :type topview_widget: Topview_Widget
+   :param sideview_widget: The sideview widget.
+   :type sideview_widget: Sideview_Widget
+   :param offsets_control: The offsets control widget.
+   :type offsets_control: OffsetsControl
+
+

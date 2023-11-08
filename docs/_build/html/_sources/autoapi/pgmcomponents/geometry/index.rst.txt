@@ -1,0 +1,560 @@
+:py:mod:`pgmcomponents.geometry`
+================================
+
+.. py:module:: pgmcomponents.geometry
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   geometry/index.rst
+   light/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.geometry.Ray3D
+   pgmcomponents.geometry.Image
+   pgmcomponents.geometry.Vector3D
+   pgmcomponents.geometry.Point3D
+   pgmcomponents.geometry.Plane
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.geometry.calc_beam_size
+   pgmcomponents.geometry.calc_source_size
+   pgmcomponents.geometry.calc_source_div
+
+
+
+.. py:class:: Ray3D(position, vector)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a simple 3D ray
+
+   :param position: The position of the ray
+   :type position: Point3D
+   :param vector: The vector of the ray
+   :type vector: Vector3D
+
+   .. method:: __repr__ : str
+
+      Returns a string representation of the ray
+
+
+   .. attribute:: position
+
+      The position of the ray
+
+      :type: Point3D
+
+   .. attribute:: vector
+
+      The vector of the ray
+
+      :type: Vector3D
+
+   .. py:property:: position
+
+
+   .. py:property:: vector
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: Image(width, height, h_div, v_div)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a 2D image.
+
+   :param width: The width of the image
+   :type width: float
+   :param height: The height of the image
+   :type height: float
+   :param h_div: The number of horizontal divisions
+   :type h_div: int
+   :param v_div: The number of vertical divisions
+   :type v_div: int
+
+   .. method:: __repr__ : str
+
+      Returns a string representation of the image
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: Vector3D(x, y, z)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a simple 3D vector
+
+   :param x:
+   :type x: float
+   :param The x component of the vector:
+   :param y:
+   :type y: float
+   :param The y component of the vector:
+   :param z:
+   :type z: float
+   :param The z component of the vector:
+   :param Methods:
+   :param ----------:
+   :param __repr__:
+   :type __repr__: str
+   :param Returns a string representation of the vector:
+   :param __add__:
+   :type __add__: Vector3D
+   :param Adds two vectors together:
+   :param __sub__:
+   :type __sub__: Vector3D
+   :param Subtracts two vectors:
+   :param __mul__:
+   :type __mul__: Vector3D
+   :param Finds the dot product of two vectors:
+   :param __div__:
+   :type __div__: Vector3D
+   :param Finds the cross product of two vectors:
+   :param __abs__:
+   :type __abs__: float
+   :param Finds the magnitude of the vector:
+   :param __neg__:
+   :type __neg__: Vector3D
+   :param Finds the negative of the vector:
+   :param __eq__:
+   :type __eq__: bool
+   :param Checks if two vectors are equal:
+   :param __ne__:
+   :type __ne__: bool
+   :param Checks if two vectors are not equal:
+   :param __getitem__:
+   :type __getitem__: float
+   :param Returns the x:
+   :param y or z component of the vector:
+   :param __setitem__:
+   :type __setitem__: float
+   :param Sets the x:
+   :param y or z component of the vector:
+   :param __iter__:
+   :type __iter__: float
+   :param Returns an iterator over the vector:
+   :param __len__:
+   :type __len__: int
+   :param Returns the length of the vector:
+   :param __hash__:
+   :type __hash__: int
+   :param Returns the hash of the vector:
+   :param __copy__:
+   :type __copy__: Vector3D
+   :param Returns a copy of the vector:
+   :param __deepcopy__:
+   :type __deepcopy__: Vector3D
+   :param Returns a deep copy of the vector:
+   :param copy:
+   :type copy: Vector3D
+   :param Returns a copy of the vector:
+   :param dot:
+   :type dot: float
+   :param Finds the dot product of two vectors:
+   :param cross:
+   :type cross: Vector3D
+   :param Finds the cross product of two vectors:
+   :param norm:
+   :type norm: float
+   :param Finds the magnitude of the vector:
+   :param normalize:
+   :type normalize: Vector3D
+   :param Normalizes the vector:
+   :param angle:
+   :type angle: float
+   :param Finds the angle between two vectors:
+   :param rotate:
+   :type rotate: Vector3D
+   :param Rotates the vector around an axis:
+   :param rotate_x:
+   :type rotate_x: Vector3D
+   :param Rotates the vector around the x axis:
+   :param rotate_y:
+   :type rotate_y: Vector3D
+   :param Rotates the vector around the y axis:
+   :param rotate_z:
+   :type rotate_z: Vector3D
+   :param Rotates the vector around the z axis:
+
+   .. py:property:: x
+
+
+   .. py:property:: y
+
+
+   .. py:property:: z
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __add__(other)
+
+
+   .. py:method:: __sub__(other)
+
+
+   .. py:method:: __mul__(other)
+
+
+   .. py:method:: __div__(other)
+
+
+   .. py:method:: __abs__()
+
+
+   .. py:method:: __neg__()
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+   .. py:method:: __ne__(other)
+
+      Return self!=value.
+
+
+   .. py:method:: __getitem__(key)
+
+
+   .. py:method:: __setitem__(key, value)
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: __hash__()
+
+      Return hash(self).
+
+
+   .. py:method:: __copy__()
+
+
+   .. py:method:: __deepcopy__(memo)
+
+
+   .. py:method:: copy()
+
+
+   .. py:method:: dot(other)
+
+
+   .. py:method:: cross(other)
+
+
+   .. py:method:: norm()
+
+
+   .. py:method:: normalize()
+
+
+   .. py:method:: angle(other)
+
+
+   .. py:method:: rotate(axis, angle)
+
+
+   .. py:method:: rotate_x(angle)
+
+
+   .. py:method:: rotate_y(angle)
+
+
+   .. py:method:: rotate_z(angle)
+
+
+
+.. py:class:: Point3D(x, y, z)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a simple 3D point.
+
+   :param x: The x coordinate of the point
+   :type x: float
+   :param y: The y coordinate of the point
+   :type y: float
+   :param z: The z coordinate of the point
+   :type z: float
+
+   .. method:: __repr__ : str
+
+      Returns a string representation of the point
+
+   .. method:: __add__ : Point3D
+
+      Adds two points together
+
+   .. method:: __sub__ : Point3D
+
+      Subtracts two points
+
+   .. method:: __eq__ : bool
+
+      Checks if two points are equal
+
+   .. method:: __ne__ : bool
+
+      Checks if two points are not equal
+
+   .. method:: __getitem__ : float
+
+      Returns the x, y or z coordinate of the point
+
+   .. method:: __setitem__ : float
+
+      Sets the x, y or z coordinate of the point
+
+   .. method:: __iter__ : float
+
+      Returns an iterator over the point
+
+   .. method:: __len__ : int
+
+      Returns the length of the point
+
+   .. method:: __hash__ : int
+
+      Returns the hash of the point
+
+   .. method:: __copy__ : Point3D
+
+      Returns a copy of the point
+
+   .. method:: __deepcopy__ : Point3D
+
+      Returns a deep copy of the point
+
+   .. method:: copy : Point3D
+
+      Returns a copy of the point
+
+   .. method:: distance : float
+
+      Finds the distance between two points
+
+
+   .. py:property:: x
+
+
+   .. py:property:: y
+
+
+   .. py:property:: z
+
+
+   .. py:property:: list
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __add__(other)
+
+
+   .. py:method:: __sub__(other)
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+   .. py:method:: __ne__(other)
+
+      Return self!=value.
+
+
+   .. py:method:: __getitem__(key)
+
+
+   .. py:method:: __setitem__(key, value)
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: __hash__()
+
+      Return hash(self).
+
+
+   .. py:method:: __copy__()
+
+
+   .. py:method:: __deepcopy__(memo)
+
+
+   .. py:method:: copy()
+
+
+   .. py:method:: distance(other)
+
+
+
+.. py:class:: Plane(*args)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a simple plane
+
+   Based on the work of Matthew Hand
+
+   :param \*args: Either a point and a normal vector, or three points defining the plane, np.array_like
+
+   .. attribute:: point
+
+      A point on the plane
+
+      :type: array_like
+
+   .. attribute:: normal
+
+      The normal vector of the plane
+
+      :type: array_like
+
+   .. method:: __repr__ : str
+
+      Returns a string representation of the plane
+
+   .. method:: __eq__ : bool
+
+      Checks if two planes are equal
+
+   .. method:: intersectQ : bool
+
+      Checks if the plane intersects another plane or ray3d
+
+   .. py:property:: point
+
+
+   .. py:property:: position
+
+
+   .. py:property:: normal
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+   .. py:method:: intersectQ(other, atol=1e-06)
+
+      Checks if the plane intersects another plane or ray3d
+
+      :param other: The other plane or ray3d
+      :type other: Plane or Ray3D
+      :param atol: The absolute tolerance for the dot product of the normal vectors
+      :type atol: float
+
+      :returns: * *bool* -- True if the plane intersects the other plane or ray3d, False otherwise
+                * *Point3D or None* -- The point of intersection if the plane intersects the other plane or ray3d, None otherwise
+
+
+
+.. py:function:: calc_beam_size(electron_size, electron_div, wavelength, distance, length, num_of_sigmas=3, insertion_device='undulator')
+
+   Calculate the beam size based on the electron size and divergence.
+
+   :param electron_size: The electron size in um
+   :type electron_size: float
+   :param electron_div: The electron divergence in urad
+   :type electron_div: float
+   :param photon_energy: The photon energy in eV
+   :type photon_energy: float
+   :param distance: The distance from the source to the image plane in m
+   :type distance: float
+   :param length: The length of the insertion device in m
+   :type length: float
+   :param num_of_sigmas: The number of sigmas to use when calculating the beam size
+   :type num_of_sigmas: int
+   :param insertion_device: The type of insertion device, can be 'undulator' or 'wiggler', default is 'undulator'
+   :type insertion_device: str
+
+   :returns: The RMS photon beam size at distance in mm
+   :rtype: float
+
+
+.. py:function:: calc_source_size(electron_size, wavelength, length)
+
+   Calculates the source size based on provided parameters.
+
+   :param electron_size: The electron size in um
+   :type electron_size: float
+   :param wavelength: The wavelength in nm
+   :type wavelength: float
+   :param length: The length of the insertion device in m
+   :type length: float
+
+   :returns: The RMS source size in m
+   :rtype: float
+
+
+.. py:function:: calc_source_div(electron_div, wavelength, length)
+
+   Calculates the source divergence based on provided parameters.
+
+   :param electron_div: The electron divergence in urad
+   :type electron_div: float
+   :param wavelength: The wavelength in nm
+   :type wavelength: float
+   :param length: The length of the insertion device in m
+   :type length: float
+
+   :returns: The RMS source divergence in rad
+   :rtype: float
+
+

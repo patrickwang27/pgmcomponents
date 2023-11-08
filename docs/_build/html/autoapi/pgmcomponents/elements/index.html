@@ -1,0 +1,1980 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>pgmcomponents.elements &#8212; pgmcomponents 0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b3523f8e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=039e1c02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+    <script src="../../../_static/documentation_options.js?v=10f1778b"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="pgmcomponents.elements.grating" href="grating/index.html" />
+    <link rel="prev" title="pgmcomponents" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-pgmcomponents.elements">
+<span id="pgmcomponents-elements"></span><h1><a class="reference internal" href="#module-pgmcomponents.elements" title="pgmcomponents.elements"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents.elements</span></code></a><a class="headerlink" href="#module-pgmcomponents.elements" title="Link to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="grating/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents.elements.grating</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="mirror/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents.elements.mirror</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="pgm/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents.elements.pgm</span></code></a></li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Link to this heading">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id13" title="pgmcomponents.elements.Point3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Point3D</span></code></a></p></td>
+<td><p>A class for a simple 3D point.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vector3D</span></code></a></p></td>
+<td><p>A class for a simple 3D vector</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id32" title="pgmcomponents.elements.Plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Plane</span></code></a></p></td>
+<td><p>A class for a simple plane</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id41" title="pgmcomponents.elements.Ray3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ray3D</span></code></a></p></td>
+<td><p>A class for a simple 3D ray</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pgmcomponents.elements.Plane_Mirror" title="pgmcomponents.elements.Plane_Mirror"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Plane_Mirror</span></code></a></p></td>
+<td><p>A class for a simple plane mirror.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id13" title="pgmcomponents.elements.Point3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Point3D</span></code></a></p></td>
+<td><p>A class for a simple 3D point.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id32" title="pgmcomponents.elements.Plane"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Plane</span></code></a></p></td>
+<td><p>A class for a simple plane</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#id41" title="pgmcomponents.elements.Ray3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Ray3D</span></code></a></p></td>
+<td><p>A class for a simple 3D ray</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Vector3D</span></code></a></p></td>
+<td><p>A class for a simple 3D vector</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#pgmcomponents.elements.Grating" title="pgmcomponents.elements.Grating"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Grating</span></code></a></p></td>
+<td><p>A class for a simple grating</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Point3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple 3D point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The x coordinate of the point</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The y coordinate of the point</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The z coordinate of the point</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__repr__</span> <span class="pre">:</span> <span class="pre">str</span></span></dt>
+<dd><p>Returns a string representation of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__add__</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Adds two points together</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__sub__</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Subtracts two points</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__eq__</span> <span class="pre">:</span> <span class="pre">bool</span></span></dt>
+<dd><p>Checks if two points are equal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__ne__</span> <span class="pre">:</span> <span class="pre">bool</span></span></dt>
+<dd><p>Checks if two points are not equal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__getitem__</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>Returns the x, y or z coordinate of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__setitem__</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>Sets the x, y or z coordinate of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__iter__</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>Returns an iterator over the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__len__</span> <span class="pre">:</span> <span class="pre">int</span></span></dt>
+<dd><p>Returns the length of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__hash__</span> <span class="pre">:</span> <span class="pre">int</span></span></dt>
+<dd><p>Returns the hash of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__copy__</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Returns a copy of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Returns a deep copy of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">copy</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Returns a copy of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">distance</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>Finds the distance between two points</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.x">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#pgmcomponents.elements.Point3D.x" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.y">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#pgmcomponents.elements.Point3D.y" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.z">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z</span></span><a class="headerlink" href="#pgmcomponents.elements.Point3D.z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list</span></span><a class="headerlink" href="#pgmcomponents.elements.Point3D.list" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__add__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__add__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__sub__">
+<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__sub__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__sub__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__eq__" title="Link to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__ne__">
+<span class="sig-name descname"><span class="pre">__ne__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__ne__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__ne__" title="Link to this definition">¶</a></dt>
+<dd><p>Return self!=value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__setitem__">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__setitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__setitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__iter__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__hash__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__hash__" title="Link to this definition">¶</a></dt>
+<dd><p>Return hash(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__copy__">
+<span class="sig-name descname"><span class="pre">__copy__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__copy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__copy__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.__deepcopy__">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__deepcopy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.__deepcopy__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.copy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Point3D.distance">
+<span class="sig-name descname"><span class="pre">distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Point3D.distance" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Vector3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple 3D vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Sets the</em>) – </p></li>
+<li><p><strong>vector</strong> (<em>Normalizes the</em>) – </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>Methods</strong> – </p></li>
+<li><p><strong>----------</strong> – </p></li>
+<li><p><strong>__repr__</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__add__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>together</strong> (<em>Adds two vectors</em>) – </p></li>
+<li><p><strong>__sub__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vectors</strong> (<em>Finds the angle between two</em>) – </p></li>
+<li><p><strong>__mul__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>__div__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>__abs__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__neg__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__eq__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – </p></li>
+<li><p><strong>equal</strong> (<em>Checks if two vectors are not</em>) – </p></li>
+<li><p><strong>__ne__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – </p></li>
+<li><p><strong>equal</strong> – </p></li>
+<li><p><strong>__getitem__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>x</strong> – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__setitem__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>x</strong> – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__iter__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__len__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__hash__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__copy__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__deepcopy__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>copy</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>dot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>cross</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>norm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>normalize</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>rotate</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>axis</strong> (<em>Rotates the vector around the z</em>) – </p></li>
+<li><p><strong>rotate_x</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>axis</strong> – </p></li>
+<li><p><strong>rotate_y</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>axis</strong> – </p></li>
+<li><p><strong>rotate_z</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>axis</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.x">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#pgmcomponents.elements.Vector3D.x" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.y">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#pgmcomponents.elements.Vector3D.y" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.z">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z</span></span><a class="headerlink" href="#pgmcomponents.elements.Vector3D.z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__add__">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__add__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__add__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__sub__">
+<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__sub__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__sub__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__mul__">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__mul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__mul__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__div__">
+<span class="sig-name descname"><span class="pre">__div__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__div__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__div__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__abs__">
+<span class="sig-name descname"><span class="pre">__abs__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__abs__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__abs__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__neg__">
+<span class="sig-name descname"><span class="pre">__neg__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__neg__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__neg__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__eq__" title="Link to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__ne__">
+<span class="sig-name descname"><span class="pre">__ne__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__ne__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__ne__" title="Link to this definition">¶</a></dt>
+<dd><p>Return self!=value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__getitem__">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__getitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__setitem__">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__setitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__setitem__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__iter__">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__iter__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__len__">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__len__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__hash__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__hash__" title="Link to this definition">¶</a></dt>
+<dd><p>Return hash(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__copy__">
+<span class="sig-name descname"><span class="pre">__copy__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__copy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__copy__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.__deepcopy__">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__deepcopy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.__deepcopy__" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.copy" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.dot">
+<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.dot" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.cross">
+<span class="sig-name descname"><span class="pre">cross</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.cross"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.cross" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.norm">
+<span class="sig-name descname"><span class="pre">norm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.norm" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.normalize" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.angle">
+<span class="sig-name descname"><span class="pre">angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.angle" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.rotate" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.rotate_x">
+<span class="sig-name descname"><span class="pre">rotate_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.rotate_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.rotate_x" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.rotate_y">
+<span class="sig-name descname"><span class="pre">rotate_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.rotate_y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.rotate_y" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Vector3D.rotate_z">
+<span class="sig-name descname"><span class="pre">rotate_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.rotate_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Vector3D.rotate_z" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Plane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Plane"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple plane</p>
+<p>Based on the work of Matthew Hand</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> – Either a point and a normal vector, or three points defining the plane, np.array_like</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane.point">
+<span class="sig-name descname"><span class="pre">point</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane.point" title="Link to this definition">¶</a></dt>
+<dd><p>A point on the plane</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane.normal">
+<span class="sig-name descname"><span class="pre">normal</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane.normal" title="Link to this definition">¶</a></dt>
+<dd><p>The normal vector of the plane</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__repr__</span> <span class="pre">:</span> <span class="pre">str</span></span></dt>
+<dd><p>Returns a string representation of the plane</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__eq__</span> <span class="pre">:</span> <span class="pre">bool</span></span></dt>
+<dd><p>Checks if two planes are equal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">intersectQ</span> <span class="pre">:</span> <span class="pre">bool</span></span></dt>
+<dd><p>Checks if the plane intersects another plane or ray3d</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">point</span></span><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane.position">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane.position" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normal</span></span><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Plane.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Plane.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane.__eq__" title="Link to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane.intersectQ">
+<span class="sig-name descname"><span class="pre">intersectQ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Plane.intersectQ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane.intersectQ" title="Link to this definition">¶</a></dt>
+<dd><p>Checks if the plane intersects another plane or ray3d</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<a class="reference internal" href="#id32" title="pgmcomponents.elements.Plane"><em>Plane</em></a><em> or </em><a class="reference internal" href="#id41" title="pgmcomponents.elements.Ray3D"><em>Ray3D</em></a>) – The other plane or ray3d</p></li>
+<li><p><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The absolute tolerance for the dot product of the normal vectors</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>bool</em> – True if the plane intersects the other plane or ray3d, False otherwise</p></li>
+<li><p><em>Point3D or None</em> – The point of intersection if the plane intersects the other plane or ray3d, None otherwise</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Ray3D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Ray3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Ray3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Ray3D" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple 3D ray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<a class="reference internal" href="#id13" title="pgmcomponents.elements.Point3D"><em>Point3D</em></a>) – The position of the ray</p></li>
+<li><p><strong>vector</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – The vector of the ray</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__repr__</span> <span class="pre">:</span> <span class="pre">str</span></span></dt>
+<dd><p>Returns a string representation of the ray</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Ray3D.position">
+<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#pgmcomponents.elements.Ray3D.position" title="Link to this definition">¶</a></dt>
+<dd><p>The position of the ray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id13" title="pgmcomponents.elements.Point3D">Point3D</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Ray3D.vector">
+<span class="sig-name descname"><span class="pre">vector</span></span><a class="headerlink" href="#pgmcomponents.elements.Ray3D.vector" title="Link to this definition">¶</a></dt>
+<dd><p>The vector of the ray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D">Vector3D</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#id2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vector</span></span><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Ray3D.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Ray3D.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Ray3D.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Plane_Mirror</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hoffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_voffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_hoffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.array([450,</span> <span class="pre">70,</span> <span class="pre">50])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">theta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">45</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">Plane()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.array([0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple plane mirror.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dimensions</strong> (<em>array_like</em>) – The dimensions of the mirror in mm</p></li>
+<li><p><strong>position</strong> (<a class="reference internal" href="#id13" title="pgmcomponents.elements.Point3D"><em>Point3D</em></a>) – The position of the mirror</p></li>
+<li><p><strong>normal</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – The normal vector of the mirror</p></li>
+<li><p><strong>orientation</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.dimensions">
+<span class="sig-name descname"><span class="pre">dimensions</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.dimensions" title="Link to this definition">¶</a></dt>
+<dd><p>The dimensions of the mirror in mm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.position">
+<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.position" title="Link to this definition">¶</a></dt>
+<dd><p>The position of the mirror</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id13" title="pgmcomponents.elements.Point3D">Point3D</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.normal">
+<span class="sig-name descname"><span class="pre">normal</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.normal" title="Link to this definition">¶</a></dt>
+<dd><p>The normal vector of the mirror</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D">Vector3D</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.orientation">
+<span class="sig-name descname"><span class="pre">orientation</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.orientation" title="Link to this definition">¶</a></dt>
+<dd><p>The orientation of the mirror</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D">Vector3D</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.corners">
+<span class="sig-name descname"><span class="pre">corners</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.corners" title="Link to this definition">¶</a></dt>
+<dd><p>The corners of the grating in the global coordinate system:
+[bottom left back,
+bottom right back,
+bottom left front,
+bottom right front,
+top left back,
+top right back,
+top left front,
+top right front]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.plane">
+<span class="sig-name descname"><span class="pre">plane</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.plane" title="Link to this definition">¶</a></dt>
+<dd><p>The plane of the mirror</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id32" title="pgmcomponents.elements.Plane">Plane</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.borders">
+<span class="sig-name descname"><span class="pre">borders</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.borders" title="Link to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Specifies the borders for a realistic plane mirror:
+borders : array_like
+Specifies the borders of a realistic grating component.
+<a href="#id92"><span class="problematic" id="id93">|-----------Top------------|</span></a>
+|                          |</p>
+</div></blockquote>
+<dl>
+<dt>Left   Mirror Plane       Right</dt><dd><div class="line-block">
+<div class="line">|       —&gt; +z direction</div>
+</div>
+<p><a href="#id94"><span class="problematic" id="id95">|----------Bottom----------|</span></a>
+[top, bottom, left, right]</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.set_position">
+<span class="sig-name descname"><span class="pre">set_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.set_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.set_position" title="Link to this definition">¶</a></dt>
+<dd><p>Set the position of the mirror</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.set_normal">
+<span class="sig-name descname"><span class="pre">set_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.set_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.set_normal" title="Link to this definition">¶</a></dt>
+<dd><p>Set the normal vector of the mirror</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.set_orientation">
+<span class="sig-name descname"><span class="pre">set_orientation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orientation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.set_orientation" title="Link to this definition">¶</a></dt>
+<dd><p>Set the orientation of the mirror</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.set_dimensions">
+<span class="sig-name descname"><span class="pre">set_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.set_dimensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.set_dimensions" title="Link to this definition">¶</a></dt>
+<dd><p>Set the dimensions of the mirror</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.set_offsets">
+<span class="sig-name descname"><span class="pre">set_offsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voffset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hoffset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_voffset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_hoffset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.set_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.set_offsets" title="Link to this definition">¶</a></dt>
+<dd><p>Set the offsets of the mirror</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.compute_corners">
+<span class="sig-name descname"><span class="pre">compute_corners</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.compute_corners"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.compute_corners" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the corners of the mirror in the global coordinate system,</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.voffset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">voffset</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.voffset" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.hoffset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hoffset</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.hoffset" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.axis_voffset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axis_voffset</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.axis_voffset" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.axis_hoffset">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">axis_hoffset</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.axis_hoffset" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dimensions</span></span><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plane</span></span><a class="headerlink" href="#id5" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.theta">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">theta</span></span><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.theta" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">corners</span></span><a class="headerlink" href="#id6" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">borders</span></span><a class="headerlink" href="#id7" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.read_file" title="Link to this definition">¶</a></dt>
+<dd><p>Read mirror parameters from a file.
+See config_pgm.ini for an example.
+A config_file may contain more than one sections, but only the
+mirror section will be read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the file to read from</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id8">
+<span class="sig-name descname"><span class="pre">set_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.set_position"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">set_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">normal</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.set_normal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">set_dimensions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.set_dimensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Link to this definition">¶</a></dt>
+<dd><p>Set the dimensions of the mirror.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> (<em>array_like</em>) – Either one or three arguments for the dimensions</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.12)"><strong>ValueError</strong></a> – If the number of arguments is not one or three</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">set_offsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">voffset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hoffset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_voffset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis_hoffset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.set_offsets"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">compute_corners</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.compute_corners"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the corners of the mirror in the global coordinate system,
+in addition to the plane and normal of the mirror.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>corners</strong> – The corners of the mirror in the global coordinate system</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.draw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.draw" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.mirror_from_file">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">mirror_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.mirror_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.mirror_from_file" title="Link to this definition">¶</a></dt>
+<dd><p>Create a mirror from a file.
+See config_pgm.ini for an example.
+A config_file may contain more than one sections, but only the
+mirror section will be read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the file to read from</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Plane_Mirror.reflect">
+<span class="sig-name descname"><span class="pre">reflect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/mirror.html#Plane_Mirror.reflect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Plane_Mirror.reflect" title="Link to this definition">¶</a></dt>
+<dd><p>A method to reflect rays off the mirror.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> (<a class="reference internal" href="#id41" title="pgmcomponents.elements.Ray3D"><em>Ray3D</em></a>) – The rays to be reflected</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>reflected_rays</strong> – A list of reflected rays</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id13">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Point3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple 3D point.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The x coordinate of the point</p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The y coordinate of the point</p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The z coordinate of the point</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__repr__</span> <span class="pre">:</span> <span class="pre">str</span></span></dt>
+<dd><p>Returns a string representation of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__add__</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Adds two points together</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__sub__</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Subtracts two points</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__eq__</span> <span class="pre">:</span> <span class="pre">bool</span></span></dt>
+<dd><p>Checks if two points are equal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__ne__</span> <span class="pre">:</span> <span class="pre">bool</span></span></dt>
+<dd><p>Checks if two points are not equal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__getitem__</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>Returns the x, y or z coordinate of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__setitem__</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>Sets the x, y or z coordinate of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__iter__</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>Returns an iterator over the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__len__</span> <span class="pre">:</span> <span class="pre">int</span></span></dt>
+<dd><p>Returns the length of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__hash__</span> <span class="pre">:</span> <span class="pre">int</span></span></dt>
+<dd><p>Returns the hash of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__copy__</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Returns a copy of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Returns a deep copy of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">copy</span> <span class="pre">:</span> <span class="pre">Point3D</span></span></dt>
+<dd><p>Returns a copy of the point</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">distance</span> <span class="pre">:</span> <span class="pre">float</span></span></dt>
+<dd><p>Finds the distance between two points</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id14">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#id14" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id15">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#id15" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id16">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z</span></span><a class="headerlink" href="#id16" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id17">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">list</span></span><a class="headerlink" href="#id17" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id18">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id18" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id19">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__add__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id19" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id20">
+<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__sub__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id20" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id21">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id21" title="Link to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id22">
+<span class="sig-name descname"><span class="pre">__ne__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__ne__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id22" title="Link to this definition">¶</a></dt>
+<dd><p>Return self!=value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id23">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id23" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id24">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__setitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id24" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id25">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id25" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id26">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id26" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id27">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__hash__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id27" title="Link to this definition">¶</a></dt>
+<dd><p>Return hash(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id28">
+<span class="sig-name descname"><span class="pre">__copy__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__copy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id28" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id29">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.__deepcopy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id29" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id30">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id30" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id31">
+<span class="sig-name descname"><span class="pre">distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Point3D.distance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id31" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id32">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Plane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Plane"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id32" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple plane</p>
+<p>Based on the work of Matthew Hand</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> – Either a point and a normal vector, or three points defining the plane, np.array_like</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id33">
+<span class="sig-name descname"><span class="pre">point</span></span><a class="headerlink" href="#id33" title="Link to this definition">¶</a></dt>
+<dd><p>A point on the plane</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id34">
+<span class="sig-name descname"><span class="pre">normal</span></span><a class="headerlink" href="#id34" title="Link to this definition">¶</a></dt>
+<dd><p>The normal vector of the plane</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__repr__</span> <span class="pre">:</span> <span class="pre">str</span></span></dt>
+<dd><p>Returns a string representation of the plane</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__eq__</span> <span class="pre">:</span> <span class="pre">bool</span></span></dt>
+<dd><p>Checks if two planes are equal</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">intersectQ</span> <span class="pre">:</span> <span class="pre">bool</span></span></dt>
+<dd><p>Checks if the plane intersects another plane or ray3d</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id35">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">point</span></span><a class="headerlink" href="#id35" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id36">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#id36" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id37">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">normal</span></span><a class="headerlink" href="#id37" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id38">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Plane.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id38" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id39">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Plane.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id39" title="Link to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id40">
+<span class="sig-name descname"><span class="pre">intersectQ</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Plane.intersectQ"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id40" title="Link to this definition">¶</a></dt>
+<dd><p>Checks if the plane intersects another plane or ray3d</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<a class="reference internal" href="#id32" title="pgmcomponents.elements.Plane"><em>Plane</em></a><em> or </em><a class="reference internal" href="#id41" title="pgmcomponents.elements.Ray3D"><em>Ray3D</em></a>) – The other plane or ray3d</p></li>
+<li><p><strong>atol</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The absolute tolerance for the dot product of the normal vectors</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><em>bool</em> – True if the plane intersects the other plane or ray3d, False otherwise</p></li>
+<li><p><em>Point3D or None</em> – The point of intersection if the plane intersects the other plane or ray3d, None otherwise</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id41">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Ray3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Ray3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id41" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple 3D ray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<a class="reference internal" href="#id13" title="pgmcomponents.elements.Point3D"><em>Point3D</em></a>) – The position of the ray</p></li>
+<li><p><strong>vector</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – The vector of the ray</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">__repr__</span> <span class="pre">:</span> <span class="pre">str</span></span></dt>
+<dd><p>Returns a string representation of the ray</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id42">
+<span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#id42" title="Link to this definition">¶</a></dt>
+<dd><p>The position of the ray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id13" title="pgmcomponents.elements.Point3D">Point3D</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="id43">
+<span class="sig-name descname"><span class="pre">vector</span></span><a class="headerlink" href="#id43" title="Link to this definition">¶</a></dt>
+<dd><p>The vector of the ray</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D">Vector3D</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id44">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">position</span></span><a class="headerlink" href="#id44" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id45">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">vector</span></span><a class="headerlink" href="#id45" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id46">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Ray3D.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id46" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="id47">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Vector3D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id47" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple 3D vector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>Sets the</em>) – </p></li>
+<li><p><strong>vector</strong> (<em>Normalizes the</em>) – </p></li>
+<li><p><strong>y</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>z</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>Methods</strong> – </p></li>
+<li><p><strong>----------</strong> – </p></li>
+<li><p><strong>__repr__</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__add__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>together</strong> (<em>Adds two vectors</em>) – </p></li>
+<li><p><strong>__sub__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vectors</strong> (<em>Finds the angle between two</em>) – </p></li>
+<li><p><strong>__mul__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>__div__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>__abs__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__neg__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__eq__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – </p></li>
+<li><p><strong>equal</strong> (<em>Checks if two vectors are not</em>) – </p></li>
+<li><p><strong>__ne__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><em>bool</em></a>) – </p></li>
+<li><p><strong>equal</strong> – </p></li>
+<li><p><strong>__getitem__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>x</strong> – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__setitem__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>x</strong> – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__iter__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__len__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__hash__</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__copy__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>__deepcopy__</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>copy</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>dot</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>cross</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>norm</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>normalize</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>vector</strong> – </p></li>
+<li><p><strong>angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – </p></li>
+<li><p><strong>vectors</strong> – </p></li>
+<li><p><strong>rotate</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>axis</strong> (<em>Rotates the vector around the z</em>) – </p></li>
+<li><p><strong>rotate_x</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>axis</strong> – </p></li>
+<li><p><strong>rotate_y</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>axis</strong> – </p></li>
+<li><p><strong>rotate_z</strong> (<a class="reference internal" href="#id47" title="pgmcomponents.elements.Vector3D"><em>Vector3D</em></a>) – </p></li>
+<li><p><strong>axis</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="id48">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">x</span></span><a class="headerlink" href="#id48" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id49">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">y</span></span><a class="headerlink" href="#id49" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id50">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">z</span></span><a class="headerlink" href="#id50" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id51">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id51" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id52">
+<span class="sig-name descname"><span class="pre">__add__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__add__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id52" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id53">
+<span class="sig-name descname"><span class="pre">__sub__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__sub__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id53" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id54">
+<span class="sig-name descname"><span class="pre">__mul__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__mul__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id54" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id55">
+<span class="sig-name descname"><span class="pre">__div__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__div__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id55" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id56">
+<span class="sig-name descname"><span class="pre">__abs__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__abs__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id56" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id57">
+<span class="sig-name descname"><span class="pre">__neg__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__neg__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id57" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id58">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__eq__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id58" title="Link to this definition">¶</a></dt>
+<dd><p>Return self==value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id59">
+<span class="sig-name descname"><span class="pre">__ne__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__ne__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id59" title="Link to this definition">¶</a></dt>
+<dd><p>Return self!=value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id60">
+<span class="sig-name descname"><span class="pre">__getitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__getitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id60" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id61">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__setitem__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id61" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id62">
+<span class="sig-name descname"><span class="pre">__iter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__iter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id62" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id63">
+<span class="sig-name descname"><span class="pre">__len__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__len__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id63" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id64">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__hash__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id64" title="Link to this definition">¶</a></dt>
+<dd><p>Return hash(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id65">
+<span class="sig-name descname"><span class="pre">__copy__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__copy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id65" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id66">
+<span class="sig-name descname"><span class="pre">__deepcopy__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">memo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.__deepcopy__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id66" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id67">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.copy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id67" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id68">
+<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id68" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id69">
+<span class="sig-name descname"><span class="pre">cross</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.cross"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id69" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id70">
+<span class="sig-name descname"><span class="pre">norm</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.norm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id70" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id71">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.normalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id71" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id72">
+<span class="sig-name descname"><span class="pre">angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id72" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id73">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id73" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id74">
+<span class="sig-name descname"><span class="pre">rotate_x</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.rotate_x"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id74" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id75">
+<span class="sig-name descname"><span class="pre">rotate_y</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.rotate_y"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id75" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id76">
+<span class="sig-name descname"><span class="pre">rotate_z</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/geometry/geometry.html#Vector3D.rotate_z"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id76" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.</span></span><span class="sig-name descname"><span class="pre">Grating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">600</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.array([1,</span> <span class="pre">1,</span> <span class="pre">1])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.array([0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple grating</p>
+<p>Based on the work of Matthew Hand</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>line_density</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The line density of the grating in lines per mm</p></li>
+<li><p><strong>energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The energy of the incident beam in eV</p></li>
+<li><p><strong>cff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The fixed focus constant of the grating</p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The diffraction order of the grating</p></li>
+<li><p><strong>dimensions</strong> (<em>array_like</em>) – The dimensions of the grating in mm [length, width, height],
+dimensions are also accessible with lambda functions as:
+self._length(), self._width(), self._height()</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.line_density">
+<span class="sig-name descname"><span class="pre">line_density</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.line_density" title="Link to this definition">¶</a></dt>
+<dd><p>The line density of the grating in lines per mm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.energy" title="Link to this definition">¶</a></dt>
+<dd><p>The energy of the incident beam in eV</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.cff">
+<span class="sig-name descname"><span class="pre">cff</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.cff" title="Link to this definition">¶</a></dt>
+<dd><p>The fixed focus constant of the grating</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.order">
+<span class="sig-name descname"><span class="pre">order</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.order" title="Link to this definition">¶</a></dt>
+<dd><p>The diffraction order of the grating</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.alpha" title="Link to this definition">¶</a></dt>
+<dd><p>The incident angle of the beam in degrees</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.beta" title="Link to this definition">¶</a></dt>
+<dd><p>The diffraction angle of the beam in degrees</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.dimensions">
+<span class="sig-name descname"><span class="pre">dimensions</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.dimensions" title="Link to this definition">¶</a></dt>
+<dd><p>The dimensions of the grating in mm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.corners">
+<span class="sig-name descname"><span class="pre">corners</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.corners" title="Link to this definition">¶</a></dt>
+<dd><p>The corners of the grating in the global coordinate system:
+[bottom left back,
+bottom right back,
+bottom left front,
+bottom right front,
+top left back,
+top right back,
+top left front,
+top right front]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.borders">
+<span class="sig-name descname"><span class="pre">borders</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.borders" title="Link to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Specifies the borders of a realistic grating component.
+<a href="#id96"><span class="problematic" id="id97">|-----------Top------------|</span></a>
+|                          |</p>
+</div></blockquote>
+<dl>
+<dt>Left   Grating Plane      Right</dt><dd><div class="line-block">
+<div class="line">|      —-&gt; +z direction</div>
+</div>
+<p><a href="#id98"><span class="problematic" id="id99">|----------Bottom----------|</span></a>
+[top, bottom, left, right]</p>
+<p>Left - Right =&gt; Tangential
+Top - Bottom =&gt; Sagittal</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.set_angles">
+<span class="sig-name descname"><span class="pre">set_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.set_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.set_angles" title="Link to this definition">¶</a></dt>
+<dd><p>Set the incident and diffraction angles of the grating</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.wavelength">
+<span class="sig-name descname"><span class="pre">wavelength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.wavelength" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the wavelength of the beam in Angstroms</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.compute_corners">
+<span class="sig-name descname"><span class="pre">compute_corners</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_corners"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.compute_corners" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the corners of the grating in the global coordinate system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.diffract">
+<span class="sig-name descname"><span class="pre">diffract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.diffract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.diffract" title="Link to this definition">¶</a></dt>
+<dd><p>A method to diffract rays off the grating</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.compute_beta">
+<span class="sig-name descname"><span class="pre">compute_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.compute_beta" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the diffraction angle beta from the incident angle alpha</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.reflect">
+<span class="sig-name descname"><span class="pre">reflect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.reflect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.reflect" title="Link to this definition">¶</a></dt>
+<dd><p>A method to ‘reflect’ rays off the grating</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id77">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">line_density</span></span><a class="headerlink" href="#id77" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id78">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy</span></span><a class="headerlink" href="#id78" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id79">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cff</span></span><a class="headerlink" href="#id79" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id80">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">order</span></span><a class="headerlink" href="#id80" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id81">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#id81" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id82">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">beta</span></span><a class="headerlink" href="#id82" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id83">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dimensions</span></span><a class="headerlink" href="#id83" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.plane">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plane</span></span><a class="headerlink" href="#pgmcomponents.elements.Grating.plane" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id84">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">borders</span></span><a class="headerlink" href="#id84" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id85">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">corners</span></span><a class="headerlink" href="#id85" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.read_file" title="Link to this definition">¶</a></dt>
+<dd><p>Read grating parameters from a file.
+See config_pgm.ini for an example.
+A config_file may contain more than one sections, but only the
+grating section will be read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the file to read from</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id86">
+<span class="sig-name descname"><span class="pre">set_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.set_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id86" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id87">
+<span class="sig-name descname"><span class="pre">compute_beta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id87" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.compute_angles">
+<span class="sig-name descname"><span class="pre">compute_angles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.compute_angles" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the incident and diffraction angles of the grating.
+The incident angle is calculated from the diffraction angle
+using the fixed focus constant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>alpha</strong> (<em>float</em>) – The incident angle in degrees</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – The diffraction angle in degrees</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id88">
+<span class="sig-name descname"><span class="pre">diffract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.diffract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id88" title="Link to this definition">¶</a></dt>
+<dd><p>A method to diffract rays off the grating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rays</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – The rays to be diffracted</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>diffracted_rays</strong> – A list of diffracted rays</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.calc_beta">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.calc_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.calc_beta" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the diffraction angle beta from the incident angle alpha.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The incident angle in degrees</p></li>
+<li><p><strong>line_density</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The line density of the grating in lines per mm</p></li>
+<li><p><strong>energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The energy of the incident beam in eV</p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The diffraction order of the grating</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>beta</strong> – The diffraction angle in degrees</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id89">
+<span class="sig-name descname"><span class="pre">wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id89" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id90">
+<span class="sig-name descname"><span class="pre">compute_corners</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_corners"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id90" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id91">
+<span class="sig-name descname"><span class="pre">reflect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.reflect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id91" title="Link to this definition">¶</a></dt>
+<dd><p>A method to reflect rays off the grating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> (<a class="reference internal" href="#id41" title="pgmcomponents.elements.Ray3D"><em>Ray3D</em></a>) – The rays to be reflected</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>reflected_rays</strong> – A list of reflected rays</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.Grating.grating_from_file">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">grating_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pgmcomponents/elements/grating.html#Grating.grating_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.Grating.grating_from_file" title="Link to this definition">¶</a></dt>
+<dd><p>Create a grating from a file.
+See config_pgm.ini for an example.
+A config_file may contain more than one sections, but only the
+grating section will be read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the file to read from</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">pgmcomponents</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../pgmcomponents.elements.html">pgmcomponents.elements package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pgmcomponents.geometry.html">pgmcomponents.geometry package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pgmcomponents.gui.html">pgmcomponents.gui package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pgmcomponents.html">pgmcomponents package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../example.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../acknowledgements.html">acknowledgements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">API Reference</a><ul>
+  <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents</span></code></a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents</span></code></a></li>
+      <li>Next: <a href="grating/index.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents.elements.grating</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Patrick Wang.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../../../_sources/autoapi/pgmcomponents/elements/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

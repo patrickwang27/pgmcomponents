@@ -1,0 +1,63 @@
+:py:mod:`pgmcomponents.gui.mplwidgets`
+======================================
+
+.. py:module:: pgmcomponents.gui.mplwidgets
+
+.. autoapi-nested-parse::
+
+   File supplies necessary mpl widgets for
+   gui_widgets.py
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.gui.mplwidgets.Toolbar
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.gui.mplwidgets.draw_figure_w_toolbar
+
+
+
+.. py:function:: draw_figure_w_toolbar(canvas, fig, canvas_toolbar)
+
+
+.. py:class:: Toolbar(*args, **kwargs)
+
+
+   Bases: :py:obj:`matplotlib.backends.backend_tkagg.NavigationToolbar2Tk`
+
+   .. attribute:: canvas
+
+      The figure canvas on which to operate.
+
+      :type: `FigureCanvas`
+
+   .. attribute:: win
+
+      The tk.Window which owns this toolbar.
+
+      :type: tk.Window
+
+   .. attribute:: pack_toolbar
+
+      If True, add the toolbar to the parent's pack manager's packing list
+      during initialization with ``side='bottom'`` and ``fill='x'``.
+      If you want to use the toolbar with a different layout manager, use
+      ``pack_toolbar=False``.
+
+      :type: bool, default: True
+
+

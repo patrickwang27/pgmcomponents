@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pgmcomponents.elements.pgm &#8212; pgmcomponents 0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b3523f8e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=039e1c02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+    <script src="../../../_static/documentation_options.js?v=10f1778b"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pgmcomponents.elements.pgm</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.patches</span> <span class="kn">import</span> <span class="n">Rectangle</span><span class="p">,</span> <span class="n">Patch</span> 
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">axes</span>
+<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">PatchCollection</span>
+<span class="kn">import</span> <span class="nn">configparser</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">e</span>
+<span class="kn">from</span> <span class="nn">pgmcomponents.geometry</span> <span class="kn">import</span> <span class="n">Plane</span><span class="p">,</span> <span class="n">Point3D</span><span class="p">,</span> <span class="n">Vector3D</span><span class="p">,</span> <span class="n">Ray3D</span>
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">ConvexHull</span>
+<span class="kn">from</span> <span class="nn">matplotlib.lines</span> <span class="kn">import</span> <span class="n">Line2D</span>
+<span class="kn">from</span> <span class="nn">pgmcomponents.elements</span> <span class="kn">import</span> <span class="n">Plane_Mirror</span><span class="p">,</span> <span class="n">Grating</span>
+
+
+<div class="viewcode-block" id="PGM">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM">[docs]</a>
+<span class="k">class</span> <span class="nc">PGM</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for a PGM setup.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grating : Grating</span>
+<span class="sd">        The grating component of the PGM</span>
+<span class="sd">    mirror : Plane_Mirror</span>
+<span class="sd">        The mirror component of the PGM</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grating : Grating</span>
+<span class="sd">        The grating component of the PGM</span>
+<span class="sd">    mirror : Plane_Mirror</span>
+<span class="sd">        The mirror component of the PGM</span>
+<span class="sd">    rays : list</span>
+<span class="sd">        The rays to be propagated through the PGM</span>
+<span class="sd">    beam_offset : float</span>
+<span class="sd">        The vertical offset of the beam in mm</span>
+<span class="sd">    beam_width : float</span>
+<span class="sd">        The width of the beam in mm</span>
+<span class="sd">    beam_height : float</span>
+<span class="sd">        The height of the beam in mm</span>
+<span class="sd">    </span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    read_file(filename)</span>
+<span class="sd">        Read PGM parameters from a file. </span>
+<span class="sd">        See config_pgm.ini for an example.</span>
+<span class="sd">        The config file should contain a grating and a mirror section.</span>
+<span class="sd">    propagate(*args)</span>
+<span class="sd">        Propagate rays through the PGM setup.</span>
+<span class="sd">    draw_sideview(ax)</span>
+<span class="sd">        Draws the setup on a y-z projection on a given axis.</span>
+<span class="sd">    draw_topview(ax)</span>
+<span class="sd">        Draws the setup on a x-z projection on a given axis, along with the beam footprints.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grating</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">mirror</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        Constructor for the PGM class.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        grating : Grating</span>
+<span class="sd">            The grating component of the PGM</span>
+<span class="sd">        mirror : Plane_Mirror</span>
+<span class="sd">            The mirror component of the PGM</span>
+<span class="sd">        **kwargs : </span>
+<span class="sd">            Keyword arguments for the grating and mirror components.</span>
+<span class="sd">            See Grating and Plane_Mirror classes for details.</span>
+
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">grating</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">grating_kwargs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;line_density&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;energy&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;cff&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;order&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;grating_dimensions&#39;</span>
+            <span class="p">]</span>
+            <span class="n">grating_kwarg_keys</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;line_density&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;energy&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;cff&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;order&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;dimensions&#39;</span>
+            <span class="p">]</span>
+        
+            <span class="n">grating_args</span> <span class="o">=</span> <span class="p">[</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">grating_kwargs</span><span class="p">]</span>
+            <span class="n">grating_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">grating_kwarg_keys</span><span class="p">,</span> <span class="n">grating_args</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grating</span> <span class="o">=</span> <span class="n">Grating</span><span class="p">(</span><span class="o">**</span><span class="n">grating_kwargs</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grating</span> <span class="o">=</span> <span class="n">grating</span>
+        
+        <span class="k">if</span> <span class="n">mirror</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mirror_kwargs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;voffset&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;hoffset&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;axis_voffset&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;axis_hoffset&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;mirror_dimensions&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;theta&#39;</span>
+            <span class="p">]</span>
+            <span class="n">mirror_kwarg_keys</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="s1">&#39;voffset&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;hoffset&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;axis_voffset&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;axis_hoffset&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;dimensions&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;theta&#39;</span>
+            <span class="p">]</span>
+        
+            <span class="n">mirror_args</span> <span class="o">=</span> <span class="p">[</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mirror_kwargs</span><span class="p">]</span>
+            <span class="n">mirror_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">mirror_kwarg_keys</span><span class="p">,</span> <span class="n">mirror_args</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span> <span class="o">=</span> <span class="n">Plane_Mirror</span><span class="p">(</span><span class="o">**</span><span class="n">mirror_kwargs</span><span class="p">)</span>
+        
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span> <span class="o">=</span> <span class="n">mirror</span>
+
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rays</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_offset</span> <span class="o">=</span> <span class="mi">0</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_width</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_height</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="PGM.__repr__">
+<a class="viewcode-back" href="../../../autoapi/pgmcomponents/elements/pgm/index.html#pgmcomponents.elements.pgm.PGM.__repr__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;PGM(grating=</span><span class="si">{}</span><span class="s2">, </span><span class="se">\n</span><span class="s2">mirror=</span><span class="si">{}</span><span class="s2">, </span><span class="se">\n</span><span class="s2">b=</span><span class="si">{}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">beam_width=</span><span class="si">{}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">beam_height=</span><span class="si">{}</span><span class="s2">)&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="p">,</span> 
+                                                               <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="p">,</span>
+                                                               <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span>
+                                                               <span class="bp">self</span><span class="o">.</span><span class="n">beam_width</span><span class="p">,</span>
+                                                               <span class="bp">self</span><span class="o">.</span><span class="n">beam_height</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="PGM.generate_rays">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.generate_rays">[docs]</a>
+    <span class="k">def</span> <span class="nf">generate_rays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generate rays for the PGM setup.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">r0</span> <span class="o">=</span> <span class="n">Ray3D</span><span class="p">(</span><span class="n">Point3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">),</span>
+                   <span class="n">Point3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">-</span>
+                   <span class="n">Point3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">))</span>
+        
+        <span class="n">r1</span> <span class="o">=</span> <span class="n">Ray3D</span><span class="p">(</span><span class="n">Point3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">),</span>
+                   <span class="n">Point3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span><span class="o">-</span>
+                     <span class="n">Point3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">)</span>
+                   <span class="p">)</span>
+
+        <span class="n">r2</span> <span class="o">=</span> <span class="n">Ray3D</span><span class="p">(</span><span class="n">Point3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">),</span>
+                   <span class="n">Point3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span>
+                   <span class="n">Point3D</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_height</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">))</span>
+
+        <span class="n">r3</span> <span class="o">=</span> <span class="n">Ray3D</span><span class="p">(</span><span class="n">Point3D</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beam_width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">),</span>
+                   <span class="n">Point3D</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beam_width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span>
+                   <span class="n">Point3D</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">beam_width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">))</span>
+
+        <span class="n">r4</span> <span class="o">=</span> <span class="n">Ray3D</span><span class="p">(</span><span class="n">Point3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beam_width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">),</span>
+                   <span class="n">Point3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beam_width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span>
+                   <span class="n">Point3D</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">beam_width</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span> <span class="o">-</span><span class="mi">1000</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rays</span> <span class="o">=</span> <span class="p">[</span><span class="n">r0</span><span class="p">,</span> <span class="n">r1</span><span class="p">,</span> <span class="n">r2</span><span class="p">,</span> <span class="n">r3</span><span class="p">,</span> <span class="n">r4</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="PGM.read_file">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.read_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read PGM parameters from a file. </span>
+<span class="sd">        See config_pgm.ini for an example.</span>
+<span class="sd">        The config file should contain a grating and a mirror section.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            The name of the file to read from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grating</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">pgm_config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">pgm_config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_energy</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">pgm_config</span><span class="p">[</span><span class="s1">&#39;beam&#39;</span><span class="p">][</span><span class="s1">&#39;energy&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_offset</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">pgm_config</span><span class="p">[</span><span class="s1">&#39;beam&#39;</span><span class="p">][</span><span class="s1">&#39;beam_offset&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_width</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">pgm_config</span><span class="p">[</span><span class="s1">&#39;beam&#39;</span><span class="p">][</span><span class="s1">&#39;beam_width&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_height</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">pgm_config</span><span class="p">[</span><span class="s1">&#39;beam&#39;</span><span class="p">][</span><span class="s1">&#39;beam_height&#39;</span><span class="p">])</span></div>
+
+    
+
+<div class="viewcode-block" id="PGM.set_theta">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.set_theta">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_theta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the angle of the grating.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">alpha</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span></div>
+
+
+    <span class="nd">@property</span>
+
+    <span class="k">def</span> <span class="nf">theta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">theta</span>
+
+    <span class="nd">@theta</span><span class="o">.</span><span class="n">setter</span>
+
+    <span class="k">def</span> <span class="nf">theta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">theta</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+
+    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">energy</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mf">1239.8419843320025</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span>
+    
+    <span class="nd">@energy</span><span class="o">.</span><span class="n">setter</span>
+    
+    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">energy</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">grating</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grating</span>
+    
+    <span class="nd">@grating</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">grating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grating</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span>
+    
+    <span class="nd">@mirror</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rays</span>
+    
+    <span class="nd">@rays</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rays</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">beam_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_beam_offset</span>
+    
+    <span class="nd">@beam_offset</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">beam_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_offset</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">beam_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beam_width</span>
+    
+    <span class="nd">@beam_width</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">beam_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_width</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">beam_height</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beam_height</span>
+    
+    <span class="nd">@beam_height</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">beam_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_height</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">grating</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grating</span>
+    
+    <span class="nd">@grating</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">grating</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grating</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span> 
+    <span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span>
+    
+    <span class="nd">@mirror</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">mirror</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rays</span>
+    
+    <span class="nd">@rays</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rays</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rays</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">beam_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beam_offset</span>
+    
+    <span class="nd">@beam_offset</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">beam_offset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_offset</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">beam_width</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beam_width</span>
+    
+    <span class="nd">@beam_width</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">beam_width</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_width</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">beam_height</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beam_height</span>
+    
+    <span class="nd">@beam_height</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">beam_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_beam_height</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">mirror_intercept</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mirror_intercept</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">grating_intercept</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grating_intercept</span>
+    
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">cff</span>
+    
+    <span class="nd">@cff</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">cff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">cff</span> <span class="o">=</span> <span class="n">value</span>
+    
+
+<div class="viewcode-block" id="PGM.values">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.values">[docs]</a>
+    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">dictionary</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;beam_vertical&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_offset</span><span class="p">,</span>
+                      <span class="s1">&#39;beam_width&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_width</span><span class="p">,</span>
+                      <span class="s1">&#39;beam_height&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">beam_height</span><span class="p">,</span>
+                      <span class="s1">&#39;line_density&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">line_density</span><span class="p">,</span>
+                      <span class="s1">&#39;energy&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span>
+                      <span class="s1">&#39;cff&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">cff</span><span class="p">,</span>
+                      <span class="s1">&#39;order&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
+                      <span class="s1">&#39;grating_dimensions&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">dimensions</span><span class="p">,</span>
+                      <span class="s1">&#39;grating.borders&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">borders</span><span class="p">,</span>
+                      <span class="s1">&#39;mirror_voffset&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">voffset</span><span class="p">,</span>
+                      <span class="s1">&#39;mirror_hoffset&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">hoffset</span><span class="p">,</span>
+                      <span class="s1">&#39;mirror_axis_voffset&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">axis_voffset</span><span class="p">,</span>
+                      <span class="s1">&#39;mirror_axis_hoffset&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">axis_hoffset</span><span class="p">,</span>
+                      <span class="s1">&#39;mirror_dimensions&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">dimensions</span><span class="p">,</span>
+                      <span class="s1">&#39;mirror_theta&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span>
+                      <span class="s1">&#39;mirror_borders&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">borders</span><span class="p">}</span>
+        <span class="k">return</span> <span class="n">dictionary</span></div>
+
+
+<div class="viewcode-block" id="PGM.pgm_from_file">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.pgm_from_file">[docs]</a>
+    <span class="nd">@classmethod</span>
+
+    <span class="k">def</span> <span class="nf">pgm_from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a PGM from a file. </span>
+<span class="sd">        See config_pgm.ini for an example.</span>
+<span class="sd">        The config file should contain a grating and a mirror section.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            The name of the file to read from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pgm</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">pgm</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pgm</span></div>
+
+
+<div class="viewcode-block" id="PGM.propagate">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.propagate">[docs]</a>
+    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Propagate rays through the PGM setup.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        *args : Ray3D</span>
+<span class="sd">            The rays to be propagated</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        grating_ray : list of Ray3D objects</span>
+<span class="sd">            A list of propagated rays originating at the grating intercept</span>
+<span class="sd">        </span>
+<span class="sd">        mirror_intercept : list of array_like</span>
+<span class="sd">            A list of the mirror intercepts</span>
+
+<span class="sd">        grating_intercept : list of array_like</span>
+<span class="sd">            A list of the grating intercepts</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span><span class="o">.</span><span class="n">compute_corners</span><span class="p">()</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grating</span><span class="o">.</span><span class="n">compute_corners</span><span class="p">()</span>
+
+        <span class="n">mirr_ray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mirror</span><span class="o">.</span><span class="n">reflect</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="n">grating_ray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grating</span><span class="o">.</span><span class="n">diffract</span><span class="p">(</span><span class="o">*</span><span class="n">mirr_ray</span><span class="p">)</span>
+        <span class="n">mirror_intercept</span> <span class="o">=</span> <span class="p">[</span><span class="n">mirr_ray</span><span class="o">.</span><span class="n">position</span> <span class="k">for</span> <span class="n">mirr_ray</span> <span class="ow">in</span> <span class="n">mirr_ray</span><span class="p">]</span>
+        <span class="n">grating_intercept</span> <span class="o">=</span> <span class="p">[</span><span class="n">grating_ray</span><span class="o">.</span><span class="n">position</span> <span class="k">for</span> <span class="n">grating_ray</span> <span class="ow">in</span> <span class="n">grating_ray</span><span class="p">]</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mirror_intercept</span> <span class="o">=</span> <span class="n">mirror_intercept</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grating_intercept</span> <span class="o">=</span> <span class="n">grating_intercept</span>
+        <span class="k">return</span> <span class="n">grating_ray</span><span class="p">,</span> <span class="n">mirror_intercept</span><span class="p">,</span> <span class="n">grating_intercept</span></div>
+
+
+
+<div class="viewcode-block" id="PGM.draw_sideview">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.draw_sideview">[docs]</a>
+    <span class="k">def</span> <span class="nf">draw_sideview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws the setup on a y-z projection on a given axis.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ax : matplotlib.axes</span>
+<span class="sd">            The axis to draw on</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mirror_corners</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">compute_corners</span><span class="p">()</span>
+        <span class="n">grating_corners</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">compute_corners</span><span class="p">()</span>
+        <span class="n">mirror_corners_y</span><span class="p">,</span> <span class="n">mirror_corners_z</span> <span class="o">=</span> <span class="n">mirror_corners</span><span class="p">[::</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">mirror_corners</span><span class="p">[::</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">mirror_corners_yz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">mirror_corners_z</span><span class="p">,</span> <span class="n">mirror_corners_y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+        <span class="c1"># ConvelHull method used to ensure the entire region is filled regardless</span>
+        <span class="c1"># of point order.</span>
+        <span class="n">hull_grating</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">mirror_corners_yz</span><span class="p">)</span>
+
+        <span class="n">grating_corners_y</span><span class="p">,</span> <span class="n">grating_corners_z</span> <span class="o">=</span> <span class="n">grating_corners</span><span class="p">[::</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="n">grating_corners</span><span class="p">[::</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">grating_corners_yz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">grating_corners_z</span><span class="p">,</span> <span class="n">grating_corners_y</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+        <span class="n">hull_mirror</span> <span class="o">=</span> <span class="n">ConvexHull</span><span class="p">(</span><span class="n">grating_corners_yz</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">mirror_corners_yz</span><span class="p">[</span><span class="n">hull_mirror</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">mirror_corners_yz</span><span class="p">[</span><span class="n">hull_mirror</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">grating_corners_yz</span><span class="p">[</span><span class="n">hull_grating</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">grating_corners_yz</span><span class="p">[</span><span class="n">hull_grating</span><span class="o">.</span><span class="n">vertices</span><span class="p">,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_rays</span><span class="p">()</span>
+        <span class="n">grating_ray</span><span class="p">,</span> <span class="n">mirror_int</span><span class="p">,</span> <span class="n">grating_int</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rays</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">ray</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grating_ray</span><span class="p">):</span>
+            <span class="n">r_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rays</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+            <span class="n">mirror_int</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+            <span class="n">grating_int</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">z</span><span class="p">,</span>
+            <span class="n">grating_int</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">+</span> <span class="mi">1000</span><span class="o">*</span><span class="n">ray</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">])</span>
+
+            <span class="n">r_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rays</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">position</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+            <span class="n">mirror_int</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+            <span class="n">grating_int</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">,</span>
+            <span class="n">grating_int</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1000</span><span class="o">*</span><span class="n">ray</span><span class="o">.</span><span class="n">vector</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+            <span class="p">])</span>
+
+            <span class="n">line</span> <span class="o">=</span> <span class="n">Line2D</span><span class="p">(</span><span class="n">r_z</span><span class="p">,</span> <span class="n">r_x</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        
+        <span class="n">xlim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+        <span class="n">ylim</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+        <span class="n">legend_entries</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.3</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Mirror&#39;</span><span class="p">),</span>
+            <span class="n">Patch</span><span class="p">(</span><span class="n">facecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.3</span><span class="p">),</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Grating&#39;</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="o">=</span><span class="n">legend_entries</span><span class="p">,</span> <span class="n">loc</span> <span class="o">=</span> <span class="s1">&#39;lower right&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">fancybox</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">shadow</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        
+
+
+        <span class="k">return</span> </div>
+
+        
+
+<div class="viewcode-block" id="PGM.draw_topview">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.draw_topview">[docs]</a>
+    <span class="k">def</span> <span class="nf">draw_topview</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Draws the top-view (x-z projection) of the setup on the current</span>
+<span class="sd">        axes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">m_corners</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror_corners</span><span class="p">()</span>
+        <span class="n">g_corners</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating_corners</span><span class="p">()</span>
+
+        <span class="n">mirror_rect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="n">m_corners</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">m_corners</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="c1">#top left</span>
+            <span class="p">[</span><span class="n">m_corners</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">m_corners</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="c1">#bottom_left</span>
+            <span class="p">[</span><span class="n">m_corners</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_length</span><span class="p">(),</span> <span class="n">m_corners</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="c1">#bottom_right</span>
+            <span class="p">[</span><span class="n">m_corners</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_length</span><span class="p">(),</span> <span class="n">m_corners</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>  <span class="c1">#top_right</span>
+        <span class="p">])</span>
+
+        <span class="c1"># Mirror the borders of the rectangular image</span>
+        <span class="n">displacement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span>
+            <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>
+        <span class="p">])</span>
+        
+        <span class="n">mirror_rect_borders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="n">mirror_rect</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">mirror_rect</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">mirror_rect</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">mirror_rect</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">mirror_rect</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">mirror_rect</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">mirror_rect</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">mirror_rect</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+        
+        <span class="n">grating_rect</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="n">g_corners</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">g_corners</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="c1">#top left</span>
+            <span class="p">[</span><span class="n">g_corners</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">g_corners</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="c1">#bottom_left</span>
+            <span class="p">[</span><span class="n">g_corners</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_length</span><span class="p">(),</span> <span class="n">g_corners</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">],</span> <span class="c1">#bottom_right</span>
+            <span class="p">[</span><span class="n">g_corners</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_length</span><span class="p">(),</span> <span class="n">g_corners</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">]</span>  <span class="c1">#top_right</span>
+        <span class="p">])</span>
+
+        <span class="n">grating_rect</span> <span class="o">=</span> <span class="n">grating_rect</span> <span class="o">+</span> <span class="n">displacement</span>
+
+        <span class="n">grating_rect_borders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="p">[</span><span class="n">grating_rect</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">grating_rect</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">grating_rect</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">grating_rect</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">grating_rect</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">grating_rect</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="p">[</span><span class="n">grating_rect</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">grating_rect</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">borders</span><span class="p">[</span><span class="mi">0</span><span class="p">]]])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">generate_rays</span><span class="p">()</span>
+        
+        <span class="n">grating_ray</span><span class="p">,</span> <span class="n">mirror_intercept</span><span class="p">,</span> <span class="n">grating_intercept</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rays</span><span class="p">)</span>
+        
+        <span class="c1">#Index denotes the ray i.e. mirror_intercept[0] is the ray_0</span>
+        
+        <span class="n">mirror_blx</span> <span class="o">=</span> <span class="n">mirror_intercept</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">mirror_blz</span> <span class="o">=</span> <span class="n">mirror_intercept</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">z</span>
+        <span class="n">mirror_l</span> <span class="o">=</span> <span class="n">mirror_intercept</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">mirror_intercept</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">z</span>
+        <span class="n">mirror_w</span> <span class="o">=</span> <span class="n">mirror_intercept</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">mirror_intercept</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+
+
+        <span class="n">grating_blx</span> <span class="o">=</span> <span class="n">grating_intercept</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">grating_blz</span> <span class="o">=</span> <span class="n">grating_intercept</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">z</span>
+        <span class="n">grating_l</span> <span class="o">=</span> <span class="n">grating_intercept</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">z</span> <span class="o">-</span> <span class="n">grating_intercept</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">z</span>
+        <span class="n">grating_w</span> <span class="o">=</span> <span class="n">grating_intercept</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">grating_intercept</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">x</span>
+        
+        
+        
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">mirror_rect_borders</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">mirror_rect_borders</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">grating_rect_borders</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">grating_rect_borders</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">mirror_rect</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">mirror_rect</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">grating_rect</span><span class="p">[:,</span><span class="mi">0</span><span class="p">],</span> <span class="n">grating_rect</span><span class="p">[:,</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">((</span><span class="n">mirror_blz</span><span class="p">,</span> <span class="n">mirror_blx</span> <span class="o">-</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">())),</span> <span class="n">mirror_l</span><span class="p">,</span> <span class="n">mirror_w</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rectangle</span><span class="p">)</span>
+
+        <span class="n">rectangle</span> <span class="o">=</span> <span class="n">Rectangle</span><span class="p">((</span><span class="n">grating_blz</span><span class="p">,</span> <span class="n">grating_blx</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span><span class="o">/</span><span class="mi">2</span><span class="p">),</span> <span class="n">grating_l</span><span class="p">,</span> <span class="n">grating_w</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">rectangle</span><span class="p">)</span>
+        
+        <span class="c1">#print(mirror_rect_hull.vertices)</span>
+        <span class="k">return</span></div>
+
+
+
+
+<div class="viewcode-block" id="PGM.mirror_corners">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.mirror_corners">[docs]</a>
+    <span class="k">def</span> <span class="nf">mirror_corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">hoffset</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">voffset</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">axis_voffset</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">theta</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mirror</span><span class="o">.</span><span class="n">_length</span><span class="p">()</span>
+        <span class="n">theta_g</span> <span class="o">=</span> <span class="mi">90</span> <span class="o">-</span> <span class="n">theta</span>
+        <span class="n">theta_rad</span> <span class="o">=</span> <span class="n">theta_g</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+
+        <span class="n">tlfz</span> <span class="o">=</span> <span class="o">-</span><span class="p">((</span><span class="n">a</span> <span class="o">-</span> <span class="n">c</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">theta_rad</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_rad</span><span class="p">))</span> <span class="o">+</span> <span class="n">h</span>
+        <span class="n">tlfx</span> <span class="o">=</span> <span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="n">trfz</span> <span class="o">=</span> <span class="n">tlfz</span>
+        <span class="n">trfx</span> <span class="o">=</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="n">tlbz</span> <span class="o">=</span> <span class="n">tlfz</span> <span class="o">-</span> <span class="n">l</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_rad</span><span class="p">)</span>
+        <span class="n">tlbx</span> <span class="o">=</span> <span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="n">trbz</span> <span class="o">=</span> <span class="n">tlbz</span>
+        <span class="n">trbx</span> <span class="o">=</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="k">return</span> <span class="p">((</span><span class="n">tlfz</span><span class="p">,</span> <span class="n">tlfx</span><span class="p">),</span> <span class="p">(</span><span class="n">trfz</span><span class="p">,</span> <span class="n">trfx</span><span class="p">),</span> <span class="p">(</span><span class="n">tlbz</span><span class="p">,</span> <span class="n">tlbx</span><span class="p">),</span> <span class="p">(</span><span class="n">trbz</span><span class="p">,</span> <span class="n">trbx</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="PGM.grating_corners">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.grating_corners">[docs]</a>
+    <span class="k">def</span> <span class="nf">grating_corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        
+        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_length</span><span class="p">()</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grating</span><span class="o">.</span><span class="n">beta</span>
+        
+        <span class="n">beta_g</span> <span class="o">=</span> <span class="mi">90</span> <span class="o">+</span> <span class="n">beta</span>
+        <span class="n">beta_rad</span> <span class="o">=</span> <span class="n">beta_g</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span>
+
+        <span class="n">blbz</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta_rad</span><span class="p">)</span>
+        <span class="n">blbx</span> <span class="o">=</span> <span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="n">brbz</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta_rad</span><span class="p">)</span>
+        <span class="n">brbx</span> <span class="o">=</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="n">blfz</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta_rad</span><span class="p">)</span>
+        <span class="n">blfx</span> <span class="o">=</span> <span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="n">brfz</span> <span class="o">=</span> <span class="p">(</span><span class="n">l</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">beta_rad</span><span class="p">)</span>
+        <span class="n">brfx</span> <span class="o">=</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+
+        <span class="k">return</span> <span class="p">((</span><span class="n">blbz</span><span class="p">,</span> <span class="n">blbx</span><span class="p">),</span> <span class="p">(</span><span class="n">brbz</span><span class="p">,</span> <span class="n">brbx</span><span class="p">),</span> <span class="p">(</span><span class="n">blfz</span><span class="p">,</span> <span class="n">blfx</span><span class="p">),</span> <span class="p">(</span><span class="n">brfz</span><span class="p">,</span> <span class="n">brfx</span><span class="p">))</span></div>
+
+    
+<div class="viewcode-block" id="PGM.undulator_size">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.pgm.PGM.undulator_size">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">undulator_size</span><span class="p">():</span>
+        <span class="k">pass</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">pgmcomponents</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Patrick Wang.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

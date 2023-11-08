@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pgmcomponents.elements.mirror &#8212; pgmcomponents 0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b3523f8e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=039e1c02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
+    <script src="../../../_static/documentation_options.js?v=10f1778b"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for pgmcomponents.elements.mirror</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pgmcomponents.geometry</span> <span class="kn">import</span> <span class="n">Point3D</span><span class="p">,</span> <span class="n">Vector3D</span><span class="p">,</span> <span class="n">Plane</span><span class="p">,</span> <span class="n">Ray3D</span>
+<span class="kn">import</span> <span class="nn">configparser</span>
+
+<div class="viewcode-block" id="Plane_Mirror">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror">[docs]</a>
+<span class="k">class</span> <span class="nc">Plane_Mirror</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A class for a simple plane mirror.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dimensions : array_like</span>
+<span class="sd">        The dimensions of the mirror in mm</span>
+<span class="sd">    position : Point3D</span>
+<span class="sd">        The position of the mirror</span>
+<span class="sd">    normal : Vector3D</span>
+<span class="sd">        The normal vector of the mirror</span>
+<span class="sd">    orientation : Vector3D</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dimensions : array_like</span>
+<span class="sd">        The dimensions of the mirror in mm</span>
+<span class="sd">    position : Point3D</span>
+<span class="sd">        The position of the mirror</span>
+<span class="sd">    normal : Vector3D</span>
+<span class="sd">        The normal vector of the mirror</span>
+<span class="sd">    orientation : Vector3D</span>
+<span class="sd">        The orientation of the mirror</span>
+<span class="sd">    corners : array_like</span>
+<span class="sd">        The corners of the grating in the global coordinate system:</span>
+<span class="sd">        [bottom left back, </span>
+<span class="sd">        bottom right back, </span>
+<span class="sd">        bottom left front, </span>
+<span class="sd">        bottom right front,</span>
+<span class="sd">        top left back,</span>
+<span class="sd">        top right back,</span>
+<span class="sd">        top left front,</span>
+<span class="sd">        top right front]</span>
+<span class="sd">    plane : Plane</span>
+<span class="sd">        The plane of the mirror</span>
+<span class="sd">    </span>
+<span class="sd">    borders: array_like</span>
+<span class="sd">        Specifies the borders for a realistic plane mirror:</span>
+<span class="sd">        borders : array_like</span>
+<span class="sd">        Specifies the borders of a realistic grating component.</span>
+<span class="sd">        |-----------Top------------|</span>
+<span class="sd">        |                          |</span>
+<span class="sd">       Left   Mirror Plane       Right</span>
+<span class="sd">        |                          |       ---&gt; +z direction</span>
+<span class="sd">        |----------Bottom----------|        </span>
+<span class="sd">        [top, bottom, left, right]</span>
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    set_position(position)</span>
+<span class="sd">        Set the position of the mirror</span>
+<span class="sd">    set_normal(normal)</span>
+<span class="sd">        Set the normal vector of the mirror</span>
+<span class="sd">    set_orientation(orientation)</span>
+<span class="sd">        Set the orientation of the mirror</span>
+<span class="sd">    set_dimensions(*args)</span>
+<span class="sd">        Set the dimensions of the mirror</span>
+<span class="sd">    set_offsets(voffset, hoffset, axis_voffset, axis_hoffset)</span>
+<span class="sd">        Set the offsets of the mirror</span>
+<span class="sd">    compute_corners()</span>
+<span class="sd">        Compute the corners of the mirror in the global coordinate system,  </span>
+<span class="sd">    </span>
+<span class="sd">    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
+                 <span class="n">voffset</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> 
+                 <span class="n">hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+                 <span class="n">axis_voffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+                 <span class="n">axis_hoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> 
+                 <span class="n">dimensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">450</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">50</span><span class="p">]),</span>
+                 <span class="n">theta</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> 
+                 <span class="n">plane</span><span class="o">=</span><span class="n">Plane</span><span class="p">(),</span>
+                 <span class="n">borders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])</span>
+                 <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor for the Plane_Mirror class.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        voffset : float</span>
+<span class="sd">            The vertical offset of the mirror in mm</span>
+<span class="sd">        hoffset : float</span>
+<span class="sd">            The horizontal offset of the mirror in mm</span>
+<span class="sd">        axis_voffset : float</span>
+<span class="sd">            The vertical offset of the mirror axis in mm</span>
+<span class="sd">        axis_hoffset : float</span>
+<span class="sd">            The horizontal offset of the mirror axis in mm</span>
+<span class="sd">        dimensions : array_like</span>
+<span class="sd">            The dimensions of the mirror in mm [length, width, height]</span>
+<span class="sd">            Dimensions are also accessible with lambda functions as:</span>
+<span class="sd">            self._length(), self._width(), self._height()</span>
+
+<span class="sd">        </span>
+<span class="sd">        theta : float</span>
+<span class="sd">            The angle of the mirror in degrees</span>
+<span class="sd">        plane : Plane</span>
+<span class="sd">            The plane of the mirror</span>
+<span class="sd">        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voffset</span> <span class="o">=</span> <span class="n">voffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hoffset</span> <span class="o">=</span> <span class="n">hoffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_voffset</span> <span class="o">=</span> <span class="n">axis_voffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_hoffset</span> <span class="o">=</span> <span class="n">axis_hoffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="n">dimensions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_length</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_width</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_height</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plane</span> <span class="o">=</span> <span class="n">plane</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_theta</span> <span class="o">=</span> <span class="n">theta</span>
+        <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_corners</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_borders</span> <span class="o">=</span> <span class="n">borders</span>
+<div class="viewcode-block" id="Plane_Mirror.__repr__">
+<a class="viewcode-back" href="../../../autoapi/pgmcomponents/gui/index.html#pgmcomponents.elements.Plane_Mirror.__repr__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;&quot;&quot;Plane_Mirror(voffset=</span><span class="si">{}</span><span class="s2">, </span>
+<span class="s2">        hoffset=</span><span class="si">{}</span><span class="s2">, </span>
+<span class="s2">        axis_voffset=</span><span class="si">{}</span><span class="s2">, </span>
+<span class="s2">        axis_hoffset=</span><span class="si">{}</span><span class="s2">, </span>
+<span class="s2">        length=</span><span class="si">{}</span><span class="s2">, </span>
+<span class="s2">        width=</span><span class="si">{}</span><span class="s2">, </span>
+<span class="s2">        height=</span><span class="si">{}</span><span class="s2">, </span>
+<span class="s2">        plane=</span><span class="si">{}</span><span class="s2">,</span>
+<span class="s2">        borders=</span><span class="si">{}</span><span class="s2">)</span>
+<span class="s2">        &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">voffset</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">hoffset</span><span class="p">,</span> 
+                            <span class="bp">self</span><span class="o">.</span><span class="n">axis_voffset</span><span class="p">,</span> 
+                            <span class="bp">self</span><span class="o">.</span><span class="n">axis_hoffset</span><span class="p">,</span> 
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_length</span><span class="p">(),</span> 
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">(),</span> 
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_height</span><span class="p">(),</span> 
+                            <span class="bp">self</span><span class="o">.</span><span class="n">plane</span><span class="p">,</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">borders</span><span class="p">)</span></div>
+
+    
+<div class="viewcode-block" id="Plane_Mirror.read_file">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror.read_file">[docs]</a>
+    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read mirror parameters from a file. </span>
+<span class="sd">        See config_pgm.ini for an example.</span>
+<span class="sd">        A config_file may contain more than one sections, but only the</span>
+<span class="sd">        mirror section will be read.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            The name of the file to read from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;mirror&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">7</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected exactly six parameters in mirror file&quot;</span><span class="p">)</span>
+
+        <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;voffset&#39;</span><span class="p">,</span> <span class="s1">&#39;hoffset&#39;</span><span class="p">,</span> <span class="s1">&#39;axis_voffset&#39;</span><span class="p">,</span> <span class="s1">&#39;axis_hoffset&#39;</span><span class="p">,</span> <span class="s1">&#39;dimensions&#39;</span><span class="p">,</span> <span class="s1">&#39;theta&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;mirror&#39;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing parameter </span><span class="si">{}</span><span class="s2"> in mirror file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
+        
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">variables</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;mirror&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;dimensions&#39;</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;borders&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;mirror&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="n">exec</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;self._</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = float(</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;mirror&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_borders</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;mirror&#39;</span><span class="p">][</span><span class="s1">&#39;borders&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)])</span></div>
+
+        
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">voffset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voffset</span>
+
+    <span class="nd">@voffset</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">voffset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voffset</span> <span class="o">=</span> <span class="n">value</span>  
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">hoffset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hoffset</span>
+
+    <span class="nd">@hoffset</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">hoffset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hoffset</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">axis_voffset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis_voffset</span>
+
+    <span class="nd">@axis_voffset</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">axis_voffset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_voffset</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">axis_hoffset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis_hoffset</span>
+
+    <span class="nd">@axis_hoffset</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">axis_hoffset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_hoffset</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span>
+    
+    <span class="nd">@dimensions</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the dimensions of the mirror.</span>
+<span class="sd">        The dimensions are specified as:</span>
+<span class="sd">        [length, width, height]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">plane</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plane</span>
+
+    <span class="nd">@plane</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">plane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plane</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">theta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_theta</span>
+    
+    <span class="nd">@theta</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">theta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_theta</span> <span class="o">=</span> <span class="n">value</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_corners</span>
+    
+    <span class="nd">@corners</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Corners should be calculated via compute_corners().&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">borders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_borders</span>
+    
+    <span class="nd">@borders</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">borders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the borders of the mirror.</span>
+<span class="sd">        The borders are specified as:</span>
+<span class="sd">        |-----------Top------------|</span>
+<span class="sd">        |                          |</span>
+<span class="sd">         Left   Mirror Plane       Right</span>
+<span class="sd">        |                          |       ---&gt; +z direction</span>
+<span class="sd">        |----------Bottom----------|</span>
+<span class="sd">        [top, bottom, left, right]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected exactly four values for borders&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_borders</span> <span class="o">=</span> <span class="n">value</span>
+
+
+<div class="viewcode-block" id="Plane_Mirror.set_position">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror.set_position">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plane</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span></div>
+
+
+<div class="viewcode-block" id="Plane_Mirror.set_normal">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror.set_normal">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_normal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">normal</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plane</span><span class="o">.</span><span class="n">normal</span> <span class="o">=</span> <span class="n">normal</span></div>
+
+
+<div class="viewcode-block" id="Plane_Mirror.set_dimensions">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror.set_dimensions">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_dimensions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the dimensions of the mirror.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        *args : array_like</span>
+<span class="sd">            Either one or three arguments for the dimensions</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the number of arguments is not one or three</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected either one or three arguments for dimensions&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Plane_Mirror.set_offsets">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror.set_offsets">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_offsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">voffset</span><span class="p">,</span> <span class="n">hoffset</span><span class="p">,</span> <span class="n">axis_voffset</span><span class="p">,</span> <span class="n">axis_hoffset</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_voffset</span> <span class="o">=</span> <span class="n">voffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hoffset</span> <span class="o">=</span> <span class="n">hoffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_voffset</span> <span class="o">=</span> <span class="n">axis_voffset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_axis_hoffset</span> <span class="o">=</span> <span class="n">axis_hoffset</span></div>
+
+
+<div class="viewcode-block" id="Plane_Mirror.compute_corners">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror.compute_corners">[docs]</a>
+    <span class="k">def</span> <span class="nf">compute_corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the corners of the mirror in the global coordinate system,</span>
+<span class="sd">        in addition to the plane and normal of the mirror.</span>
+<span class="sd">    </span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        corners : array_like</span>
+<span class="sd">            The corners of the mirror in the global coordinate system</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cot</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">theta_g</span> <span class="o">=</span> <span class="mi">90</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_theta</span>
+        <span class="n">theta_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">theta_g</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hoffset</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_voffset</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis_voffset</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axis_hoffset</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span><span class="p">()</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height</span><span class="p">()</span>
+        <span class="c1">#Top left front</span>
+
+        <span class="n">tlfz</span> <span class="o">=</span> <span class="o">-</span><span class="p">((</span><span class="n">a</span> <span class="o">-</span> <span class="n">c</span> <span class="o">*</span> <span class="n">cot</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">+</span> <span class="n">h</span>
+        <span class="n">tlfy</span> <span class="o">=</span> <span class="o">-</span><span class="p">(</span><span class="n">c</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span> <span class="o">+</span> 
+                 <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">c</span><span class="o">*</span><span class="n">cot</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">))</span> <span class="o">+</span> <span class="n">v</span>
+        <span class="n">tlfx</span> <span class="o">=</span> <span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">tlf</span> <span class="o">=</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">tlfx</span><span class="p">,</span> <span class="n">tlfy</span><span class="p">,</span> <span class="n">tlfz</span><span class="p">)</span>
+
+        <span class="c1">#Bottom left front</span>
+        <span class="n">blfz</span> <span class="o">=</span> <span class="n">tlfz</span> <span class="o">+</span> <span class="n">d</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">blfy</span> <span class="o">=</span> <span class="n">tlfy</span> <span class="o">-</span> <span class="n">d</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>        
+        <span class="n">blfx</span> <span class="o">=</span> <span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">blf</span> <span class="o">=</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">blfx</span><span class="p">,</span> <span class="n">blfy</span><span class="p">,</span> <span class="n">blfz</span><span class="p">)</span>
+
+        <span class="c1">#Top right front</span>
+        <span class="n">trfz</span> <span class="o">=</span> <span class="n">tlfz</span>
+        <span class="n">trfy</span> <span class="o">=</span> <span class="n">tlfy</span>
+        <span class="n">trfx</span> <span class="o">=</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">trf</span> <span class="o">=</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">trfx</span><span class="p">,</span> <span class="n">trfy</span><span class="p">,</span> <span class="n">trfz</span><span class="p">)</span>
+
+        <span class="c1">#Bottom right front</span>
+        <span class="n">brfz</span> <span class="o">=</span> <span class="n">blfz</span>
+        <span class="n">brfy</span> <span class="o">=</span> <span class="n">blfy</span>
+        <span class="n">brfx</span> <span class="o">=</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">brf</span> <span class="o">=</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">brfx</span><span class="p">,</span> <span class="n">brfy</span><span class="p">,</span> <span class="n">brfz</span><span class="p">)</span>
+
+        <span class="c1">#Top left back</span>
+        <span class="n">tlbz</span> <span class="o">=</span> <span class="n">tlfz</span> <span class="o">-</span> <span class="n">l</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">tlby</span> <span class="o">=</span> <span class="n">tlfy</span> <span class="o">-</span> <span class="n">l</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">tlbx</span> <span class="o">=</span> <span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">tlb</span> <span class="o">=</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">tlbx</span><span class="p">,</span> <span class="n">tlby</span><span class="p">,</span> <span class="n">tlbz</span><span class="p">)</span>
+
+        <span class="c1">#Bottom left back</span>
+        <span class="n">blbz</span> <span class="o">=</span> <span class="n">tlbz</span> <span class="o">+</span> <span class="n">d</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">blby</span> <span class="o">=</span> <span class="n">tlby</span> <span class="o">-</span> <span class="n">d</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+        <span class="n">blbx</span> <span class="o">=</span> <span class="o">-</span><span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">blb</span> <span class="o">=</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">blbx</span><span class="p">,</span> <span class="n">blby</span><span class="p">,</span> <span class="n">blbz</span><span class="p">)</span>
+
+        <span class="c1">#Top right back</span>
+        <span class="n">trbz</span> <span class="o">=</span> <span class="n">tlbz</span>
+        <span class="n">trby</span> <span class="o">=</span> <span class="n">tlby</span>
+        <span class="n">trbx</span> <span class="o">=</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">trb</span> <span class="o">=</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">trbx</span><span class="p">,</span> <span class="n">trby</span><span class="p">,</span> <span class="n">trbz</span><span class="p">)</span>
+
+        <span class="c1">#Bottom right back</span>
+        <span class="n">brbz</span> <span class="o">=</span> <span class="n">blbz</span>
+        <span class="n">brby</span> <span class="o">=</span> <span class="n">blby</span>
+        <span class="n">brbx</span> <span class="o">=</span> <span class="n">w</span><span class="o">/</span><span class="mi">2</span>
+        <span class="n">brb</span> <span class="o">=</span> <span class="n">Point3D</span><span class="p">(</span><span class="n">brbx</span><span class="p">,</span> <span class="n">brby</span><span class="p">,</span> <span class="n">brbz</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_plane</span> <span class="o">=</span> <span class="n">Plane</span><span class="p">(</span><span class="n">tlf</span><span class="p">,</span> <span class="n">trf</span><span class="p">,</span> <span class="n">tlb</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_corners</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+            <span class="n">tlf</span><span class="p">,</span>
+            <span class="n">trf</span><span class="p">,</span>
+            <span class="n">blf</span><span class="p">,</span>
+            <span class="n">brf</span><span class="p">,</span>
+            <span class="n">tlb</span><span class="p">,</span>
+            <span class="n">trb</span><span class="p">,</span>
+            <span class="n">blb</span><span class="p">,</span>
+            <span class="n">brb</span>
+        <span class="p">])</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_corners</span></div>
+
+
+<div class="viewcode-block" id="Plane_Mirror.draw">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror.draw">[docs]</a>
+    <span class="k">def</span> <span class="nf">draw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Plane_Mirror.mirror_from_file">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror.mirror_from_file">[docs]</a>
+    <span class="nd">@classmethod</span>
+
+    <span class="k">def</span> <span class="nf">mirror_from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a mirror from a file. </span>
+<span class="sd">        See config_pgm.ini for an example.</span>
+<span class="sd">        A config_file may contain more than one sections, but only the</span>
+<span class="sd">        mirror section will be read.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            The name of the file to read from</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mirror</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="n">mirror</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">mirror</span></div>
+
+
+<div class="viewcode-block" id="Plane_Mirror.reflect">
+<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.Plane_Mirror.reflect">[docs]</a>
+    <span class="k">def</span> <span class="nf">reflect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        A method to reflect rays off the mirror.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        *args : Ray3D</span>
+<span class="sd">            The rays to be reflected</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        reflected_rays : list</span>
+<span class="sd">            A list of reflected rays</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reflected_rays</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected at least one ray&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">ray</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ray</span><span class="p">,</span> <span class="n">Ray3D</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected Ray3D object&quot;</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">plane_intersection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plane</span><span class="o">.</span><span class="n">intersectQ</span><span class="p">(</span><span class="n">ray</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Ray of index </span><span class="si">{</span><span class="n">index</span><span class="si">}</span><span class="s1"> does not intersect mirror, tread with caution!&#39;</span><span class="p">)</span>
+                <span class="k">continue</span>
+            <span class="n">ray_array</span> <span class="o">=</span> <span class="n">ray</span><span class="o">.</span><span class="n">vector</span>
+            <span class="n">mirror_normal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_plane</span><span class="o">.</span><span class="n">normal</span>
+            <span class="n">reflected_ray_array</span> <span class="o">=</span> <span class="n">ray_array</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ray_array</span><span class="p">,</span> <span class="n">mirror_normal</span><span class="p">)</span> <span class="o">*</span> <span class="n">mirror_normal</span>
+            <span class="n">reflected_ray_array</span> <span class="o">=</span> <span class="n">reflected_ray_array</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">reflected_ray_array</span><span class="p">)</span>
+            <span class="n">reflected_ray</span> <span class="o">=</span> <span class="n">Ray3D</span><span class="p">(</span><span class="n">plane_intersection</span><span class="p">,</span> <span class="n">reflected_ray_array</span><span class="p">)</span>
+            <span class="n">reflected_rays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reflected_ray</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">reflected_rays</span></div>
+</div>
+
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">pgmcomponents</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Patrick Wang.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

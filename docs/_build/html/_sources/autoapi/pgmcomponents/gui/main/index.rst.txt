@@ -1,0 +1,22 @@
+:py:mod:`pgmcomponents.gui.main`
+================================
+
+.. py:module:: pgmcomponents.gui.main
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   pgmcomponents.gui.main.main
+
+
+
+.. py:function:: main()
+
+

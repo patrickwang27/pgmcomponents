@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../../../../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>pgmcomponents.elements.grating &#8212; pgmcomponents 0.2 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b3523f8e" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/alabaster.css?v=039e1c02" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=eafc0fe6" />
+    <script src="../../../../_static/documentation_options.js?v=10f1778b"></script>
+    <script src="../../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="pgmcomponents.elements.mirror" href="../mirror/index.html" />
+    <link rel="prev" title="pgmcomponents.elements" href="../index.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-pgmcomponents.elements.grating">
+<span id="pgmcomponents-elements-grating"></span><h1><a class="reference internal" href="#module-pgmcomponents.elements.grating" title="pgmcomponents.elements.grating"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents.elements.grating</span></code></a><a class="headerlink" href="#module-pgmcomponents.elements.grating" title="Link to this heading">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#pgmcomponents.elements.grating.Grating" title="pgmcomponents.elements.grating.Grating"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Grating</span></code></a></p></td>
+<td><p>A class for a simple grating</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pgmcomponents.elements.grating.</span></span><span class="sig-name descname"><span class="pre">Grating</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">line_density</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">600</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cff</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.array([1,</span> <span class="pre">1,</span> <span class="pre">1])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">borders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">np.array([0,</span> <span class="pre">0,</span> <span class="pre">0,</span> <span class="pre">0])</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.12)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A class for a simple grating</p>
+<p>Based on the work of Matthew Hand</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>line_density</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The line density of the grating in lines per mm</p></li>
+<li><p><strong>energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The energy of the incident beam in eV</p></li>
+<li><p><strong>cff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The fixed focus constant of the grating</p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The diffraction order of the grating</p></li>
+<li><p><strong>dimensions</strong> (<em>array_like</em>) – The dimensions of the grating in mm [length, width, height],
+dimensions are also accessible with lambda functions as:
+self._length(), self._width(), self._height()</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.line_density">
+<span class="sig-name descname"><span class="pre">line_density</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.line_density" title="Link to this definition">¶</a></dt>
+<dd><p>The line density of the grating in lines per mm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.energy">
+<span class="sig-name descname"><span class="pre">energy</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.energy" title="Link to this definition">¶</a></dt>
+<dd><p>The energy of the incident beam in eV</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.cff">
+<span class="sig-name descname"><span class="pre">cff</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.cff" title="Link to this definition">¶</a></dt>
+<dd><p>The fixed focus constant of the grating</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.order">
+<span class="sig-name descname"><span class="pre">order</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.order" title="Link to this definition">¶</a></dt>
+<dd><p>The diffraction order of the grating</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.alpha" title="Link to this definition">¶</a></dt>
+<dd><p>The incident angle of the beam in degrees</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.beta" title="Link to this definition">¶</a></dt>
+<dd><p>The diffraction angle of the beam in degrees</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.dimensions">
+<span class="sig-name descname"><span class="pre">dimensions</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.dimensions" title="Link to this definition">¶</a></dt>
+<dd><p>The dimensions of the grating in mm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.corners">
+<span class="sig-name descname"><span class="pre">corners</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.corners" title="Link to this definition">¶</a></dt>
+<dd><p>The corners of the grating in the global coordinate system:
+[bottom left back,
+bottom right back,
+bottom left front,
+bottom right front,
+top left back,
+top right back,
+top left front,
+top right front]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.borders">
+<span class="sig-name descname"><span class="pre">borders</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.borders" title="Link to this definition">¶</a></dt>
+<dd><blockquote>
+<div><p>Specifies the borders of a realistic grating component.
+<a href="#id15"><span class="problematic" id="id16">|-----------Top------------|</span></a>
+|                          |</p>
+</div></blockquote>
+<dl>
+<dt>Left   Grating Plane      Right</dt><dd><div class="line-block">
+<div class="line">|      —-&gt; +z direction</div>
+</div>
+<p><a href="#id17"><span class="problematic" id="id18">|----------Bottom----------|</span></a>
+[top, bottom, left, right]</p>
+<p>Left - Right =&gt; Tangential
+Top - Bottom =&gt; Sagittal</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>array_like</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.set_angles">
+<span class="sig-name descname"><span class="pre">set_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.set_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.set_angles" title="Link to this definition">¶</a></dt>
+<dd><p>Set the incident and diffraction angles of the grating</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.wavelength">
+<span class="sig-name descname"><span class="pre">wavelength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.wavelength" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the wavelength of the beam in Angstroms</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.compute_corners">
+<span class="sig-name descname"><span class="pre">compute_corners</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_corners"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.compute_corners" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the corners of the grating in the global coordinate system</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.diffract">
+<span class="sig-name descname"><span class="pre">diffract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.diffract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.diffract" title="Link to this definition">¶</a></dt>
+<dd><p>A method to diffract rays off the grating</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.compute_beta">
+<span class="sig-name descname"><span class="pre">compute_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.compute_beta" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the diffraction angle beta from the incident angle alpha</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.reflect">
+<span class="sig-name descname"><span class="pre">reflect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.reflect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.reflect" title="Link to this definition">¶</a></dt>
+<dd><p>A method to ‘reflect’ rays off the grating</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">line_density</span></span><a class="headerlink" href="#id0" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">energy</span></span><a class="headerlink" href="#id1" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id2">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cff</span></span><a class="headerlink" href="#id2" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id3">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">order</span></span><a class="headerlink" href="#id3" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id4">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">alpha</span></span><a class="headerlink" href="#id4" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id5">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">beta</span></span><a class="headerlink" href="#id5" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dimensions</span></span><a class="headerlink" href="#id6" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.plane">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">plane</span></span><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.plane" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id7">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">borders</span></span><a class="headerlink" href="#id7" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="id8">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">corners</span></span><a class="headerlink" href="#id8" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.__repr__" title="Link to this definition">¶</a></dt>
+<dd><p>Return repr(self).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.read_file" title="Link to this definition">¶</a></dt>
+<dd><p>Read grating parameters from a file.
+See config_pgm.ini for an example.
+A config_file may contain more than one sections, but only the
+grating section will be read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the file to read from</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id9">
+<span class="sig-name descname"><span class="pre">set_angles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.set_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id10">
+<span class="sig-name descname"><span class="pre">compute_beta</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.compute_angles">
+<span class="sig-name descname"><span class="pre">compute_angles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_angles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.compute_angles" title="Link to this definition">¶</a></dt>
+<dd><p>Compute the incident and diffraction angles of the grating.
+The incident angle is calculated from the diffraction angle
+using the fixed focus constant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>alpha</strong> (<em>float</em>) – The incident angle in degrees</p></li>
+<li><p><strong>beta</strong> (<em>float</em>) – The diffraction angle in degrees</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id11">
+<span class="sig-name descname"><span class="pre">diffract</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.diffract"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Link to this definition">¶</a></dt>
+<dd><p>A method to diffract rays off the grating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>rays</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)"><em>list</em></a>) – The rays to be diffracted</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>diffracted_rays</strong> – A list of diffracted rays</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.calc_beta">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">calc_beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">line_density</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">energy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.calc_beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.calc_beta" title="Link to this definition">¶</a></dt>
+<dd><p>Calculate the diffraction angle beta from the incident angle alpha.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The incident angle in degrees</p></li>
+<li><p><strong>line_density</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The line density of the grating in lines per mm</p></li>
+<li><p><strong>energy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><em>float</em></a>) – The energy of the incident beam in eV</p></li>
+<li><p><strong>order</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><em>int</em></a>) – The diffraction order of the grating</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>beta</strong> – The diffraction angle in degrees</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)">float</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id12">
+<span class="sig-name descname"><span class="pre">wavelength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">energy</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.wavelength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id13">
+<span class="sig-name descname"><span class="pre">compute_corners</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.compute_corners"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="id14">
+<span class="sig-name descname"><span class="pre">reflect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.reflect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id14" title="Link to this definition">¶</a></dt>
+<dd><p>A method to reflect rays off the grating.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>*args</strong> (<a class="reference internal" href="../index.html#id41" title="pgmcomponents.elements.Ray3D"><em>Ray3D</em></a>) – The rays to be reflected</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>reflected_rays</strong> – A list of reflected rays</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.12)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pgmcomponents.elements.grating.Grating.grating_from_file">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">grating_from_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/pgmcomponents/elements/grating.html#Grating.grating_from_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pgmcomponents.elements.grating.Grating.grating_from_file" title="Link to this definition">¶</a></dt>
+<dd><p>Create a grating from a file.
+See config_pgm.ini for an example.
+A config_file may contain more than one sections, but only the
+grating section will be read.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a>) – The name of the file to read from</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">pgmcomponents</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../../pgmcomponents.elements.html">pgmcomponents.elements package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pgmcomponents.geometry.html">pgmcomponents.geometry package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pgmcomponents.gui.html">pgmcomponents.gui package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../pgmcomponents.html">pgmcomponents package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../example.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../acknowledgements.html">acknowledgements</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">API Reference</a><ul>
+  <li><a href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents</span></code></a><ul>
+  <li><a href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents.elements</span></code></a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents.elements</span></code></a></li>
+      <li>Next: <a href="../mirror/index.html" title="next chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">pgmcomponents.elements.mirror</span></code></a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Patrick Wang.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../../../../_sources/autoapi/pgmcomponents/elements/grating/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
