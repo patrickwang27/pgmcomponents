@@ -442,7 +442,9 @@ class PGM(object):
             line = Line2D(r_z, r_x, color='green', linewidth=1, label='Dispersed Rays')
             ax.add_line(line)
         
-        zero_order_rays = self.grating.reflect(self.rays)
+        zero_order_rays = self.grating.reflect(self.rays, zero_order=True)
+
+
         for index, ray in enumerate(zero_order_rays):
             r_z = np.array([
             grating_int[index].z,

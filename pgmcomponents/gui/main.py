@@ -27,7 +27,7 @@ def main():
     version = sg.__version__
     version_str = version.split('.')
     print(Fore.GREEN,"Welcome to pgm-gui!", Fore.RESET)
-    print("Checking PySimpleGUI version...")
+    print(Fore.YELLOW,"Checking PySimpleGUI version...", Fore.RESET)
     if len(version_str) <= 3:
         print(Fore.RED + "PySimpleGUI is not up-to-date, see popup!" + Fore.RESET)
         response = sg.PopupOKCancel(f"Your PySimpleGUI version is {version}\nThis program requires version the github dev version.\n Press OK to begin upgrade sequence.")
@@ -48,7 +48,7 @@ def main():
     menu = [['File', ['Open workspace', 'Save workspace', 'Exit']],
             ['Export', ['Export Mirror', 'Export Grating', 'Export Beams', 'Export All']],
             ['Help', 'About...'], ]
-    print("Initialising control widgets...")
+    print(Fore.CYAN,"Initialising control widgets...", Fore.RESET)
     energy_control = EPICScontrol('Energy (eV)', 250.,10., '-ENERGY-', pgm=pgm)
     cff_control = EPICScontrol(u'Cff', 2.,0.1, '-CFF-',pgm=pgm)
     order_control = EPICScontrol('Order', 1,1, '-ORDER-',pgm=pgm)
@@ -58,8 +58,9 @@ def main():
     offsets_control = OffsetsControl(offset_defaults, '-OFFSETS-')
     up_events = {'-ENERGY-_up':energy_control, '-CFF-_up':cff_control, '-ORDER-_up':order_control, '-LINE_DENSITY-_up':line_density_control}
     down_events = {'-ENERGY-_down':energy_control, '-CFF-_down':cff_control, '-ORDER-_down':order_control, '-LINE_DENSITY-_down':line_density_control}
+    print(Fore.GREEN, "Control widgets initialised!", Fore.RESET)
 
-    print("Initialising widgets...")
+    print(Fore.CYAN, "Initialising widgets...", Fore.RESET)
 
     beam_config = Beam_Config()
     topview_widget = Topview_Widget(pgm, size=(1000,500))
@@ -83,9 +84,10 @@ def main():
         ],
         [sideview_widget.frame]
     ]]
-    print("Initialising window...")
+    print(Fore.GREEN, "Widgets initialised!", Fore.RESET)
+    print(Fore.CYAN, "Initialising window...", Fore.RESET)
     window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resizable=True, return_keyboard_events=True)
-
+    print(Fore.GREEN, "Window initialised!", Fore.RESET)
 
     _,_ = pgm.grating.compute_angles()
     _=pgm.mirror.compute_corners()
@@ -110,8 +112,7 @@ def main():
     ]
     while True:
         event, values = window.read()
-        print(event)
-        print(pgm.beam_height, pgm.beam_width, pgm.beam_offset)
+        print(Fore.LIGHTYELLOW_EX, 'Event:',Fore.RESET, event)
         if event in update_events:
 
             update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)

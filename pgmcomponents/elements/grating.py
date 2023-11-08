@@ -502,7 +502,7 @@ class Grating(object):
 
         return self._corners
 
-    def reflect(self, *args)-> list:
+    def reflect(self, *args, zero_order = False)-> list:
         """
         A method to reflect rays off the grating.
 
@@ -536,7 +536,11 @@ class Grating(object):
                 continue
             ray_array = ray.vector
             grating_normal = self._grating_plane.normal
-            reflected_ray_array = ray_array - 2 * np.dot(ray_array, grating_normal) * grating_normal
+            if zero_order:
+                
+                reflected_ray_array = ray_array - 2 * np.dot(ray_array, -grating_normal) * grating_normal
+            else:
+                reflected_ray_array = ray_array - 2 * np.dot(ray_array, grating_normal) * grating_normal
             reflected_ray_array = reflected_ray_array / np.linalg.norm(reflected_ray_array)
             reflected_ray = Ray3D(plane_intersection, reflected_ray_array)
             reflected_rays.append(reflected_ray)

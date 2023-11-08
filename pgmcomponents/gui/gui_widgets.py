@@ -445,15 +445,12 @@ class Beam_Config(object):
                                                      float(values['distance']),
                                                      float(values['id_length']),
                                                      num_of_sigmas=float(values['num_of_sigmas']))
-                        print('save Beam size h is ', beam_size_h)
                         beam_size_v = calc_beam_size(float(values['electron_size_v']),
                                                     float(values['electron_div_v']),
                                                     pgm.wavelength,
                                                     float(values['distance']),
                                                     float(values['id_length']),
                                                     num_of_sigmas=float(values['num_of_sigmas']))
-                        
-                        print('save Beam size v is ', beam_size_v)
                         self.beam_size_h = beam_size_h
                         self.beam_size_v = beam_size_v
                         pgm.beam_width = beam_size_h
@@ -517,15 +514,6 @@ class Beam_Config(object):
 
             if check_fill() and values['calculate_q']:
                 try:
-                    print("called in second loop")
-                    print('Wavelength is ', pgm.wavelength)
-                    print('Distance is ', float(values['distance']))
-                    print('ID length is ', float(values['id_length']))
-                    print('Number of sigmas is ', float(values['num_of_sigmas']))
-                    print('Electron size h is ', float(values['electron_size_h']))
-                    print('Electron size v is ', float(values['electron_size_v']))
-                    print('Electron div h is ', float(values['electron_div_h']))
-                    print('Electron div v is ', float(values['electron_div_v']))
 
                     beam_size_h = calc_beam_size(float(values['electron_size_h']), 
                                                 float(values['electron_div_h']), 
@@ -533,7 +521,7 @@ class Beam_Config(object):
                                                 float(values['distance']),
                                                 float(values['id_length']), 
                                                 num_of_sigmas=float(values['num_of_sigmas']))
-                    print('tick Beam size h is ', beam_size_h)
+                    
                     
                     beam_size_v = calc_beam_size(float(values['electron_size_v']),
                                                 float(values['electron_div_v']), 
@@ -548,7 +536,7 @@ class Beam_Config(object):
                     self.beam_size_v = beam_size_v
                     pgm.beam_height = beam_size_v
                     pgm.beam_width = beam_size_h
-                    print('tick Beam size v is ', beam_size_v)
+
                     pass
                     
                 except Exception as e:
@@ -579,7 +567,7 @@ class OffsetsControl(object):
 
     def __init__(self, values, key):
         self.values = values
-        print('values:',values)
+
         self.key = key
 
         layout = [
@@ -857,7 +845,7 @@ def update_and_draw(window,
 
     """
 
-    print(Fore.RED + 'updated in fn' + Style.RESET_ALL)
+
     energy_input = float(values['-ENERGY-'])
     cff_input = float(values['-CFF-'])
     order_input = int(values['-ORDER-'])
