@@ -438,6 +438,14 @@ class Beam_Config(object):
                         self.num_of_sigmas = float(values['num_of_sigmas'])
                         self.calc = True
                         print('Wavelength is ', pgm.wavelength)
+                        print('Distance is ', self.distance)
+                        print('ID length is ', self.id_length)
+                        print('Number of sigmas is ', self.num_of_sigmas)
+                        print('Electron size h is ', self.electron_size_h)
+                        print('Electron size v is ', self.electron_size_v)
+                        print('Electron div h is ', self.electron_div_h)
+                        print('Electron div v is ', self.electron_div_v)
+    
                         beam_size_h = calc_beam_size(self.electron_div_h,
                                                      self.electron_div_h,
                                                      pgm.wavelength,

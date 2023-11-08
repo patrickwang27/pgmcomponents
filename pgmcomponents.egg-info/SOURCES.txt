@@ -14,7 +14,6 @@ pgmcomponents/elements/mirror.py
 pgmcomponents/elements/pgm.py
 pgmcomponents/geometry/__init__.py
 pgmcomponents/geometry/geometry.py
-pgmcomponents/geometry/light.py
 pgmcomponents/gui/__init__.py
 pgmcomponents/gui/gui_widgets.py
 pgmcomponents/gui/main.py
