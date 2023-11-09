@@ -1,7 +1,9 @@
 from __future__ import annotations
+# List not used
 from ast import List
 import numpy as np
 import configparser
+# Vestor3D not used
 from pgmcomponents.geometry import Point3D, Plane, Ray3D, Vector3D
 from scipy.constants import c, h, e
 
@@ -90,6 +92,7 @@ class Grating(object):
     reflect(*args)
         A method to 'reflect' rays off the grating
     """
+    # Run a code formatter and linter to fix code style adn syntax errors. Black & Falke8 are good for this.
     def __init__(self, 
                  line_density=600, 
                  energy=250, 
@@ -115,6 +118,7 @@ class Grating(object):
 
 
     def __repr__(self):
+        # Use f-strings
         return "Grating(line_density={},\n energy={}, \n cff={}, \n order={}, \n dimensions={},\n borders={})".format(self.line_density, 
                                                                                              self.energy, 
                                                                                              self.cff, 
@@ -138,16 +142,21 @@ class Grating(object):
         config.read(filename)
         
         if len(config['grating']) != 6:
+            # You could add config['grating'] into the error message
             raise ValueError("Expected exactly five parameters in grating file")
 
+        # Could use tuple instead of list
         variables = ['line_density', 'energy', 'cff', 'order', 'dimensions']
         for var in variables:
             if var not in config['grating']:
                 raise ValueError("Missing parameter {} in grating file".format(var))
             
+        # You already check if variables in config['grating'] above and repeat below.
+        # Could use sets to create items from variable and config['grating'] to avoid list comprehension.
         items = [x for x in variables if x in config['grating'] and x != 'dimensions' and x != 'borders']
 
         for key, value in zip(items, config['grating'].values()):
+            # Avoid using exec
             exec(f"self._{key} = float({value})")
             print(key)
             print(value)
@@ -160,6 +169,7 @@ class Grating(object):
     def line_density(self):
         return self._line_density
     
+    # Is there any validation you could add to any of these setters?
     @line_density.setter
     def line_density(self, value):
         self._line_density = value
@@ -254,6 +264,7 @@ class Grating(object):
         
         try:
             self._energy = 12398.42 / wavelength #converts wavelength to eV
+        # better to check explicity if wavelength is zero and raise ValueError
         except ZeroDivisionError:
             raise ValueError("Unexpected divide by zero in grating.set_angles")
         
@@ -267,6 +278,7 @@ class Grating(object):
     
     @corners.setter
     def corners(self, value):
+        # could call compute_corners() here instead of raising error
         raise AttributeError("Corners should be calculated via compute_corners().")
 
     def compute_beta(self):
@@ -289,7 +301,7 @@ class Grating(object):
             wavelength = self.wavelength(self.energy)
             u = self.order*self.line_density*1000*wavelength - np.sin(np.deg2rad(self.alpha))
             beta = np.rad2deg(np.arcsin(u))
-        
+        # Better to validate value and raise ValueError on that directly (e.g. -1 <= u <= 1) with descriptive error message
         except ZeroDivisionError:
             print('Error in grating.compute_beta')
         
@@ -326,6 +338,7 @@ class Grating(object):
 
         return self._alpha, self._beta
 
+    # Could add type annotations on all your functions
     def diffract(self, *args)-> list:
         """
         A method to diffract rays off the grating.
@@ -342,19 +355,23 @@ class Grating(object):
 
         Raises
         ------
+        raises ValueError too
         TypeError
             If the rays are not Ray3D objects
 
         """
         diffracted_rays = []
         
+        # You check len before checking args is a list. Is this checking for an empty list? If so would be better after list check. 
         if len(args) == 0:
             raise ValueError("Expected at least one ray")
         
+        # Use isinstance()
         if type(args[0]) == list:
             args = args[0]
 
 
+        # Index isn't used, so can use _ as palceholder (for _, ray in (enumerate))
         for index, ray in enumerate(args):
             if not isinstance(ray, Ray3D):
                 raise TypeError("Expected Ray3D object")
@@ -370,8 +387,10 @@ class Grating(object):
             diffracted_rays.append(diff_ray)
         return diffracted_rays
     
+    # accesses Grating.wavelength
     @staticmethod
 
+    # Isn't this the same as compute_beta?
     def calc_beta(alpha, line_density, energy, order):
         """
         Calculate the diffraction angle beta from the incident angle alpha.
@@ -409,7 +428,8 @@ class Grating(object):
             raise ValueError("Unexpected divide by zero in grating.calc_beta")
         
         return beta
-    
+
+    # rename something like energy_to_wavelength
     def wavelength(self, energy):
         return h*c/(e*energy)
     
@@ -432,6 +452,7 @@ class Grating(object):
         """
         
         beta = np.deg2rad(self._beta)
+        # beta_g not used
         beta_g = np.deg2rad(self._beta + 90)
         l = self._length()
         w = self._width()
@@ -519,9 +540,11 @@ class Grating(object):
         """
         reflected_rays = []
         
+        # Check after determining if list
         if len(args) == 0:
             raise ValueError("Expected at least one ray")
         
+        # se isinstance
         if type(args[0]) == list:
             args = args[0]
         

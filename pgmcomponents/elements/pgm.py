@@ -1,11 +1,16 @@
 from __future__ import annotations
 import numpy as np
+# plt not used
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Patch 
+# axes not used
 from matplotlib import axes
+# PatchCollection
 from matplotlib.collections import PatchCollection
 import configparser
+# c, h, e not used
 from scipy.constants import c, h, e
+# Plane, Vector3D not used
 from pgmcomponents.geometry import Plane, Point3D, Vector3D, Ray3D
 from scipy.spatial import ConvexHull
 from matplotlib.lines import Line2D
@@ -68,6 +73,7 @@ class PGM(object):
 
         
         """
+        # It's unclear what is happening here and there will be uncaught errors if kwargs is not as expected.
         if grating is None:
             grating_kwargs = [
                 'line_density',
@@ -175,6 +181,7 @@ class PGM(object):
         pgm_config = configparser.ConfigParser()
         pgm_config.read(filename)
 
+        # _energy not in __init__
         self._energy = float(pgm_config['beam']['energy'])
         self._beam_offset = float(pgm_config['beam']['beam_offset'])
         self._beam_width = float(pgm_config['beam']['beam_width'])
@@ -208,7 +215,7 @@ class PGM(object):
         return 1239.8419843320025/self.energy
     
     @energy.setter
-    
+    # need validation for energy value, e.g. non-zero
     def energy(self, value):
         self.grating.energy = value
 
@@ -261,6 +268,7 @@ class PGM(object):
         self._beam_height = value
 
     @property
+    # already defined
     def grating(self):
         return self._grating
     
@@ -269,6 +277,7 @@ class PGM(object):
         self._grating = value
 
     @property 
+    # already defined
     def mirror(self):
         return self._mirror
     
@@ -277,6 +286,7 @@ class PGM(object):
         self._mirror = value
 
     @property
+    # already defined
     def rays(self):
         return self._rays
     
@@ -285,6 +295,7 @@ class PGM(object):
         self._rays = value
 
     @property
+    # already defined
     def beam_offset(self):
         return self._beam_offset
     
@@ -293,6 +304,7 @@ class PGM(object):
         self._beam_offset = value
     
     @property
+    # already defined
     def beam_width(self):
         return self._beam_width
     
@@ -301,6 +313,7 @@ class PGM(object):
         self._beam_width = value
 
     @property
+    # already defined
     def beam_height(self):
         return self._beam_height
     
@@ -391,6 +404,7 @@ class PGM(object):
         mirror_intercept = [mirr_ray.position for mirr_ray in mirr_ray]
         grating_intercept = [grating_ray.position for grating_ray in grating_ray]
         
+        # _mirror_intercept and _grating_intercept not defined in __init__
         self._mirror_intercept = mirror_intercept
         self._grating_intercept = grating_intercept
         return grating_ray, mirror_intercept, grating_intercept
@@ -410,6 +424,7 @@ class PGM(object):
         grating_corners = self.grating.compute_corners()
         mirror_corners_y, mirror_corners_z = mirror_corners[::2,1], mirror_corners[::2,2]
         mirror_corners_yz = np.array([mirror_corners_z, mirror_corners_y]).T
+        # ConvexHull sp?
         # ConvelHull method used to ensure the entire region is filled regardless
         # of point order.
         hull_grating = ConvexHull(mirror_corners_yz)
@@ -459,6 +474,7 @@ class PGM(object):
             line = Line2D(r_z, r_x, color='gray', linewidth=1, label='Zero Order Reflections')
             ax.add_line(line)
         
+        #xlim and ylim not used
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
         legend_entries = [
@@ -469,7 +485,7 @@ class PGM(object):
 
         
 
-
+        # don't need return
         return 
         
 
@@ -483,6 +499,7 @@ class PGM(object):
         m_corners = self.mirror_corners()
         g_corners = self.grating_corners()
 
+        # use your _width and _length setters
         mirror_rect = np.array([
             [m_corners[2][0], m_corners[2][1]+self.mirror._width()/2], #top left
             [m_corners[2][0], m_corners[2][1]-self.mirror._width()/2], #bottom_left
@@ -521,6 +538,7 @@ class PGM(object):
         
         self.generate_rays()
         
+        # _, mirror_intercept, grating_intercept
         grating_ray, mirror_intercept, grating_intercept = self.propagate(self.rays)
         
         #Index denotes the ray i.e. mirror_intercept[0] is the ray_0
@@ -537,6 +555,7 @@ class PGM(object):
         grating_w = grating_intercept[4].x - grating_intercept[3].x
         
         
+        # beam_footprint_dimensions not used
         beam_footprint_dimensions = np.array([mirror_l, mirror_w, grating_l, grating_w])
         
         ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
@@ -552,6 +571,7 @@ class PGM(object):
         ]
         ax.legend(handles=legend_entries, loc = 'upper left', fontsize=16, fancybox=True, shadow=True)
     
+        # columns not used
         columns = ['Value']
         
         rectangle = Rectangle((grating_blz, grating_blx + self.mirror._width()/2+ self.grating._width()/2), grating_l, grating_w, color='g', alpha=1)
@@ -565,6 +585,7 @@ class PGM(object):
 
     def mirror_corners(self):
         a = self.mirror.hoffset
+        # Need to remove unused imports "from scipy.constants import c, h, e" otherwise redefining here.
         c = self.mirror.voffset
         h = self.mirror.axis_voffset
         theta = self.mirror.theta

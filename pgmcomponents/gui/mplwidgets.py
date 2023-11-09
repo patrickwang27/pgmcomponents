@@ -6,8 +6,10 @@ version: 0.2.2
 
 """
 
+# plt not used
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+# Canvas not used
 from PySimpleGUI import Canvas
 
 def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
@@ -38,5 +40,6 @@ def draw_figure_w_toolbar(canvas, fig, canvas_toolbar):
 
 
 class Toolbar(NavigationToolbar2Tk):
+    # no need for this __init__ method as calls it's parent class's __init__
     def __init__(self, *args, **kwargs):
         super(Toolbar, self).__init__(*args, **kwargs)

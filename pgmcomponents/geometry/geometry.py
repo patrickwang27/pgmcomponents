@@ -12,8 +12,10 @@ Date: 2023-09-15
 from __future__ import division, print_function
 import numpy as np
 #from .light import Ray3D as Ray3DLight
+# colorama not in requirements.txt
 from colorama import Fore
 
+# Do not need object in Python3 classes
 class Ray3D(object):
     """
     A class for a simple 3D ray
@@ -46,6 +48,7 @@ class Ray3D(object):
         self._vector = vector / vector_mag
 
     def __repr__(self):
+        # use f-string
         return "Ray3D(position={}, vector={})".format(self.position, self.vector)
 
     @property
@@ -167,6 +170,7 @@ class Vector3D(object):
         self._vector = np.array([x, y, z], dtype=float)
 
     def __repr__(self):
+        # f-string
         return "Vector3D(x={}, y={}, z={})".format(self.x, self.y, self.z)
     
     def __add__(self, other):
@@ -181,6 +185,7 @@ class Vector3D(object):
         return self.x*other.x + self.y*other.y + self.z*other.z
     
     def __div__(self, other):
+        # np.cross returns np ndarray but Vector3D expects x, y, z params
         return Vector3D(np.cross(self._vector, other._vector))
     
     def __abs__(self):
@@ -223,6 +228,7 @@ class Vector3D(object):
         return self.x*other.x + self.y*other.y + self.z*other.z
     
     def cross(self, other):
+        # Vector3D expects x, y, z
         return Vector3D(np.cross(self._vector, other._vector))
     
     def norm(self):
@@ -323,6 +329,7 @@ class Point3D(object):
         self._point = np.array([x, y, z], dtype=float)
 
     def __repr__(self):
+        # f-string
         return "Point3D(x={}, y={}, z={})".format(self.x, self.y, self.z)
     
     def __add__(self, other):
@@ -362,6 +369,7 @@ class Point3D(object):
         return Point3D(self.x, self.y, self.z)
     
     def distance(self, other):
+        # use point property rather than accessing other._point
         return np.linalg.norm(self._point - other._point)
     
     @property
@@ -446,6 +454,7 @@ class Plane(object):
         self.d = -self._normal.dot(self._point)
 
     def __repr__(self):
+        #f-string
         return "Plane(point={}, normal={})".format(self._point, self._normal)
     
     def __eq__(self, other):
@@ -475,7 +484,7 @@ class Plane(object):
     def normal(self, value):
         self._normal = np.array(value)
             
-
+    # rename intersect_q
     def intersectQ(self, other, atol=1e-6):
         """
         Checks if the plane intersects another plane or ray3d
@@ -507,11 +516,12 @@ class Plane(object):
             
             else:
                 raise ValueError("The plane and ray are parallel")    
+        # return type is different to return type from if and elif above
         print(Fore.RED + 'Not handled!' + Fore.RESET)
 
 
 
-
+# Image class already defined
 class Image(object):
     """
     A class for a 2D image.
@@ -558,6 +568,7 @@ def calc_beam_size(electron_size: float,
         The electron size in um
     electron_div : float
         The electron divergence in urad
+    wavelength not photon_energy in params
     photon_energy : float
         The photon energy in eV
     distance : float

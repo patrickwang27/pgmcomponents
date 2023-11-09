@@ -1,4 +1,5 @@
 from __future__ import annotations
+# List not used
 from ast import List
 import numpy as np
 from pgmcomponents.geometry import Point3D, Vector3D, Plane, Ray3D
@@ -135,11 +136,13 @@ class Plane_Mirror(object):
         self._height = lambda: self._dimensions[2]
         self._plane = plane
         self._theta = theta
+        # Just call method without assigning to _
         _ = self.compute_corners()
         self._borders = borders
 
 
     def __repr__(self):
+        # Use f-string
         return """Plane_Mirror(voffset={}, 
         hoffset={}, 
         axis_voffset={}, 
@@ -160,6 +163,7 @@ class Plane_Mirror(object):
                             self.borders)
     
 
+    # read_file is very similar to read_file in grating.py. Refactor to use common code.
     def read_file(self, filename):
         """
         Read mirror parameters from a file. 
@@ -186,6 +190,7 @@ class Plane_Mirror(object):
         items = [x for x in variables if x in config['mirror'] and x != 'dimensions' and x != 'borders']
 
         for key, value in zip(items, config['mirror'].values()):
+            # Don't use exec. Either explicitly assign variables or if you will not know what they will be, use a dictionary not variables.
             exec(f"self._{key} = float({value})")
             print(key)
             print(value)
@@ -281,6 +286,7 @@ class Plane_Mirror(object):
         |----------Bottom----------|
         [top, bottom, left, right]
         """
+        # What if value has no length?
         if len(value) != 4:
             raise ValueError("Expected exactly four values for borders")
         self._borders = value
@@ -292,6 +298,7 @@ class Plane_Mirror(object):
     def set_normal(self, normal: Vector3D):
         self._plane.normal = normal
 
+    # Combine with setter
     def set_dimensions(self, *args):
         """
         Set the dimensions of the mirror.
@@ -307,6 +314,8 @@ class Plane_Mirror(object):
             If the number of arguments is not one or three
 
         """
+        # compute length once and assign to variable. Can use this in error msg.
+        # Will raise ValueError if args does not have length, so check that too.
         if len(args) == 1:
             self._dimensions = args[0]
         elif len(args) == 3:
@@ -455,6 +464,7 @@ class Plane_Mirror(object):
         if len(args) == 0:
             raise ValueError("Expected at least one ray")
         
+        # isinstance
         if type(args[0]) == list:
             args = args[0]
         
