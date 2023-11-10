@@ -1,6 +1,7 @@
 from __future__ import annotations
 # List not used
 from ast import List
+from matplotlib.pyplot import isinteractive
 import numpy as np
 from pgmcomponents.geometry import Point3D, Vector3D, Plane, Ray3D
 import configparser
@@ -201,43 +202,56 @@ class Plane_Mirror(object):
         
 
     @property
-    def voffset(self):
+    def voffset(self)-> float:
+
         return self._voffset
 
     @voffset.setter
-    def voffset(self, value):
-        self._voffset = value  
+    def voffset(self, value: float)-> None:
+        if isinstance(value, float):
+            self._voffset = value  
+        else:
+            raise TypeError("Expected voffset to be float!")
 
     @property
-    def hoffset(self):
+    def hoffset(self)-> float:
         return self._hoffset
 
     @hoffset.setter
-    def hoffset(self, value):
-        self._hoffset = value
+    def hoffset(self, value: float):
+        if isinstance(value, float):
+            self._hoffset = value
+        else:
+            raise TypeError("Expected hoffset to be float!")
 
     @property
-    def axis_voffset(self):
+    def axis_voffset(self)-> float:
         return self._axis_voffset
 
     @axis_voffset.setter
-    def axis_voffset(self, value):
-        self._axis_voffset = value
+    def axis_voffset(self, value: float):
+        if isinstance(value, float):
+            self._axis_voffset = value
+        else:
+            raise TypeError("Expected axis voffset to be float!")
 
     @property
-    def axis_hoffset(self):
+    def axis_hoffset(self)-> float:
         return self._axis_hoffset
 
     @axis_hoffset.setter
-    def axis_hoffset(self, value):
-        self._axis_hoffset = value
+    def axis_hoffset(self, value:float):
+        if isinstance(value, float):
+            self._axis_hoffset = value
+        else:
+            raise TypeError("Expected axis hoffset to be float!")
 
     @property
-    def dimensions(self):
+    def dimensions(self)-> np.ndarray:
         return self._dimensions
     
     @dimensions.setter
-    def dimensions(self, value):
+    def dimensions(self, value:float):
         """
         Sets the dimensions of the mirror.
         The dimensions are specified as:
@@ -247,35 +261,39 @@ class Plane_Mirror(object):
         self._dimensions = value
 
     @property
-    def plane(self):
+    def plane(self)-> Plane:
         return self._plane
 
     @plane.setter
-    def plane(self, value):
-        self._plane = value
+    def plane(self, value: Plane)-> None:
+        if isinstance(value, Plane):
+            self._plane = value
+        else:
+            raise TypeError("Expected value to be Plane instance!")
     
     @property
-    def theta(self):
+    def theta(self)-> float:
         return self._theta
     
     @theta.setter
-    def theta(self, value):
+    def theta(self, value: float)-> float:
         self._theta = value
     
     @property
-    def corners(self):
+    def corners(self)-> np.ndarray:
         return self._corners
     
     @corners.setter
     def corners(self, value):
-        raise AttributeError("Corners should be calculated via compute_corners().")
+        print("Input value ignored, corners computed from parameters!")
+        self.compute_corners()
 
     @property
-    def borders(self):
+    def borders(self)-> np.ndarray:
         return self._borders
     
     @borders.setter
-    def borders(self, value):
+    def borders(self, value)-> None:
         """
         Sets the borders of the mirror.
         The borders are specified as:
@@ -286,20 +304,29 @@ class Plane_Mirror(object):
         |----------Bottom----------|
         [top, bottom, left, right]
         """
-        # What if value has no length?
-        if len(value) != 4:
-            raise ValueError("Expected exactly four values for borders")
-        self._borders = value
+        if isinstance(value, np.ndarray) and len(value)==4:
+            if all(value > 0):
+                self._borders = value
+            else:
+                raise ValueError("Lengths should be positive.")
+        else:
+            raise ValueError("Expected 1D numpy array with length 4")
 
 
-    def set_position(self, position: Point3D):
-        self._plane.position = position
+    def set_position(self, position: Point3D)-> None:
+        if isinstance(position, Point3D):
+            self._plane.position = position
+        else:
+            raise TypeError("Expected Point3D instance for position value!")
 
-    def set_normal(self, normal: Vector3D):
-        self._plane.normal = normal
+    def set_normal(self, normal: Vector3D)-> None:
+        if isinstance(normal, Vector3D):
+            self._plane.normal = normal
+        else:
+            raise TypeError("Expected Vector3D instance for normal value!")
 
     # Combine with setter
-    def set_dimensions(self, *args):
+    def set_dimensions(self, *args: np.ndarray | float)-> None:
         """
         Set the dimensions of the mirror.
 
@@ -316,18 +343,19 @@ class Plane_Mirror(object):
         """
         # compute length once and assign to variable. Can use this in error msg.
         # Will raise ValueError if args does not have length, so check that too.
-        if len(args) == 1:
+        length_of_args = len(args)
+        if length_of_args == 1:
             self._dimensions = args[0]
-        elif len(args) == 3:
+        elif length_of_args == 3:
             self._dimensions = np.array(args)
         else:
-            raise ValueError("Expected either one or three arguments for dimensions")
+            raise ValueError(f"Expected either one or three arguments for dimensions, got length of {length_of_args} instead.")
 
-    def set_offsets(self, voffset, hoffset, axis_voffset, axis_hoffset):
-        self._voffset = voffset
-        self._hoffset = hoffset
-        self._axis_voffset = axis_voffset
-        self._axis_hoffset = axis_hoffset
+    def set_offsets(self, voffset: float, hoffset: float, axis_voffset: float, axis_hoffset: float)-> None:
+        self.voffset(voffset)
+        self.hoffset(hoffset)
+        self.axis_voffset(axis_voffset)
+        self.axis_hoffset(axis_hoffset)
 
     def compute_corners(self)-> np.ndarray:
         """
@@ -428,7 +456,7 @@ class Plane_Mirror(object):
 
     @classmethod
 
-    def mirror_from_file(cls, filename):
+    def mirror_from_file(cls, filename: str)-> Plane_Mirror:
         """
         Create a mirror from a file. 
         See config_pgm.ini for an example.
@@ -444,7 +472,7 @@ class Plane_Mirror(object):
         mirror.read_file(filename)
         return mirror
 
-    def reflect(self, *args) -> list:
+    def reflect(self, *args: Ray3D | list) -> list:
         """
         A method to reflect rays off the mirror.
 
@@ -464,8 +492,7 @@ class Plane_Mirror(object):
         if len(args) == 0:
             raise ValueError("Expected at least one ray")
         
-        # isinstance
-        if type(args[0]) == list:
+        if isinstance(args[0], list):
             args = args[0]
         
 
