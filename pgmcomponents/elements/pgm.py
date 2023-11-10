@@ -1,17 +1,9 @@
 from __future__ import annotations
+from matplotlib.axes import Axes
 import numpy as np
-# plt not used
-import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Patch 
-# axes not used
-from matplotlib import axes
-# PatchCollection
-from matplotlib.collections import PatchCollection
 import configparser
-# c, h, e not used
-from scipy.constants import c, h, e
-# Plane, Vector3D not used
-from pgmcomponents.geometry import Plane, Point3D, Vector3D, Ray3D
+from pgmcomponents.geometry import Point3D, Ray3D
 from scipy.spatial import ConvexHull
 from matplotlib.lines import Line2D
 from pgmcomponents.elements import Plane_Mirror, Grating
@@ -127,6 +119,7 @@ class PGM(object):
         self._beam_offset = 0 
         self._beam_width = 0
         self._beam_height = 0
+        self._energy = 250
 
     def __repr__(self):
         return """PGM(grating={}, \nmirror={}, \nb={},\nbeam_width={},\nbeam_height={})""".format(self.grating, 
@@ -180,8 +173,6 @@ class PGM(object):
         self._mirror.read_file(filename)
         pgm_config = configparser.ConfigParser()
         pgm_config.read(filename)
-
-        # _energy not in __init__
         self._energy = float(pgm_config['beam']['energy'])
         self._beam_offset = float(pgm_config['beam']['beam_offset'])
         self._beam_width = float(pgm_config['beam']['beam_width'])
@@ -216,130 +207,95 @@ class PGM(object):
     
     @energy.setter
     # need validation for energy value, e.g. non-zero
-    def energy(self, value):
-        self.grating.energy = value
-
+    def energy(self, value: float)-> None:
+        if isinstance(value, float) and value > 0:
+            self.grating.energy = value
+        else:
+            raise ValueError("Expected energy to be a positive float!")
     @property
-    def grating(self):
+    def grating(self)-> Grating:
         return self._grating
     
     @grating.setter
-    def grating(self, value):
-        self._grating = value
+    def grating(self, value: Grating)-> None:
+        if isinstance(value, Grating):
+            self._grating = value
+        else: 
+            raise TypeError("Expected Grating instance for grating!")
     
     @property
-    def mirror(self):
+    def mirror(self)-> Plane_Mirror:
         return self._mirror
     
     @mirror.setter
-    def mirror(self, value):
-        self._mirror = value
-
+    def mirror(self, value: Plane_Mirror):
+        if isinstance(value, Plane_Mirror):
+            self._mirror = value
+        else:
+            raise TypeError("Expected Plane_Mirror instance for mirror!")
     @property
-    def rays(self):
+    def rays(self)-> list[Ray3D]:
         return self._rays
     
     @rays.setter
-    def rays(self, value):
+    def rays(self, value: list[Ray3D])-> None:
         self._rays = value
     
     @property
-    def beam_offset(self):
+    def beam_offset(self)-> float:
         return -1*self._beam_offset
     
     @beam_offset.setter
-    def beam_offset(self, value):
-        self._beam_offset = value
-    
+    def beam_offset(self, value: float)-> None:
+        if isinstance(value, float):
+            self._beam_offset = value
+        else:
+            raise TypeError("Expected float for beam_offset!")
     @property
-    def beam_width(self):
+    def beam_width(self)-> float:
         return self._beam_width
     
     @beam_width.setter
-    def beam_width(self, value):
-        self._beam_width = value
+    def beam_width(self, value: float)-> None:
+        if isinstance(value, float) and value >= 0:
+            self._beam_width = value
+        else:
+            raise TypeError("Expected non-negative float for beam_width!")
     
     @property
-    def beam_height(self):
+    def beam_height(self)-> float:
         return self._beam_height
     
     @beam_height.setter
-    def beam_height(self, value):
-        self._beam_height = value
+    def beam_height(self, value: float)-> None:
+        if isinstance(value, float) and value >= 0:
+            self._beam_height = value
+        else:
+            raise ValueError("Expected non-negative float for beam_height!")
+
 
     @property
-    # already defined
-    def grating(self):
-        return self._grating
-    
-    @grating.setter
-    def grating(self, value):
-        self._grating = value
-
-    @property 
-    # already defined
-    def mirror(self):
-        return self._mirror
-    
-    @mirror.setter
-    def mirror(self, value):
-        self._mirror = value
-
-    @property
-    # already defined
-    def rays(self):
-        return self._rays
-    
-    @rays.setter
-    def rays(self, value):
-        self._rays = value
-
-    @property
-    # already defined
-    def beam_offset(self):
-        return self._beam_offset
-    
-    @beam_offset.setter
-    def beam_offset(self, value):
-        self._beam_offset = value
-    
-    @property
-    # already defined
-    def beam_width(self):
-        return self._beam_width
-    
-    @beam_width.setter
-    def beam_width(self, value):
-        self._beam_width = value
-
-    @property
-    # already defined
-    def beam_height(self):
-        return self._beam_height
-    
-    @beam_height.setter
-    def beam_height(self, value):
-        self._beam_height = value
-
-    @property
-    def mirror_intercept(self):
+    def mirror_intercept(self)-> Point3D:
         return self._mirror_intercept
     
     @property
-    def grating_intercept(self):
+    def grating_intercept(self)-> Point3D:
         return self._grating_intercept
     
     
     @property
-    def cff(self):
+    def cff(self)-> float:
         return self.grating.cff
     
     @cff.setter
-    def cff(self, value):
-        self.grating.cff = value
-    
+    def cff(self, value: float)-> None:
+        if isinstance(value, float) and value > 1:
+            self.grating.cff = value
+        else:
+            raise ValueError("Expected cff to be a positive float bigger than 1!")
 
-    def values(self):
+    def values(self)-> dict:
+
         dictionary = {'beam_vertical': self.beam_offset,
                       'beam_width': self.beam_width,
                       'beam_height': self.beam_height,
@@ -360,7 +316,7 @@ class PGM(object):
 
     @classmethod
 
-    def pgm_from_file(cls, filename):
+    def pgm_from_file(cls, filename:float)-> PGM:
         """
         Create a PGM from a file. 
         See config_pgm.ini for an example.
@@ -375,7 +331,7 @@ class PGM(object):
         pgm.read_file(filename)
         return pgm
 
-    def propagate(self, *args):
+    def propagate(self, *args: Ray3D | list)-> tuple:
         """
         Propagate rays through the PGM setup.
 
@@ -410,7 +366,7 @@ class PGM(object):
         return grating_ray, mirror_intercept, grating_intercept
 
 
-    def draw_sideview(self, ax):
+    def draw_sideview(self, ax: Axes):
         """
         Draws the setup on a y-z projection on a given axis.
 
@@ -473,10 +429,7 @@ class PGM(object):
 
             line = Line2D(r_z, r_x, color='gray', linewidth=1, label='Zero Order Reflections')
             ax.add_line(line)
-        
-        #xlim and ylim not used
-        xlim = ax.get_xlim()
-        ylim = ax.get_ylim()
+
         legend_entries = [
             Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
             Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
@@ -485,11 +438,7 @@ class PGM(object):
 
         
 
-        # don't need return
-        return 
-        
-
-    def draw_topview(self, ax):
+    def draw_topview(self, ax: Axes)-> None:
         """
         Draws the top-view (x-z projection) of the setup on the current
         axes.
@@ -539,7 +488,7 @@ class PGM(object):
         self.generate_rays()
         
         # _, mirror_intercept, grating_intercept
-        grating_ray, mirror_intercept, grating_intercept = self.propagate(self.rays)
+        _, mirror_intercept, grating_intercept = self.propagate(self.rays)
         
         #Index denotes the ray i.e. mirror_intercept[0] is the ray_0
         
@@ -570,20 +519,15 @@ class PGM(object):
             Patch(facecolor=(0,1,0,1), edgecolor=(0,1,0,0.3), label='Beam Footprint'),
         ]
         ax.legend(handles=legend_entries, loc = 'upper left', fontsize=16, fancybox=True, shadow=True)
-    
-        # columns not used
-        columns = ['Value']
+
         
         rectangle = Rectangle((grating_blz, grating_blx + self.mirror._width()/2+ self.grating._width()/2), grating_l, grating_w, color='g', alpha=1)
         ax.add_patch(rectangle)
 
-        
-        #print(mirror_rect_hull.vertices)
-        return
 
 
 
-    def mirror_corners(self):
+    def mirror_corners(self)-> tuple:
         a = self.mirror.hoffset
         # Need to remove unused imports "from scipy.constants import c, h, e" otherwise redefining here.
         c = self.mirror.voffset
@@ -608,7 +552,7 @@ class PGM(object):
 
         return ((tlfz, tlfx), (trfz, trfx), (tlbz, tlbx), (trbz, trbx))
 
-    def grating_corners(self):
+    def grating_corners(self)-> tuple:
         
         l = self.grating._length()
         w = self.grating._width()
