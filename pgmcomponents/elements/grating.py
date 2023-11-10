@@ -1,10 +1,7 @@
 from __future__ import annotations
-# List not used
-from ast import List
 import numpy as np
 import configparser
-# Vestor3D not used
-from pgmcomponents.geometry import Point3D, Plane, Ray3D, Vector3D
+from pgmcomponents.geometry import Point3D, Plane, Ray3D
 from scipy.constants import c, h, e
 
 
@@ -119,12 +116,7 @@ class Grating(object):
 
     def __repr__(self):
         # Use f-strings
-        return "Grating(line_density={},\n energy={}, \n cff={}, \n order={}, \n dimensions={},\n borders={})".format(self.line_density, 
-                                                                                             self.energy, 
-                                                                                             self.cff, 
-                                                                                             self.order, 
-                                                                                             self.dimensions,
-                                                                                             self.borders)
+        return f"Grating(line_density={self.line_density},\n energy={}, \n cff={}, \n order={}, \n dimensions={},\n borders={})"
     
     def read_file(self, filename):
         """
