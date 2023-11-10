@@ -116,7 +116,7 @@ class Grating(object):
 
     def __repr__(self):
         # Use f-strings
-        return f"Grating(line_density={self.line_density},\n energy={}, \n cff={}, \n order={}, \n dimensions={},\n borders={})"
+        return f"Grating(line_density={self.line_density},\n energy={self.energy}, \n cff={self.cff}, \n order={self.order}, \n dimensions={self.dimensions},\n borders={self.borders})"
     
     def read_file(self, filename):
         """
@@ -138,7 +138,7 @@ class Grating(object):
             raise ValueError("Expected exactly five parameters in grating file")
 
         # Could use tuple instead of list
-        variables = ['line_density', 'energy', 'cff', 'order', 'dimensions']
+        variables = ('line_density', 'energy', 'cff', 'order', 'dimensions')
         for var in variables:
             if var not in config['grating']:
                 raise ValueError("Missing parameter {} in grating file".format(var))
@@ -148,8 +148,7 @@ class Grating(object):
         items = [x for x in variables if x in config['grating'] and x != 'dimensions' and x != 'borders']
 
         for key, value in zip(items, config['grating'].values()):
-            # Avoid using exec
-            exec(f"self._{key} = float({value})")
+            setattr(self, key, value)
             print(key)
             print(value)
         
@@ -158,52 +157,66 @@ class Grating(object):
         self._borders= np.array([float(x) for x in config['grating']['borders'].split(',')])
 
     @property
-    def line_density(self):
+    def line_density(self)-> float:
         return self._line_density
     
-    # Is there any validation you could add to any of these setters?
     @line_density.setter
-    def line_density(self, value):
-        self._line_density = value
+    def line_density(self, value: float)-> None:
+        if value <= 0:
+            raise ValueError("Expected positive line density")
+        else:
+            self._line_density = value
 
     @property
-    def energy(self):
+    def energy(self)-> float:
         return self._energy
     
     @energy.setter
-    def energy(self, value):
-        self._energy = value
+    def energy(self, value: float)-> None:
+        if value <= 0:
+            raise ValueError("Expected positive energy")
+        else:
+            self._energy = value
         
     @property
-    def cff(self):
+    def cff(self)-> float:
         return self._cff
     
     @cff.setter
-    def cff(self, value):
-        self._cff = value
+    def cff(self, value: float)-> None:
+        if value <= 0:
+            raise ValueError("Expected positive cff")
+        else:
+            self._cff = value
     
     @property
-    def order(self):
+    def order(self)-> int:
         return int(self._order)
     
     @order.setter
-    def order(self, value):
-        self._order = int(value)
-    
+    def order(self, value: int)-> None:
+        if value >= 1 and isinstance(value, int):
+            self._order = value
+        else:
+            raise ValueError("Expected positive integer order")
+
     @property
-    def alpha(self):   
+    def alpha(self)-> float:   
         return self._alpha
     
     @alpha.setter
-    def alpha(self, value):
-        self._alpha = value
+    def alpha(self, value)-> None:
+        if np.abs(value) <= 180 and isinstance(value, float):
+            self._alpha = value
+        else:
+            raise ValueError("Expected float alpha with magnitude less than 180 degrees")
 
     @property
-    def beta(self):
+    def beta(self)-> float:
         return self._beta
     
     @beta.setter
-    def beta(self, value):
+    def beta(self, value: float)-> None:
         self._beta = value
     
     @property
@@ -217,25 +230,29 @@ class Grating(object):
         self._dimensions = value
 
     @property
-    def plane(self):
+    def plane(self)-> Plane:
         return self._grating_plane
     
     @plane.setter
-    def plane(self, value):
-        self._grating_plane = value if isinstance(value, Plane) else Plane()
+    def plane(self, value: Plane)-> None:
+        if isinstance(value, Plane):
+            self._grating_plane = value
+        else:
+            raise TypeError("Expected Plane object for plane")
+
     @property
-    def borders(self):
+    def borders(self)-> np.ndarray:
         return self._borders
     
     @borders.setter
+    def borders(self, value: np.ndarray)-> None:
+        if len(value) != 4 or not isinstance(value, np.ndarray):
+            raise ValueError("Expected exactly 1D array of length 4 for borders")
+        else:
+            self._borders = value
 
-    def borders(self, value):
-        if len(value) != 4:
-            raise ValueError("Expected exactly four values for borders")
-        self._borders = value
 
-
-    def set_angles(self, alpha, beta):
+    def set_angles(self, alpha: float, beta: float)-> None:
         """
         Set the incident and diffraction angles of the grating.
 
@@ -254,26 +271,26 @@ class Grating(object):
         """
         wavelength = (np.sin(np.deg2rad(alpha)) + np.sin(np.deg2rad(beta))) / (self.line_density*1000*self._order)
         
-        try:
+        if wavelength <= 0:
+            raise ValueError("Expected positive, non-zero wavelength")
+
+        else:
             self._energy = 12398.42 / wavelength #converts wavelength to eV
-        # better to check explicity if wavelength is zero and raise ValueError
-        except ZeroDivisionError:
-            raise ValueError("Unexpected divide by zero in grating.set_angles")
         
         self._alpha = alpha
         self._beta = beta
         self._cff = self.cff
 
     @property
-    def corners(self):
+    def corners(self)-> np.ndarray:
         return self._corners
     
     @corners.setter
-    def corners(self, value):
-        # could call compute_corners() here instead of raising error
-        raise AttributeError("Corners should be calculated via compute_corners().")
+    def corners(self, value:any)-> None:
+        print("Input ignored, corners are computed from dimensions")
+        self._corners = self.compute_corners()
 
-    def compute_beta(self):
+    def compute_beta(self)-> float:
         """
         Compute the diffraction angle beta from the incident angle alpha.
 
@@ -282,24 +299,18 @@ class Grating(object):
         beta : float
             The diffraction angle in degrees
         
-        Raises
-        ------
-        ValueError
-            If the wavelength is zero
-        
+    
         """
         beta = 0
-        try:
-            wavelength = self.wavelength(self.energy)
-            u = self.order*self.line_density*1000*wavelength - np.sin(np.deg2rad(self.alpha))
-            beta = np.rad2deg(np.arcsin(u))
-        # Better to validate value and raise ValueError on that directly (e.g. -1 <= u <= 1) with descriptive error message
-        except ZeroDivisionError:
-            print('Error in grating.compute_beta')
+        
+        wavelength = self.wavelength(self.energy)
+        u = self.order*self.line_density*1000*wavelength - np.sin(np.deg2rad(self.alpha))
+        beta = np.rad2deg(np.arcsin(u))
+        
         
         return beta
 
-    def compute_angles(self):
+    def compute_angles(self)-> tuple[float, float]:
         """
         Compute the incident and diffraction angles of the grating.
         The incident angle is calculated from the diffraction angle
@@ -331,7 +342,7 @@ class Grating(object):
         return self._alpha, self._beta
 
     # Could add type annotations on all your functions
-    def diffract(self, *args)-> list:
+    def diffract(self, *args: Ray3D | list )-> list:
         """
         A method to diffract rays off the grating.
 
@@ -354,17 +365,14 @@ class Grating(object):
         """
         diffracted_rays = []
         
-        # You check len before checking args is a list. Is this checking for an empty list? If so would be better after list check. 
-        if len(args) == 0:
-            raise ValueError("Expected at least one ray")
-        
-        # Use isinstance()
-        if type(args[0]) == list:
+
+        if isinstance(args[0], list):
             args = args[0]
 
+        elif len(args) == 0:
+            raise ValueError("Expected at least one ray")
 
-        # Index isn't used, so can use _ as palceholder (for _, ray in (enumerate))
-        for index, ray in enumerate(args):
+        for _, ray in enumerate(args):
             if not isinstance(ray, Ray3D):
                 raise TypeError("Expected Ray3D object")
             raydotplane = ray.vector.dot(self._grating_plane.normal)
@@ -379,50 +387,10 @@ class Grating(object):
             diffracted_rays.append(diff_ray)
         return diffracted_rays
     
-    # accesses Grating.wavelength
-    @staticmethod
-
-    # Isn't this the same as compute_beta?
-    def calc_beta(alpha, line_density, energy, order):
-        """
-        Calculate the diffraction angle beta from the incident angle alpha.
-        
-        Parameters
-        ----------
-        alpha : float
-            The incident angle in degrees
-        line_density : float
-            The line density of the grating in lines per mm
-        energy : float
-            The energy of the incident beam in eV
-        order : int
-            The diffraction order of the grating
-
-        Returns
-        -------
-        beta : float
-            The diffraction angle in degrees
-        
-        Raises
-        ------ 
-        ValueError
-            If the wavelength is zero
-        
-        """
-        beta = 0 
-
-        try:
-            wavelength = Grating.wavelength(energy)
-            u = order*line_density*1000*wavelength - np.sin(np.deg2rad(alpha))
-            beta = np.rad2deg(np.arcsin(u))
-
-        except ZeroDivisionError:
-            raise ValueError("Unexpected divide by zero in grating.calc_beta")
-        
-        return beta
+    
 
     # rename something like energy_to_wavelength
-    def wavelength(self, energy):
+    def energy_to_wavelength(self, energy: float)-> float:
         return h*c/(e*energy)
     
     def compute_corners(self)-> np.ndarray:
