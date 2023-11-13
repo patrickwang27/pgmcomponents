@@ -6,7 +6,7 @@ Author-email: Patrick Wang <patrick.wang@diamond.ac.uk>
 Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
-Requires-Python: >=3.8
+Requires-Python: >=3.10
 Description-Content-Type: text/markdown
 License-File: LICENSE
 Requires-Dist: numpy>=1.23.0
@@ -19,7 +19,7 @@ Requires-Dist: pyrsistent>=0.19.3
 
 # PGM-Components Package
 [![Documentation Status](https://readthedocs.org/projects/pgmcomponents/badge/?version=latest)](https://pgmcomponents.readthedocs.io/en/latest/?badge=latest)
-[![Static Badge](https://img.shields.io/badge/unstable-v0.2-blue?labelColor=red&color=blue)](https://github.com/patrickwang27/pgmcomponents/releases)
+[![Static Badge](https://img.shields.io/badge/unstable-v0.3-blue?labelColor=red&color=blue)](https://github.com/patrickwang27/pgmcomponents/releases)
 
 
 The pgm-components package provides the class PGM for use in simple ray tracing calculations.

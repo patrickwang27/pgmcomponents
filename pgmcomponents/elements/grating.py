@@ -184,7 +184,7 @@ class Grating(object):
     
     @cff.setter
     def cff(self, value: float)-> None:
-        if value <= 0:
+        if value <= 1:
             raise ValueError("Expected positive cff")
         else:
             self._cff = value

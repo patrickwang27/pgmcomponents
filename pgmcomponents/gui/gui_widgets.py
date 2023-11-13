@@ -148,7 +148,7 @@ class EPICScontrol(object):
                     values[self.key] = updated
                     window[self.key].update(value=updated)
                     window.write_event_value('Update', values)
-                    setattr(pgm, self.properties[self.key], updated)
+                    setattr(pgm.grating, 'order', updated)
 
                 except Exception as e:
                     sg.Popup('Order should be type int', e)
@@ -178,7 +178,7 @@ class EPICScontrol(object):
             """
             window[self.key].update(value=self.value)
             if self.key == "-ORDER-":
-                setattr(pgm, self.properties[self.key], int(self.value))
+                setattr(pgm.grating, 'order', int(self.value))
             else:
                 setattr(pgm, self.properties[self.key], float(self.value))
             return
@@ -713,7 +713,8 @@ class Topview_Widget(object):
         self.pgm.draw_topview(ax)
 
         draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
-
+        ax.set_xlabel('z (mm)')
+        ax.set_ylabel('x (mm)')
 
 class Sideview_Widget(object):
 
@@ -761,6 +762,38 @@ class Sideview_Widget(object):
         self.canvas = sg.Canvas(size = self.size, key = self.key, background_color='white')
         self.control_canvas = sg.Canvas(key=f'{self.key}_control')
     
+
+    def add_table(self):
+        columns = ("Parameter", "Value")
+        parameters = ["Order", 
+                    "LD (l/mm)",
+                    "Energy (eV)",
+                    "$c_{ff}$",
+                    "$b$ (mm)",
+                    "$a$ (mm)",
+                    "$c$ (mm)",
+                    "$h$ (mm)",
+                    "$v$ (mm)",
+                    r"$\alpha$ ($^\circ$)",
+                    r"$\beta$ ($^\circ$)",
+                    r"$\theta$ ($^\circ$)"]
+        values = [self.pgm.grating.order,
+                  self.pgm.grating.line_density,
+                  self.pgm.energy,
+                  self.pgm.grating.cff,
+                  self.pgm.beam_offset,
+                  self.pgm.mirror.hoffset,
+                  self.pgm.mirror.voffset,
+                  self.pgm.mirror.axis_hoffset,
+                  self.pgm.mirror.axis_voffset,
+                  self.pgm.grating.alpha,
+                  self.pgm.grating.beta,
+                  self.pgm.mirror.theta]
+        data = [(param, round(val, ndigits=3)) for param, val in zip(parameters, values)]
+        table = plt.table(cellText=data, colLabels=columns, loc='right', colWidths=(0.1,0.1),fontsize=11)
+        plt.subplots_adjust(right=0.7)
+        return table
+
     def draw(self, window):
         plt.figure(2)
         plt.clf()
@@ -779,25 +812,30 @@ class Sideview_Widget(object):
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
         ax.set_xticks(np.arange(xlim[0], xlim[1], 10), minor=True)
+        ax.set_yticks(np.arange(round(ylim[0]), ylim[1], 10))
         ax.grid(which='both', alpha=0.6, linewidth=0.8)
-        ax.annotate(fr'$\alpha ={self.pgm.grating.alpha:.3f}^\circ$', (xlim[1]-45, ylim[1]-10))
-        ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-45, ylim[1]-15))
-        ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-45, ylim[1]-20))
+        #ax.annotate(fr'$\alpha ={self.pgm.grating.alpha:.3f}^\circ$', (xlim[1]-45, ylim[1]-10))
+        #ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-45, ylim[1]-15))
+        #ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-45, ylim[1]-20))
 
         # some calculations repeated, like xlim[1] - 90. Assign to variable to avoid recalculating.
-        ax.annotate(fr'$b = {np.abs(self.pgm.beam_offset)}$ mm', (xlim[1]-90, ylim[1]-10))
-        ax.annotate(fr'$a = {self.pgm.mirror.hoffset}$ mm', (xlim[1]-90, ylim[1]-15))
-        ax.annotate(fr'$c = {self.pgm.mirror.voffset}$ mm', (xlim[1]-90, ylim[1]-20))
-        ax.annotate(fr'$h = {self.pgm.mirror.axis_hoffset}$ mm', (xlim[1]-90, ylim[1]-25))
-        ax.annotate(fr'$v = {self.pgm.mirror.axis_voffset}$ mm', (xlim[1]-90, ylim[1]-30))
+        #ax.annotate(fr'$b = {np.abs(self.pgm.beam_offset)}$ mm', (xlim[1]-90, ylim[1]-10))
+        #ax.annotate(fr'$a = {self.pgm.mirror.hoffset}$ mm', (xlim[1]-90, ylim[1]-15))
+        #ax.annotate(fr'$c = {self.pgm.mirror.voffset}$ mm', (xlim[1]-90, ylim[1]-20))
+        #ax.annotate(fr'$h = {self.pgm.mirror.axis_hoffset}$ mm', (xlim[1]-90, ylim[1]-25))
+        #ax.annotate(fr'$v = {self.pgm.mirror.axis_voffset}$ mm', (xlim[1]-90, ylim[1]-30))
 
-        ax.annotate(fr'Order = {self.pgm.grating.order}', (xlim[0]+5, ylim[1]-10))
-        ax.annotate(fr'Line Density = {self.pgm.grating.line_density} l/mm', (xlim[0]+5, ylim[1]-15))
-        ax.annotate(fr'Energy = {self.pgm.energy} eV', (xlim[0]+5, ylim[1]-20))
-        ax.annotate(fr'$c_{{ff}} = {self.pgm.grating.cff:.3}$', (xlim[0]+5, ylim[1]-25))
+        #ax.annotate(fr'Order = {self.pgm.grating.order}', (xlim[0]+5, ylim[1]-10))
+        #ax.annotate(fr'Line Density = {self.pgm.grating.line_density} l/mm', (xlim[0]+5, ylim[1]-15))
+        #ax.annotate(fr'Energy = {self.pgm.energy} eV', (xlim[0]+5, ylim[1]-20))
+        #ax.annotate(fr'$c_{{ff}} = {self.pgm.grating.cff:.3}$', (xlim[0]+5, ylim[1]-25))
         draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
-
-
+        ax.set_xlabel('z (mm)')
+        ax.set_ylabel('y (mm)')
+        table = self.add_table()
+        table.scale(1, 1.43)
+        table.auto_set_font_size(False)
+        table.set_fontsize(10)
 def main():
     beam = Beam_Config()
     mirror = Plane_Mirror.mirror_from_file('config_pgm.ini')
