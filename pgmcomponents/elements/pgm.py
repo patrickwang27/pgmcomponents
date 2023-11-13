@@ -208,9 +208,10 @@ class PGM(object):
     @energy.setter
     # need validation for energy value, e.g. non-zero
     def energy(self, value: float)-> None:
-        if isinstance(value, float) and value > 0:
+        if isinstance(value, (float, int)) and value > 0:
             self.grating.energy = value
         else:
+            print(value, type(value))
             raise ValueError("Expected energy to be a positive float!")
     @property
     def grating(self)-> Grating:
@@ -247,8 +248,8 @@ class PGM(object):
     
     @beam_offset.setter
     def beam_offset(self, value: float)-> None:
-        if isinstance(value, float):
-            self._beam_offset = value
+        if isinstance(value, (float, int)):
+            self._beam_offset = -1*value
         else:
             raise TypeError("Expected float for beam_offset!")
     @property
@@ -257,7 +258,7 @@ class PGM(object):
     
     @beam_width.setter
     def beam_width(self, value: float)-> None:
-        if isinstance(value, float) and value >= 0:
+        if isinstance(value, (float, int)) and value >= 0:
             self._beam_width = value
         else:
             raise TypeError("Expected non-negative float for beam_width!")
@@ -268,7 +269,7 @@ class PGM(object):
     
     @beam_height.setter
     def beam_height(self, value: float)-> None:
-        if isinstance(value, float) and value >= 0:
+        if isinstance(value, (float, int)) and value >= 0:
             self._beam_height = value
         else:
             raise ValueError("Expected non-negative float for beam_height!")
@@ -289,7 +290,7 @@ class PGM(object):
     
     @cff.setter
     def cff(self, value: float)-> None:
-        if isinstance(value, float) and value > 1:
+        if isinstance(value, (float, int)) and value > 1:
             self.grating.cff = value
         else:
             raise ValueError("Expected cff to be a positive float bigger than 1!")

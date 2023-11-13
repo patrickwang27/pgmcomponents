@@ -11,11 +11,8 @@ Date: 2023-09-15
 """
 from __future__ import division, print_function
 import numpy as np
-#from .light import Ray3D as Ray3DLight
-# colorama not in requirements.txt
 from colorama import Fore
 
-# Do not need object in Python3 classes
 class Ray3D(object):
     """
     A class for a simple 3D ray
@@ -49,8 +46,7 @@ class Ray3D(object):
 
     def __repr__(self):
         # use f-string
-        return "Ray3D(position={}, vector={})".format(self.position, self.vector)
-
+        return f"Ray3D(position={self.position}, vector={self.vector})"
     @property
     def position(self):
         return self._position
@@ -170,8 +166,7 @@ class Vector3D(object):
         self._vector = np.array([x, y, z], dtype=float)
 
     def __repr__(self):
-        # f-string
-        return "Vector3D(x={}, y={}, z={})".format(self.x, self.y, self.z)
+        return f"Vector3D(x={self.x}, y={self.y}, z={self.z})"
     
     def __add__(self, other):
         return Vector3D(self.x + other[0], self.y + other[1], self.z + other[2])
@@ -186,7 +181,8 @@ class Vector3D(object):
     
     def __div__(self, other):
         # np.cross returns np ndarray but Vector3D expects x, y, z params
-        return Vector3D(np.cross(self._vector, other._vector))
+        cp = np.cross(self._vector, other._vector)
+        return Vector3D(cp[0],cp[1],cp[2])
     
     def __abs__(self):
         return np.linalg.norm(self._vector)

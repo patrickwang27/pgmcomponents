@@ -78,7 +78,7 @@ class Grating(object):
     -------
     set_angles(alpha, beta)
         Set the incident and diffraction angles of the grating
-    wavelength()
+    energy_to_wavelength()
         Calculate the wavelength of the beam in Angstroms
     compute_corners()
         Compute the corners of the grating in the global coordinate system
@@ -197,6 +197,7 @@ class Grating(object):
     def order(self, value: int)-> None:
         if value >= 1 and isinstance(value, int):
             self._order = value
+            print("order set!")
         else:
             raise ValueError("Expected positive integer order")
 
@@ -206,7 +207,7 @@ class Grating(object):
     
     @alpha.setter
     def alpha(self, value)-> None:
-        if np.abs(value) <= 180 and isinstance(value, float):
+        if np.abs(value) <= 180 and isinstance(value, (float, int)):
             self._alpha = value
         else:
             raise ValueError("Expected float alpha with magnitude less than 180 degrees")
@@ -303,7 +304,7 @@ class Grating(object):
         """
         beta = 0
         
-        wavelength = self.wavelength(self.energy)
+        wavelength = self.energy_to_wavelength(self.energy)
         u = self.order*self.line_density*1000*wavelength - np.sin(np.deg2rad(self.alpha))
         beta = np.rad2deg(np.arcsin(u))
         
@@ -327,7 +328,7 @@ class Grating(object):
         """
         
         
-        wavelength = self.wavelength(self.energy)
+        wavelength = self.energy_to_wavelength(self.energy)
         print(self.energy,
               self.order,
                 self.line_density,

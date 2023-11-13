@@ -111,7 +111,8 @@ class EPICScontrol(object):
                 values[self.key] = updated
                 window[self.key].update(value=updated)
                 window.write_event_value('Update', self.key)
-                setattr(pgm, self.properties[self.key], updated)
+                print('here!')
+                setattr(pgm.grating, 'order', updated)
 
             # make exception more specific
             except Exception as e:
@@ -176,7 +177,10 @@ class EPICScontrol(object):
             None
             """
             window[self.key].update(value=self.value)
-            setattr(pgm, self.properties[self.key], self.value)
+            if self.key == "-ORDER-":
+                setattr(pgm, self.properties[self.key], int(self.value))
+            else:
+                setattr(pgm, self.properties[self.key], float(self.value))
             return
     
     # pgm parameter not used
@@ -196,8 +200,7 @@ class EPICScontrol(object):
 
         """
         window[self.key].update(value=value)
-        # Avoid using exec. Could use setattr(pgm, self.properties[self.key], window[self.key].get())
-        exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+        setattr(pgm, self.properties[self.key], float(window[self.key].get()))
     
         return
 
