@@ -1,12 +1,9 @@
 from __future__ import annotations
+from matplotlib.axes import Axes
 import numpy as np
-import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle, Patch 
-from matplotlib import axes
-from matplotlib.collections import PatchCollection
 import configparser
-from scipy.constants import c, h, e
-from pgmcomponents.geometry import Plane, Point3D, Vector3D, Ray3D
+from pgmcomponents.geometry import Point3D, Ray3D
 from scipy.spatial import ConvexHull
 from matplotlib.lines import Line2D
 from pgmcomponents.elements import Plane_Mirror, Grating
@@ -68,6 +65,7 @@ class PGM(object):
 
         
         """
+        # It's unclear what is happening here and there will be uncaught errors if kwargs is not as expected.
         if grating is None:
             grating_kwargs = [
                 'line_density',
@@ -121,6 +119,7 @@ class PGM(object):
         self._beam_offset = 0 
         self._beam_width = 0
         self._beam_height = 0
+        self._energy = 250
 
     def __repr__(self):
         return """PGM(grating={}, \nmirror={}, \nb={},\nbeam_width={},\nbeam_height={})""".format(self.grating, 
@@ -174,7 +173,6 @@ class PGM(object):
         self._mirror.read_file(filename)
         pgm_config = configparser.ConfigParser()
         pgm_config.read(filename)
-
         self._energy = float(pgm_config['beam']['energy'])
         self._beam_offset = float(pgm_config['beam']['beam_offset'])
         self._beam_width = float(pgm_config['beam']['beam_width'])
@@ -208,125 +206,97 @@ class PGM(object):
         return 1239.8419843320025/self.energy
     
     @energy.setter
-    
-    def energy(self, value):
-        self.grating.energy = value
-
+    # need validation for energy value, e.g. non-zero
+    def energy(self, value: float)-> None:
+        if isinstance(value, (float, int)) and value > 0:
+            self.grating.energy = value
+        else:
+            print(value, type(value))
+            raise ValueError("Expected energy to be a positive float!")
     @property
-    def grating(self):
+    def grating(self)-> Grating:
         return self._grating
     
     @grating.setter
-    def grating(self, value):
-        self._grating = value
+    def grating(self, value: Grating)-> None:
+        if isinstance(value, Grating):
+            self._grating = value
+        else: 
+            raise TypeError("Expected Grating instance for grating!")
     
     @property
-    def mirror(self):
+    def mirror(self)-> Plane_Mirror:
         return self._mirror
     
     @mirror.setter
-    def mirror(self, value):
-        self._mirror = value
-
+    def mirror(self, value: Plane_Mirror):
+        if isinstance(value, Plane_Mirror):
+            self._mirror = value
+        else:
+            raise TypeError("Expected Plane_Mirror instance for mirror!")
     @property
-    def rays(self):
+    def rays(self)-> list[Ray3D]:
         return self._rays
     
     @rays.setter
-    def rays(self, value):
+    def rays(self, value: list[Ray3D])-> None:
         self._rays = value
     
     @property
-    def beam_offset(self):
+    def beam_offset(self)-> float:
         return -1*self._beam_offset
     
     @beam_offset.setter
-    def beam_offset(self, value):
-        self._beam_offset = value
-    
+    def beam_offset(self, value: float)-> None:
+        if isinstance(value, (float, int)):
+            self._beam_offset = -1*value
+        else:
+            raise TypeError("Expected float for beam_offset!")
     @property
-    def beam_width(self):
+    def beam_width(self)-> float:
         return self._beam_width
     
     @beam_width.setter
-    def beam_width(self, value):
-        self._beam_width = value
+    def beam_width(self, value: float)-> None:
+        if isinstance(value, (float, int)) and value >= 0:
+            self._beam_width = value
+        else:
+            raise TypeError("Expected non-negative float for beam_width!")
     
     @property
-    def beam_height(self):
+    def beam_height(self)-> float:
         return self._beam_height
     
     @beam_height.setter
-    def beam_height(self, value):
-        self._beam_height = value
+    def beam_height(self, value: float)-> None:
+        if isinstance(value, (float, int)) and value >= 0:
+            self._beam_height = value
+        else:
+            raise ValueError("Expected non-negative float for beam_height!")
+
 
     @property
-    def grating(self):
-        return self._grating
-    
-    @grating.setter
-    def grating(self, value):
-        self._grating = value
-
-    @property 
-    def mirror(self):
-        return self._mirror
-    
-    @mirror.setter
-    def mirror(self, value):
-        self._mirror = value
-
-    @property
-    def rays(self):
-        return self._rays
-    
-    @rays.setter
-    def rays(self, value):
-        self._rays = value
-
-    @property
-    def beam_offset(self):
-        return self._beam_offset
-    
-    @beam_offset.setter
-    def beam_offset(self, value):
-        self._beam_offset = value
-    
-    @property
-    def beam_width(self):
-        return self._beam_width
-    
-    @beam_width.setter
-    def beam_width(self, value):
-        self._beam_width = value
-
-    @property
-    def beam_height(self):
-        return self._beam_height
-    
-    @beam_height.setter
-    def beam_height(self, value):
-        self._beam_height = value
-
-    @property
-    def mirror_intercept(self):
+    def mirror_intercept(self)-> Point3D:
         return self._mirror_intercept
     
     @property
-    def grating_intercept(self):
+    def grating_intercept(self)-> Point3D:
         return self._grating_intercept
     
     
     @property
-    def cff(self):
+    def cff(self)-> float:
         return self.grating.cff
     
     @cff.setter
-    def cff(self, value):
-        self.grating.cff = value
-    
+    def cff(self, value: float)-> None:
+        if isinstance(value, (float, int)) and value > 1:
+            self.grating.cff = value
+        else:
+            raise ValueError("Expected cff to be a positive float bigger than 1!")
 
-    def values(self):
+    def values(self)-> dict:
+
         dictionary = {'beam_vertical': self.beam_offset,
                       'beam_width': self.beam_width,
                       'beam_height': self.beam_height,
@@ -347,7 +317,7 @@ class PGM(object):
 
     @classmethod
 
-    def pgm_from_file(cls, filename):
+    def pgm_from_file(cls, filename:float)-> PGM:
         """
         Create a PGM from a file. 
         See config_pgm.ini for an example.
@@ -362,7 +332,7 @@ class PGM(object):
         pgm.read_file(filename)
         return pgm
 
-    def propagate(self, *args):
+    def propagate(self, *args: Ray3D | list)-> tuple:
         """
         Propagate rays through the PGM setup.
 
@@ -391,12 +361,13 @@ class PGM(object):
         mirror_intercept = [mirr_ray.position for mirr_ray in mirr_ray]
         grating_intercept = [grating_ray.position for grating_ray in grating_ray]
         
+        # _mirror_intercept and _grating_intercept not defined in __init__
         self._mirror_intercept = mirror_intercept
         self._grating_intercept = grating_intercept
         return grating_ray, mirror_intercept, grating_intercept
 
 
-    def draw_sideview(self, ax):
+    def draw_sideview(self, ax: Axes):
         """
         Draws the setup on a y-z projection on a given axis.
 
@@ -410,6 +381,7 @@ class PGM(object):
         grating_corners = self.grating.compute_corners()
         mirror_corners_y, mirror_corners_z = mirror_corners[::2,1], mirror_corners[::2,2]
         mirror_corners_yz = np.array([mirror_corners_z, mirror_corners_y]).T
+        # ConvexHull sp?
         # ConvelHull method used to ensure the entire region is filled regardless
         # of point order.
         hull_grating = ConvexHull(mirror_corners_yz)
@@ -444,7 +416,7 @@ class PGM(object):
         
         zero_order_rays = self.grating.reflect(self.rays, zero_order=True)
 
-
+        """
         for index, ray in enumerate(zero_order_rays):
             r_z = np.array([
             grating_int[index].z,
@@ -458,9 +430,7 @@ class PGM(object):
 
             line = Line2D(r_z, r_x, color='gray', linewidth=1, label='Zero Order Reflections')
             ax.add_line(line)
-        
-        xlim = ax.get_xlim()
-        ylim = ax.get_ylim()
+        """
         legend_entries = [
             Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
             Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
@@ -469,11 +439,7 @@ class PGM(object):
 
         
 
-
-        return 
-        
-
-    def draw_topview(self, ax):
+    def draw_topview(self, ax: Axes)-> None:
         """
         Draws the top-view (x-z projection) of the setup on the current
         axes.
@@ -482,89 +448,72 @@ class PGM(object):
 
         m_corners = self.mirror_corners()
         g_corners = self.grating_corners()
-
-        mirror_rect = np.array([
-            [m_corners[2][0], m_corners[2][1]+self.mirror._width()/2], #top left
-            [m_corners[2][0], m_corners[2][1]-self.mirror._width()/2], #bottom_left
-            [m_corners[2][0]+ self.mirror._length(), m_corners[2][1]-self.mirror._width()/2], #bottom_right
-            [m_corners[2][0]+ self.mirror._length(), m_corners[2][1]+self.mirror._width()/2]  #top_right
-        ])
-
-        # Mirror the borders of the rectangular image
-        displacement = np.array([
-            [0, self.mirror._width()/2+ self.grating._width()/2],
-            [0, self.mirror._width()/2+ self.grating._width()/2],
-            [0, self.mirror._width()/2+ self.grating._width()/2],
-            [0, self.mirror._width()/2+ self.grating._width()/2]
-        ])
-        
-        mirror_rect_borders = np.array([
-            [mirror_rect[0][0] - self.mirror.borders[2], mirror_rect[0][1] + self.mirror.borders[0]],
-            [mirror_rect[1][0] - self.mirror.borders[2], mirror_rect[1][1] - self.mirror.borders[1]],
-            [mirror_rect[2][0] + self.mirror.borders[3], mirror_rect[2][1] - self.mirror.borders[1]],
-            [mirror_rect[3][0] + self.mirror.borders[3], mirror_rect[3][1] + self.mirror.borders[0]]])
-        
-        grating_rect = np.array([
-            [g_corners[0][0], g_corners[0][1] - self.grating._width()/2], #top left
-            [g_corners[0][0], g_corners[0][1] + self.grating._width()/2], #bottom_left
-            [g_corners[0][0] + self.grating._length(), g_corners[0][1] + self.grating._width()/2], #bottom_right
-            [g_corners[0][0] + self.grating._length(), g_corners[0][1] - self.grating._width()/2]  #top_right
-        ])
-
-        grating_rect = grating_rect + displacement
-
-        grating_rect_borders = np.array([
-            [grating_rect[0][0] + self.grating.borders[2], grating_rect[0][1] + self.grating.borders[0]],
-            [grating_rect[1][0] + self.grating.borders[2], grating_rect[1][1] - self.grating.borders[1]],
-            [grating_rect[2][0] - self.grating.borders[3], grating_rect[2][1] - self.grating.borders[1]],
-            [grating_rect[3][0] - self.grating.borders[3], grating_rect[3][1] + self.grating.borders[0]]])
+        m_corners = np.array(m_corners)
+        # use your _width and _length setters
         
         self.generate_rays()
         
-        grating_ray, mirror_intercept, grating_intercept = self.propagate(self.rays)
-        
-        #Index denotes the ray i.e. mirror_intercept[0] is the ray_0
-        
-        mirror_blx = mirror_intercept[3].x + self.mirror._width()/2
-        mirror_blz = mirror_intercept[2].z
-        mirror_l = mirror_intercept[1].z - mirror_intercept[2].z
-        mirror_w = mirror_intercept[4].x - mirror_intercept[3].x
+        # _, mirror_intercept, grating_intercept
+        grating_corners = np.array(self.grating_corners())
+        mirror_corners = np.array(self.mirror_corners())
+        grating_ray, mirror_int_1, grating_int_1 =  self.propagate(self.rays[1])
+        grating_ray, mirror_int_2, grating_int_2 =  self.propagate(self.rays[2])
+        grating_ray, mirror_int_3, grating_int_3 =  self.propagate(self.rays[3])
+        grating_ray, mirror_int_4, grating_int_4 =  self.propagate(self.rays[4])
+        mirr_footprint_corners = np.array([
+            [mirror_int_2[0].z, mirror_int_3[0].x],
+            [mirror_int_1[0].z, mirror_int_3[0].x],
+            [mirror_int_1[0].z, mirror_int_4[0].x],
+            [mirror_int_2[0].z, mirror_int_4[0].x]
+        ])
 
+        grating_footprint_corners = np.array([
+            [grating_int_2[0].z, grating_int_3[0].x],
+            [grating_int_1[0].z, grating_int_3[0].x],
+            [grating_int_1[0].z, grating_int_4[0].x],
+            [grating_int_2[0].z, grating_int_4[0].x]
+        ])
 
-        grating_blx = grating_intercept[3].x - self.grating._width()/2
-        grating_blz = grating_intercept[2].z
-        grating_l = grating_intercept[1].z - grating_intercept[2].z
-        grating_w = grating_intercept[4].x - grating_intercept[3].x
+        offset = 0.5*(self.mirror._width() + self.grating._width())* np.array([
+            [0,1],
+            [0,1],
+            [0,1],
+            [0,1]
+        ])
+
+        grating_corners = grating_corners + offset
+        grating_footprint_corners = grating_footprint_corners + offset
+
+        ax.fill(mirror_corners[:,0], mirror_corners[:,1], 'r',alpha=1, label='Mirror')
+        ax.fill(grating_corners[:,0], grating_corners[:,1], 'b',alpha=0.5, label='Grating')
+        ax.fill(mirr_footprint_corners[:,0], mirr_footprint_corners[:,1], c='black')
+        ax.fill(grating_footprint_corners[:,0], grating_footprint_corners[:,1], c='green')
+        ax.grid(axis='both', which='both', alpha = 0.5)
+        ax.set_xticks(np.arange(-1000, 1000, 50), minor=True)
+        ax.set_xticks(np.arange(-1000, 1000, 100), minor=False)
+        ax.set_xlim(min(mirror_corners[:,0]), max(grating_corners[:,0]))
+        #ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
+        #ax.fill(m_corners[:,] , 'r',alpha=1)
+        #x.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
+        #ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5, label='Grating')
         
         
-        beam_footprint_dimensions = np.array([mirror_l, mirror_w, grating_l, grating_w])
-        
-        ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
-        ax.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
-        ax.fill(mirror_rect[:,0], mirror_rect[:,1], 'r',alpha=1, label='Mirror')
-        ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5, label='Grating')
-        rectangle = Rectangle((mirror_blz, mirror_blx - (self.mirror._width()/2+ self.grating._width())), mirror_l, mirror_w, color='g', alpha=1)
-        ax.add_patch(rectangle)
+        #ax.fill([mirror_blz, mirror_blz + mirror_l, mirror_blz + mirror_l, mirror_blz], [mirror_blx, mirror_blx, mirror_blx + mirror_w, mirror_blx + mirror_w], 'g', alpha=0.5, label='Beam Footprint')
+        #ax.fill([grating_blz, grating_blz + grating_l, grating_blz + grating_l, grating_blz], [grating_blx, grating_blx, grating_blx + grating_w, grating_blx + grating_w], 'g', alpha=0.5)
         legend_entries = [
             Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
             Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
             Patch(facecolor=(0,1,0,1), edgecolor=(0,1,0,0.3), label='Beam Footprint'),
         ]
         ax.legend(handles=legend_entries, loc = 'upper left', fontsize=16, fancybox=True, shadow=True)
-    
-        columns = ['Value']
-        
-        rectangle = Rectangle((grating_blz, grating_blx + self.mirror._width()/2+ self.grating._width()/2), grating_l, grating_w, color='g', alpha=1)
-        ax.add_patch(rectangle)
 
         
-        #print(mirror_rect_hull.vertices)
-        return
 
 
 
-    def mirror_corners(self):
+    def mirror_corners(self)-> tuple:
         a = self.mirror.hoffset
+        # Need to remove unused imports "from scipy.constants import c, h, e" otherwise redefining here.
         c = self.mirror.voffset
         h = self.mirror.axis_voffset
         theta = self.mirror.theta
@@ -585,9 +534,9 @@ class PGM(object):
         trbz = tlbz
         trbx = w/2
 
-        return ((tlfz, tlfx), (trfz, trfx), (tlbz, tlbx), (trbz, trbx))
+        return ((tlfz, tlfx), (trfz, trfx), (trbz, trbx), (tlbz, tlbx))
 
-    def grating_corners(self):
+    def grating_corners(self)-> tuple:
         
         l = self.grating._length()
         w = self.grating._width()
@@ -608,7 +557,7 @@ class PGM(object):
         brfz = (l/2)*np.cos(beta_rad)
         brfx = w/2
 
-        return ((blbz, blbx), (brbz, brbx), (blfz, blfx), (brfz, brfx))
+        return ((blbz, blbx), (brbz, brbx), (brfz, brfx), (blfz, blfx))
     
     @staticmethod
     def undulator_size():

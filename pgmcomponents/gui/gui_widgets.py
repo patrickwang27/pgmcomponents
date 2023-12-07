@@ -10,17 +10,25 @@ Version = 0.2.2
 
 """
 from __future__ import annotations
+# back not used
 from turtle import back
 import numpy as np
 import PySimpleGUI as sg
+# v not used
 from pyrsistent import v
+# calc_source_div and calc_source_size not used
 from pgmcomponents.geometry import calc_beam_size, calc_source_div, calc_source_size
 import traceback
 import matplotlib.pyplot as plt
+# Toolbar not used
 from pgmcomponents.gui.mplwidgets import draw_figure_w_toolbar, Toolbar
+# colorama import not used
 from colorama import Fore, Back, Style, init
+# sleep not used
 from time import sleep
+# Better to explicitly import
 from pgmcomponents.elements import *
+# inspect not used
 import inspect
  
 
@@ -65,6 +73,7 @@ class EPICScontrol(object):
         self.properties = {'-ENERGY-':'energy', '-CFF-':'cff', '-ORDER-':'grating.order', '-LINE_DENSITY-':'grating.line_density'}
 
         if pgm is not None:
+            # avoid use of eval with user input (key)
             self.value = eval(f"pgm.{self.properties[self.key]}")
 
         layout = [[sg.Button(button_text='―', key=f"{key}_down", font=('Arial', 10),image_data=button_image, image_size=(20,30)),
@@ -75,9 +84,10 @@ class EPICScontrol(object):
                 ]
         self.frame = sg.Frame(title=name, layout=layout)
 
-
+        # don't need return
         return
 
+    # PGM imported from * import. 
     def up(self, window: sg.Window, values: dict, pgm: PGM) -> None:
         """
         Parameters
@@ -101,8 +111,10 @@ class EPICScontrol(object):
                 values[self.key] = updated
                 window[self.key].update(value=updated)
                 window.write_event_value('Update', self.key)
-                setattr(pgm, self.properties[self.key], updated)
+                print('here!')
+                setattr(pgm.grating, 'order', updated)
 
+            # make exception more specific
             except Exception as e:
                 sg.Popup('Order should be type int', e)
             
@@ -136,7 +148,7 @@ class EPICScontrol(object):
                     values[self.key] = updated
                     window[self.key].update(value=updated)
                     window.write_event_value('Update', values)
-                    setattr(pgm, self.properties[self.key], updated)
+                    setattr(pgm.grating, 'order', updated)
 
                 except Exception as e:
                     sg.Popup('Order should be type int', e)
@@ -165,9 +177,13 @@ class EPICScontrol(object):
             None
             """
             window[self.key].update(value=self.value)
-            setattr(pgm, self.properties[self.key], self.value)
+            if self.key == "-ORDER-":
+                setattr(pgm.grating, 'order', int(self.value))
+            else:
+                setattr(pgm, self.properties[self.key], float(self.value))
             return
     
+    # pgm parameter not used
     def write(self, window: sg.Window, value: dict, pgm: PGM)-> None:
         """
         Subroutine to write the values of a known pgm to
@@ -184,7 +200,7 @@ class EPICScontrol(object):
 
         """
         window[self.key].update(value=value)
-        exec(f"pgm.{self.properties[self.key]} = window[self.key].get()")
+        setattr(pgm, self.properties[self.key], float(window[self.key].get()))
     
         return
 
@@ -207,7 +223,7 @@ class EPICScontrol(object):
     
     
 
-
+# Plane_Mirror and Grating undefined here
 def configuration_popup(title: str, key: str, element: Plane_Mirror | Grating, window)-> dict:
     """
     Creates a popup window for configuration of Plane_Mirror or Grating.
@@ -259,6 +275,7 @@ def configuration_popup(title: str, key: str, element: Plane_Mirror | Grating, w
                 element.dimensions = np.array([float(values[f'{key}_length']), 
                                                float(values[f'{key}_width']), 
                                                float(values[f'{key}_height'])])
+            # catch more specific exception
             except Exception as e:
                 print(e)
                 sg.Popup('Invalid dimensions')
@@ -277,6 +294,7 @@ def configuration_popup(title: str, key: str, element: Plane_Mirror | Grating, w
             
     return values if event == 'Save' else None
 
+# don't need to inherit from object. Rename BeamConfig for PascalCase
 class Beam_Config(object):
     """
     Provides a class for beam configuration.
@@ -323,11 +341,12 @@ class Beam_Config(object):
         self.beam_size_v = None
         self.calc = False
 
+        # don't need return
         return
 
 
     
-
+    # This function is very long. Can you refactor into smaller functions.
     def window(self, pgm: PGM, window: sg.Window)-> None:
         """
         Pops up a window for beam configuration.
@@ -373,6 +392,7 @@ class Beam_Config(object):
 
         config_keys = ['electron_size_h', 'electron_size_v', 'electron_div_h', 'electron_div_v', 'id_length', 'distance', 'num_of_sigmas']
 
+        # use def instead of lambda here
         check_fill = lambda: all([window_beam[key].get() != '' for key in config_keys])
         window_beam = sg.Window('Beam Configuration', layout=layout, modal=True, finalize=True)
 
@@ -390,6 +410,7 @@ class Beam_Config(object):
                     window_beam['beam_size_v'].update(value=self.beam_size_v, readonly=True)
                 else:
                     raise ValueError('Beam size does not match calculated beam size.')
+            # Can you give a more specific exception and useful error msg here
             except Exception as e:
                 sg.Popup('Invalid values', e)
         
@@ -536,15 +557,17 @@ class Beam_Config(object):
                     self.beam_size_v = beam_size_v
                     pgm.beam_height = beam_size_v
                     pgm.beam_width = beam_size_h
-
+                    # don't need pass
                     pass
                     
                 except Exception as e:
                     sg.Popup('Invalid values', [[e],[traceback.format_exc()]])
+                    # dont' need pass
                     pass
 
             
             
+        # don't need return
         return
 
 
@@ -597,6 +620,7 @@ class OffsetsControl(object):
         """
         Calculate the offsets.
         """
+        # mirror_voffset and mirror_axis_voffset should be in __init__
         self.mirror_voffset = float(window[f'{self.key}_beam_vertical'].get())
         self.mirror_axis_voffset = self.mirror_voffset/2
         pgm.mirror.voffset = self.mirror_voffset
@@ -626,7 +650,7 @@ class OffsetsControl(object):
 
         return
 
-
+# rename TopViewWidget
 class Topview_Widget(object):
     """
     A class to supply the GUI widget for a top-view
@@ -689,7 +713,8 @@ class Topview_Widget(object):
         self.pgm.draw_topview(ax)
 
         draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
-
+        ax.set_xlabel('z (mm)')
+        ax.set_ylabel('x (mm)')
 
 class Sideview_Widget(object):
 
@@ -737,6 +762,38 @@ class Sideview_Widget(object):
         self.canvas = sg.Canvas(size = self.size, key = self.key, background_color='white')
         self.control_canvas = sg.Canvas(key=f'{self.key}_control')
     
+
+    def add_table(self):
+        columns = ("Parameter", "Value")
+        parameters = ["Order", 
+                    "LD (l/mm)",
+                    "Energy (eV)",
+                    "$c_{ff}$",
+                    "$b$ (mm)",
+                    "$a$ (mm)",
+                    "$c$ (mm)",
+                    "$h$ (mm)",
+                    "$v$ (mm)",
+                    r"$\alpha$ ($^\circ$)",
+                    r"$\beta$ ($^\circ$)",
+                    r"$\theta$ ($^\circ$)"]
+        values = [self.pgm.grating.order,
+                  self.pgm.grating.line_density,
+                  self.pgm.energy,
+                  self.pgm.grating.cff,
+                  self.pgm.beam_offset,
+                  self.pgm.mirror.hoffset,
+                  self.pgm.mirror.voffset,
+                  self.pgm.mirror.axis_hoffset,
+                  self.pgm.mirror.axis_voffset,
+                  self.pgm.grating.alpha,
+                  self.pgm.grating.beta,
+                  self.pgm.mirror.theta]
+        data = [(param, round(val, ndigits=3)) for param, val in zip(parameters, values)]
+        table = plt.table(cellText=data, colLabels=columns, loc='right', colWidths=(0.1,0.1),fontsize=11)
+        plt.subplots_adjust(right=0.7)
+        return table
+
     def draw(self, window):
         plt.figure(2)
         plt.clf()
@@ -755,24 +812,30 @@ class Sideview_Widget(object):
         xlim = ax.get_xlim()
         ylim = ax.get_ylim()
         ax.set_xticks(np.arange(xlim[0], xlim[1], 10), minor=True)
+        ax.set_yticks(np.arange(round(ylim[0]), ylim[1], 10))
         ax.grid(which='both', alpha=0.6, linewidth=0.8)
-        ax.annotate(fr'$\alpha ={self.pgm.grating.alpha:.3f}^\circ$', (xlim[1]-45, ylim[1]-10))
-        ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-45, ylim[1]-15))
-        ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-45, ylim[1]-20))
+        #ax.annotate(fr'$\alpha ={self.pgm.grating.alpha:.3f}^\circ$', (xlim[1]-45, ylim[1]-10))
+        #ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-45, ylim[1]-15))
+        #ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-45, ylim[1]-20))
 
-        ax.annotate(fr'$b = {np.abs(self.pgm.beam_offset)}$ mm', (xlim[1]-90, ylim[1]-10))
-        ax.annotate(fr'$a = {self.pgm.mirror.hoffset}$ mm', (xlim[1]-90, ylim[1]-15))
-        ax.annotate(fr'$c = {self.pgm.mirror.voffset}$ mm', (xlim[1]-90, ylim[1]-20))
-        ax.annotate(fr'$h = {self.pgm.mirror.axis_hoffset}$ mm', (xlim[1]-90, ylim[1]-25))
-        ax.annotate(fr'$v = {self.pgm.mirror.axis_voffset}$ mm', (xlim[1]-90, ylim[1]-30))
+        # some calculations repeated, like xlim[1] - 90. Assign to variable to avoid recalculating.
+        #ax.annotate(fr'$b = {np.abs(self.pgm.beam_offset)}$ mm', (xlim[1]-90, ylim[1]-10))
+        #ax.annotate(fr'$a = {self.pgm.mirror.hoffset}$ mm', (xlim[1]-90, ylim[1]-15))
+        #ax.annotate(fr'$c = {self.pgm.mirror.voffset}$ mm', (xlim[1]-90, ylim[1]-20))
+        #ax.annotate(fr'$h = {self.pgm.mirror.axis_hoffset}$ mm', (xlim[1]-90, ylim[1]-25))
+        #ax.annotate(fr'$v = {self.pgm.mirror.axis_voffset}$ mm', (xlim[1]-90, ylim[1]-30))
 
-        ax.annotate(fr'Order = {self.pgm.grating.order}', (xlim[0]+5, ylim[1]-10))
-        ax.annotate(fr'Line Density = {self.pgm.grating.line_density} l/mm', (xlim[0]+5, ylim[1]-15))
-        ax.annotate(fr'Energy = {self.pgm.energy} eV', (xlim[0]+5, ylim[1]-20))
-        ax.annotate(fr'$c_{{ff}} = {self.pgm.grating.cff:.3}$', (xlim[0]+5, ylim[1]-25))
+        #ax.annotate(fr'Order = {self.pgm.grating.order}', (xlim[0]+5, ylim[1]-10))
+        #ax.annotate(fr'Line Density = {self.pgm.grating.line_density} l/mm', (xlim[0]+5, ylim[1]-15))
+        #ax.annotate(fr'Energy = {self.pgm.energy} eV', (xlim[0]+5, ylim[1]-20))
+        #ax.annotate(fr'$c_{{ff}} = {self.pgm.grating.cff:.3}$', (xlim[0]+5, ylim[1]-25))
         draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
-
-
+        ax.set_xlabel('z (mm)')
+        ax.set_ylabel('y (mm)')
+        table = self.add_table()
+        table.scale(1, 1.43)
+        table.auto_set_font_size(False)
+        table.set_fontsize(10)
 def main():
     beam = Beam_Config()
     mirror = Plane_Mirror.mirror_from_file('config_pgm.ini')
@@ -788,6 +851,7 @@ def main():
                                                  ])
     
     while True:
+        # values not used
         event, values = window.read()
         if event == sg.WIN_CLOSED:
             break
@@ -854,6 +918,7 @@ def update_and_draw(window,
         val = float(energy_input)
         if val > 0:
             energy_control.write(window, float(energy_input), pgm)
+            # can remove all of these pass statements
             pass
         else:
             sg.Popup('Error', 'Energy must be a positive number')
@@ -919,6 +984,7 @@ def update_and_draw(window,
         offsets_control.updatepgm(window, pgm)
 
     try:
+        # can just call functions without assigning to variables
         _,_ = pgm.grating.compute_angles()
         _=pgm.mirror.compute_corners()
         _=pgm.grating.compute_corners()

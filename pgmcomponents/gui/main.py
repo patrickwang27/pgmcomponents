@@ -10,18 +10,24 @@ Version = 0.2.2
 
 import PySimpleGUI as sg
 from PySimpleGUI.PySimpleGUI import _upgrade_gui as upgrade
+# init not used
 from colorama import init, Fore
 import numpy as np
 import dill as pickle
 
+# plt not used
 import matplotlib.pyplot as plt
+# FigureCanvasTkAgg, NavigationToolbar2Tk not used
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+# best to explicitly import what you want, otherwise more difficult to follow
 from pgmcomponents.elements import *
 from pgmcomponents.geometry import *
 from pgmcomponents.gui import *
+# os not used
 import os
 
 
+# main function is more of a long script. Better to break down into smaller chunks of code in methods
 def main():
 
     version = sg.__version__
@@ -95,6 +101,8 @@ def main():
     pgm.set_theta()
     _=pgm.mirror.compute_corners()
 
+    # can remove commented out code
+
     #pgm.generate_rays()
             
     #topview_widget.draw(window)
@@ -165,6 +173,7 @@ def main():
             else:
                 window['-OFFSETS-_mirror_vertical'].update(readonly=False)
                 window['-OFFSETS-_mirror_axis_vertical'].update(readonly=False)
+        # commented out code
             """
         elif event == '-OFFSETS-_beam_vertical':
             if values['-OFFSETS-_beam_vertical'] not in ['',' ', '-']:
@@ -215,6 +224,7 @@ def main():
                     sg.Popup('Workspace saved')
                     break
                 
+            # remove pass
             pass
 
 
