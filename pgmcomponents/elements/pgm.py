@@ -416,7 +416,7 @@ class PGM(object):
         
         zero_order_rays = self.grating.reflect(self.rays, zero_order=True)
 
-
+        """
         for index, ray in enumerate(zero_order_rays):
             r_z = np.array([
             grating_int[index].z,
@@ -430,7 +430,7 @@ class PGM(object):
 
             line = Line2D(r_z, r_x, color='gray', linewidth=1, label='Zero Order Reflections')
             ax.add_line(line)
-
+        """
         legend_entries = [
             Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
             Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
@@ -448,72 +448,58 @@ class PGM(object):
 
         m_corners = self.mirror_corners()
         g_corners = self.grating_corners()
-
+        m_corners = np.array(m_corners)
         # use your _width and _length setters
-        mirror_rect = np.array([
-            [m_corners[2][0], m_corners[2][1]+self.mirror._width()/2], #top left
-            [m_corners[2][0], m_corners[2][1]-self.mirror._width()/2], #bottom_left
-            [m_corners[2][0]+ self.mirror._length(), m_corners[2][1]-self.mirror._width()/2], #bottom_right
-            [m_corners[2][0]+ self.mirror._length(), m_corners[2][1]+self.mirror._width()/2]  #top_right
-        ])
-
-        # Mirror the borders of the rectangular image
-        displacement = np.array([
-            [0, self.mirror._width()/2+ self.grating._width()/2],
-            [0, self.mirror._width()/2+ self.grating._width()/2],
-            [0, self.mirror._width()/2+ self.grating._width()/2],
-            [0, self.mirror._width()/2+ self.grating._width()/2]
-        ])
-        
-        mirror_rect_borders = np.array([
-            [mirror_rect[0][0] - self.mirror.borders[2], mirror_rect[0][1] + self.mirror.borders[0]],
-            [mirror_rect[1][0] - self.mirror.borders[2], mirror_rect[1][1] - self.mirror.borders[1]],
-            [mirror_rect[2][0] + self.mirror.borders[3], mirror_rect[2][1] - self.mirror.borders[1]],
-            [mirror_rect[3][0] + self.mirror.borders[3], mirror_rect[3][1] + self.mirror.borders[0]]])
-        
-        grating_rect = np.array([
-            [g_corners[0][0], g_corners[0][1] - self.grating._width()/2], #top left
-            [g_corners[0][0], g_corners[0][1] + self.grating._width()/2], #bottom_left
-            [g_corners[0][0] + self.grating._length(), g_corners[0][1] + self.grating._width()/2], #bottom_right
-            [g_corners[0][0] + self.grating._length(), g_corners[0][1] - self.grating._width()/2]  #top_right
-        ])
-
-        grating_rect = grating_rect + displacement
-
-        grating_rect_borders = np.array([
-            [grating_rect[0][0] + self.grating.borders[2], grating_rect[0][1] + self.grating.borders[0]],
-            [grating_rect[1][0] + self.grating.borders[2], grating_rect[1][1] - self.grating.borders[1]],
-            [grating_rect[2][0] - self.grating.borders[3], grating_rect[2][1] - self.grating.borders[1]],
-            [grating_rect[3][0] - self.grating.borders[3], grating_rect[3][1] + self.grating.borders[0]]])
         
         self.generate_rays()
         
         # _, mirror_intercept, grating_intercept
-        _, mirror_intercept, grating_intercept = self.propagate(self.rays)
-        
-        #Index denotes the ray i.e. mirror_intercept[0] is the ray_0
-        
-        mirror_blx = mirror_intercept[3].x + self.mirror._width()/2
-        mirror_blz = mirror_intercept[2].z
-        mirror_l = mirror_intercept[1].z - mirror_intercept[2].z
-        mirror_w = mirror_intercept[4].x - mirror_intercept[3].x
+        grating_corners = np.array(self.grating_corners())
+        mirror_corners = np.array(self.mirror_corners())
+        grating_ray, mirror_int_1, grating_int_1 =  self.propagate(self.rays[1])
+        grating_ray, mirror_int_2, grating_int_2 =  self.propagate(self.rays[2])
+        grating_ray, mirror_int_3, grating_int_3 =  self.propagate(self.rays[3])
+        grating_ray, mirror_int_4, grating_int_4 =  self.propagate(self.rays[4])
+        mirr_footprint_corners = np.array([
+            [mirror_int_2[0].z, mirror_int_3[0].x],
+            [mirror_int_1[0].z, mirror_int_3[0].x],
+            [mirror_int_1[0].z, mirror_int_4[0].x],
+            [mirror_int_2[0].z, mirror_int_4[0].x]
+        ])
 
+        grating_footprint_corners = np.array([
+            [grating_int_2[0].z, grating_int_3[0].x],
+            [grating_int_1[0].z, grating_int_3[0].x],
+            [grating_int_1[0].z, grating_int_4[0].x],
+            [grating_int_2[0].z, grating_int_4[0].x]
+        ])
 
-        grating_blx = grating_intercept[3].x - self.grating._width()/2
-        grating_blz = grating_intercept[2].z
-        grating_l = grating_intercept[1].z - grating_intercept[2].z
-        grating_w = grating_intercept[4].x - grating_intercept[3].x
+        offset = 0.5*(self.mirror._width() + self.grating._width())* np.array([
+            [0,1],
+            [0,1],
+            [0,1],
+            [0,1]
+        ])
+
+        grating_corners = grating_corners + offset
+        grating_footprint_corners = grating_footprint_corners + offset
+
+        ax.fill(mirror_corners[:,0], mirror_corners[:,1], 'r',alpha=1, label='Mirror')
+        ax.fill(grating_corners[:,0], grating_corners[:,1], 'b',alpha=0.5, label='Grating')
+        ax.fill(mirr_footprint_corners[:,0], mirr_footprint_corners[:,1], c='black')
+        ax.fill(grating_footprint_corners[:,0], grating_footprint_corners[:,1], c='green')
+        ax.grid(axis='both', which='both', alpha = 0.5)
+        ax.set_xticks(np.arange(-1000, 1000, 50), minor=True)
+        ax.set_xticks(np.arange(-1000, 1000, 100), minor=False)
+        ax.set_xlim(min(mirror_corners[:,0]), max(grating_corners[:,0]))
+        #ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
+        #ax.fill(m_corners[:,] , 'r',alpha=1)
+        #x.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
+        #ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5, label='Grating')
         
         
-        # beam_footprint_dimensions not used
-        beam_footprint_dimensions = np.array([mirror_l, mirror_w, grating_l, grating_w])
-        
-        ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
-        ax.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
-        ax.fill(mirror_rect[:,0], mirror_rect[:,1], 'r',alpha=1, label='Mirror')
-        ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5, label='Grating')
-        rectangle = Rectangle((mirror_blz, mirror_blx - (self.mirror._width()/2+ self.grating._width())), mirror_l, mirror_w, color='g', alpha=1)
-        ax.add_patch(rectangle)
+        #ax.fill([mirror_blz, mirror_blz + mirror_l, mirror_blz + mirror_l, mirror_blz], [mirror_blx, mirror_blx, mirror_blx + mirror_w, mirror_blx + mirror_w], 'g', alpha=0.5, label='Beam Footprint')
+        #ax.fill([grating_blz, grating_blz + grating_l, grating_blz + grating_l, grating_blz], [grating_blx, grating_blx, grating_blx + grating_w, grating_blx + grating_w], 'g', alpha=0.5)
         legend_entries = [
             Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
             Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
@@ -522,9 +508,6 @@ class PGM(object):
         ax.legend(handles=legend_entries, loc = 'upper left', fontsize=16, fancybox=True, shadow=True)
 
         
-        rectangle = Rectangle((grating_blz, grating_blx + self.mirror._width()/2+ self.grating._width()/2), grating_l, grating_w, color='g', alpha=1)
-        ax.add_patch(rectangle)
-
 
 
 
@@ -551,7 +534,7 @@ class PGM(object):
         trbz = tlbz
         trbx = w/2
 
-        return ((tlfz, tlfx), (trfz, trfx), (tlbz, tlbx), (trbz, trbx))
+        return ((tlfz, tlfx), (trfz, trfx), (trbz, trbx), (tlbz, tlbx))
 
     def grating_corners(self)-> tuple:
         
@@ -574,7 +557,7 @@ class PGM(object):
         brfz = (l/2)*np.cos(beta_rad)
         brfx = w/2
 
-        return ((blbz, blbx), (brbz, brbx), (blfz, blfx), (brfz, brfx))
+        return ((blbz, blbx), (brbz, brbx), (brfz, brfx), (blfz, blfx))
     
     @staticmethod
     def undulator_size():
