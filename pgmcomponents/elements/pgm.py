@@ -460,7 +460,7 @@ class PGM(object):
         grating_ray, mirror_int_2, grating_int_2 =  self.propagate(self.rays[2])
         grating_ray, mirror_int_3, grating_int_3 =  self.propagate(self.rays[3])
         grating_ray, mirror_int_4, grating_int_4 =  self.propagate(self.rays[4])
-        print("Top view r3 int:", mirror_int_3)
+
         mirr_footprint_corners = np.array([
             [mirror_int_2[0].z, mirror_int_3[0].x],
             [mirror_int_1[0].z, mirror_int_3[0].x],
@@ -513,6 +513,7 @@ class PGM(object):
 
 
     def mirror_corners(self)-> tuple:
+
         cot = lambda x: 1/np.tan(x)
         theta = np.deg2rad(self.mirror.theta)
         theta_g = 90 - self.theta
@@ -521,6 +522,7 @@ class PGM(object):
         c = self.mirror._voffset
         v = self.mirror._axis_voffset
         h = self.mirror._axis_hoffset
+
         w = self.mirror._width()
         l = self.mirror._length()
         d = self.mirror._height()
