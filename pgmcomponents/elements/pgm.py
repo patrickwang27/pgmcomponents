@@ -395,7 +395,7 @@ class PGM(object):
 
         self.generate_rays()
         grating_ray, mirror_int, grating_int = self.propagate(self.rays)
-        
+        print("Side view r3 int:", mirror_int[3])
         for index, ray in enumerate(grating_ray):
             r_z = np.array([
             self.rays[index].position.z,
@@ -460,6 +460,7 @@ class PGM(object):
         grating_ray, mirror_int_2, grating_int_2 =  self.propagate(self.rays[2])
         grating_ray, mirror_int_3, grating_int_3 =  self.propagate(self.rays[3])
         grating_ray, mirror_int_4, grating_int_4 =  self.propagate(self.rays[4])
+
         mirr_footprint_corners = np.array([
             [mirror_int_2[0].z, mirror_int_3[0].x],
             [mirror_int_1[0].z, mirror_int_3[0].x],
@@ -512,27 +513,41 @@ class PGM(object):
 
 
     def mirror_corners(self)-> tuple:
-        a = self.mirror.hoffset
-        # Need to remove unused imports "from scipy.constants import c, h, e" otherwise redefining here.
-        c = self.mirror.voffset
-        h = self.mirror.axis_voffset
-        theta = self.mirror.theta
+
+        cot = lambda x: 1/np.tan(x)
+        theta = np.deg2rad(self.mirror.theta)
+        theta_g = 90 - self.theta
+        theta_g = np.deg2rad(theta_g)
+        a = self.mirror._hoffset
+        c = self.mirror._voffset
+        v = self.mirror._axis_voffset
+        h = self.mirror._axis_hoffset
+
         w = self.mirror._width()
         l = self.mirror._length()
-        theta_g = 90 - theta
-        theta_rad = theta_g*np.pi/180
+        d = self.mirror._height()
+        #Top left front
 
-        tlfz = -((a - c * np.tan(theta_rad)) * np.cos(theta_rad)) + h
+        tlfz = -((a - c * cot(theta)) * np.sin(theta)) + h
+        tlfy = -(c / np.sin(theta) + 
+                 (a - c*cot(theta)) * np.cos(theta)) + v
         tlfx = -w/2
 
+        #Top right front
         trfz = tlfz
+        trfy = tlfy
         trfx = w/2
 
-        tlbz = tlfz - l*np.cos(theta_rad)
+        #Top left back
+        tlbz = tlfz - l*np.sin(theta)
+        tlby = tlfy - l*np.cos(theta)
         tlbx = -w/2
 
+        #Top right back
         trbz = tlbz
+        trby = tlby
         trbx = w/2
+        trb = Point3D(trbx, trby, trbz)
 
         return ((tlfz, tlfx), (trfz, trfx), (trbz, trbx), (tlbz, tlbx))
 
