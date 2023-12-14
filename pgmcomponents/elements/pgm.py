@@ -436,7 +436,8 @@ class PGM(object):
             Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
         ]
         ax.legend(handles=legend_entries, loc = 'lower right', fontsize=16, fancybox=True, shadow=True)
-
+        ax.axhline(y=0, color='black', linestyle='--', linewidth=1.3)
+        ax.axvline(x=0, color='black', linestyle='--', linewidth=1.3)
         
 
     def draw_topview(self, ax: Axes)-> None:
@@ -460,6 +461,27 @@ class PGM(object):
         grating_ray, mirror_int_2, grating_int_2 =  self.propagate(self.rays[2])
         grating_ray, mirror_int_3, grating_int_3 =  self.propagate(self.rays[3])
         grating_ray, mirror_int_4, grating_int_4 =  self.propagate(self.rays[4])
+
+        mirror_intercepts = [
+            mirror_int_1[0].to_point(),
+            mirror_int_2[0].to_point(),
+            mirror_int_3[0].to_point(),
+            mirror_int_4[0].to_point()
+        ]
+
+        grating_intercepts = [
+            grating_int_1[0].to_point(),
+            grating_int_2[0].to_point(),
+            grating_int_3[0].to_point(),
+            grating_int_4[0].to_point()
+        ]
+
+        mirror_footprint_width, mirror_footprint_height = self.calc_footprint_size(mirror_intercepts)
+        grating_footprint_width, grating_footprint_height = self.calc_footprint_size(grating_intercepts)
+        print("Mirror footprint width:", mirror_footprint_width)
+        print("Mirror footprint height:", mirror_footprint_height)
+        print("Grating footprint width:", grating_footprint_width)
+        print("Grating footprint height:", grating_footprint_height)
 
         mirr_footprint_corners = np.array([
             [mirror_int_2[0].z, mirror_int_3[0].x],
@@ -490,9 +512,11 @@ class PGM(object):
         ax.fill(mirr_footprint_corners[:,0], mirr_footprint_corners[:,1], c='black')
         ax.fill(grating_footprint_corners[:,0], grating_footprint_corners[:,1], c='green')
         ax.grid(axis='both', which='both', alpha = 0.5)
-        ax.set_xticks(np.arange(-1000, 1000, 50), minor=True)
+        ax.set_xticks(np.arange(-1000, 1000, 10), minor=True)
         ax.set_xticks(np.arange(-1000, 1000, 100), minor=False)
+        ax.set_yticks(np.arange(-1000, 1000, 10), minor=True)
         ax.set_xlim(min(mirror_corners[:,0]), max(grating_corners[:,0]))
+        ax.set_ylim(min(mirror_corners[:,1]), max(grating_corners[:,1]))
         #ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
         #ax.fill(m_corners[:,] , 'r',alpha=1)
         #x.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
@@ -504,11 +528,40 @@ class PGM(object):
         legend_entries = [
             Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
             Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
-            Patch(facecolor=(0,1,0,1), edgecolor=(0,1,0,0.3), label='Beam Footprint'),
+            Patch(facecolor=(0,0,0,1), edgecolor=(0,1,0,0.3), label=rf'Beam Footprint (Mirror): {mirror_footprint_width:.2f} mm x {mirror_footprint_height:.2f} mm'),
+            Patch(facecolor=(0,1,0,1), edgecolor=(0,1,0,0.3), label=rf'Beam Footprint (Grating): {grating_footprint_width:.2f} mm x {grating_footprint_height:.2f} mm')
+
         ]
-        ax.legend(handles=legend_entries, loc = 'upper left', fontsize=16, fancybox=True, shadow=True)
+
+        ax.legend(handles=legend_entries, loc = 'upper left', fontsize=12, fancybox=True, shadow=True)
 
         
+
+    def calc_footprint_size(self, intercepts: list[Point3D])-> tuple:
+        """
+        Calculate the size of the footprint of the beam on the grating or the mirror
+        when given the intercepts of the beam with the grating or the mirror.
+        
+        
+        Parameters
+        ----------
+        intercepts : list of Point3D objects
+            The intercepts of the beam with the grating or the mirror
+            [r_1, r_2, r_3, r_4]
+
+        Returns
+        -------
+        size : tuple
+            The size of the footprint of the beam on the grating or the mirror in mm
+        """
+
+        r_1, r_2, r_3, r_4 = intercepts
+    
+        width = r_1.distance(r_2)
+        height = r_3.distance(r_4)
+
+        return width, height
+
 
 
 

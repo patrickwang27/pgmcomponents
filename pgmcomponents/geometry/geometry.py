@@ -94,6 +94,128 @@ class Image(object):
         return "Image(width={}, height={}, h_div={}, v_div={})".format(self.width, self.height, self.h_div, self.v_div)
 
 
+
+class Point3D(object):
+    """
+    A class for a simple 3D point.
+
+    Parameters
+    ----------
+    x : float
+        The x coordinate of the point
+    y : float
+        The y coordinate of the point
+    z : float
+        The z coordinate of the point
+
+    Methods
+    ----------
+    __repr__ : str
+        Returns a string representation of the point
+    __add__ : Point3D
+        Adds two points together
+    __sub__ : Point3D
+        Subtracts two points
+    __eq__ : bool
+        Checks if two points are equal
+    __ne__ : bool
+        Checks if two points are not equal
+    __getitem__ : float
+        Returns the x, y or z coordinate of the point
+    __setitem__ : float
+        Sets the x, y or z coordinate of the point
+    __iter__ : float
+        Returns an iterator over the point
+    __len__ : int
+        Returns the length of the point
+    __hash__ : int 
+        Returns the hash of the point
+    __copy__ : Point3D
+        Returns a copy of the point
+    __deepcopy__ : Point3D
+        Returns a deep copy of the point
+    copy : Point3D
+        Returns a copy of the point
+    distance : float
+        Finds the distance between two points
+    """
+
+    def __init__(self, x, y, z):
+        self._point = np.array([x, y, z], dtype=float)
+
+    def __repr__(self):
+        # f-string
+        return "Point3D(x={}, y={}, z={})".format(self.x, self.y, self.z)
+    
+    def __add__(self, other):
+        return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
+    
+    def __sub__(self, other):
+        return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
+    
+    def __eq__(self, other):
+        return np.array_equal(self._point, other._point)
+    
+    def __ne__(self, other):
+        return not np.array_equal(self._point, other._point)
+    
+    def __getitem__(self, key):
+        return self._point[key] 
+    
+    def __setitem__(self, key, value):
+        self._point[key] = value
+
+    def __iter__(self):
+        return iter(self._point)    
+
+    def __len__(self):
+        return len(self._point)
+    
+    def __hash__(self):
+        return hash(self._point.tostring())
+    
+    def __copy__(self):
+        return Point3D(self.x, self.y, self.z)
+    
+    def __deepcopy__(self, memo):
+        return Point3D(self.x, self.y, self.z)
+    
+    def copy(self):
+        return Point3D(self.x, self.y, self.z)
+    
+    def distance(self, other):
+        # use point property rather than accessing other._point
+        return np.linalg.norm(self._point - other._point)
+    
+    @property
+    def x(self):
+        return self._point[0]
+    
+    @x.setter
+    def x(self, value):
+        self._point[0] = value
+
+    @property
+    def y(self):
+        return self._point[1]
+    
+    @y.setter
+    def y(self, value):
+        self._point[1] = value
+
+    @property
+    def z(self):
+        return self._point[2]
+    
+    @z.setter
+    def z(self, value):
+        self._point[2] = value
+
+    @property
+    def list(self):
+        return self._point.tolist()
+    
+
 class Vector3D(object):
     """A class for a simple 3D vector
     
@@ -275,128 +397,12 @@ class Vector3D(object):
     def z(self, value):
         self._vector[2] = value
 
-
-class Point3D(object):
-    """
-    A class for a simple 3D point.
-
-    Parameters
-    ----------
-    x : float
-        The x coordinate of the point
-    y : float
-        The y coordinate of the point
-    z : float
-        The z coordinate of the point
-
-    Methods
-    ----------
-    __repr__ : str
-        Returns a string representation of the point
-    __add__ : Point3D
-        Adds two points together
-    __sub__ : Point3D
-        Subtracts two points
-    __eq__ : bool
-        Checks if two points are equal
-    __ne__ : bool
-        Checks if two points are not equal
-    __getitem__ : float
-        Returns the x, y or z coordinate of the point
-    __setitem__ : float
-        Sets the x, y or z coordinate of the point
-    __iter__ : float
-        Returns an iterator over the point
-    __len__ : int
-        Returns the length of the point
-    __hash__ : int 
-        Returns the hash of the point
-    __copy__ : Point3D
-        Returns a copy of the point
-    __deepcopy__ : Point3D
-        Returns a deep copy of the point
-    copy : Point3D
-        Returns a copy of the point
-    distance : float
-        Finds the distance between two points
-    """
-
-    def __init__(self, x, y, z):
-        self._point = np.array([x, y, z], dtype=float)
-
-    def __repr__(self):
-        # f-string
-        return "Point3D(x={}, y={}, z={})".format(self.x, self.y, self.z)
-    
-    def __add__(self, other):
-        return Point3D(self.x + other.x, self.y + other.y, self.z + other.z)
-    
-    def __sub__(self, other):
-        return Vector3D(self.x - other.x, self.y - other.y, self.z - other.z)
-    
-    def __eq__(self, other):
-        return np.array_equal(self._point, other._point)
-    
-    def __ne__(self, other):
-        return not np.array_equal(self._point, other._point)
-    
-    def __getitem__(self, key):
-        return self._point[key] 
-    
-    def __setitem__(self, key, value):
-        self._point[key] = value
-
-    def __iter__(self):
-        return iter(self._point)    
-
-    def __len__(self):
-        return len(self._point)
-    
-    def __hash__(self):
-        return hash(self._point.tostring())
-    
-    def __copy__(self):
+    def to_point(self)-> Point3D:
+        """
+        Converts the vector to a Point3D
+        """
         return Point3D(self.x, self.y, self.z)
-    
-    def __deepcopy__(self, memo):
-        return Point3D(self.x, self.y, self.z)
-    
-    def copy(self):
-        return Point3D(self.x, self.y, self.z)
-    
-    def distance(self, other):
-        # use point property rather than accessing other._point
-        return np.linalg.norm(self._point - other._point)
-    
-    @property
-    def x(self):
-        return self._point[0]
-    
-    @x.setter
-    def x(self, value):
-        self._point[0] = value
 
-    @property
-    def y(self):
-        return self._point[1]
-    
-    @y.setter
-    def y(self, value):
-        self._point[1] = value
-
-    @property
-    def z(self):
-        return self._point[2]
-    
-    @z.setter
-    def z(self, value):
-        self._point[2] = value
-
-    @property
-    def list(self):
-        return self._point.tolist()
-    
-    
 
 class Plane(object):
     """

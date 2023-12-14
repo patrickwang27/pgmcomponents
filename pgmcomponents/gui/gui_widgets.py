@@ -711,7 +711,7 @@ class Topview_Widget(object):
         ax = fig.add_subplot(111)
 
         self.pgm.draw_topview(ax)
-
+        ax.grid(which='both', alpha=0.6, linewidth=0.8)
         draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
         ax.set_xlabel('z (mm)')
         ax.set_ylabel('x (mm)')
