@@ -699,26 +699,19 @@ class Topview_Widget(object):
     
     @property
     def frame(self):
-        return sg.Frame(title='Footprint View', layout=[[self.canvas], [self.control_canvas]], element_justification='center')
+        return sg.Frame(title='Footprint View', layout=[[self.canvas]], element_justification='center')
     
 
     def make_canvas(self):
-        self.canvas = sg.Canvas(size = self.size, key = self.key, background_color='white')
-        self.control_canvas = sg.Canvas(key=f'{self.key}_control')
+        self.canvas = sg.Graph(canvas_size=self.size, 
+                               graph_bottom_left=self.pgm.mirror_corners()[0], 
+                               graph_top_right=self.pgm.mirror_corners()[1], 
+                               key=self.key, 
+                               background_color='white',
+                               right_click_menu=[[''],['Reset', 'Save As...']])
     
     def draw(self, window):
-        plt.figure(1)
-        plt.clf()
-        fig = plt.gcf()
-        DPI = fig.get_dpi()
-        fig.set_size_inches(self.size[0]/float(DPI), self.size[1]/float(DPI))
-        ax = fig.add_subplot(111)
-
-        self.pgm.draw_topview(ax)
-        ax.grid(which='both', alpha=0.6, linewidth=0.8)
-        draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
-        ax.set_xlabel('z (mm)')
-        ax.set_ylabel('x (mm)')
+        pass
 
 class Sideview_Widget(object):
 
@@ -763,83 +756,15 @@ class Sideview_Widget(object):
     
 
     def make_canvas(self):
-        self.canvas = sg.Canvas(size = self.size, key = self.key, background_color='white')
+        self.canvas = sg.Canvas(size = self.size, key = self.key, background_color='white', right_click_menu=[[''],['Reset', 'Save As...']])
         self.control_canvas = sg.Canvas(key=f'{self.key}_control')
     
 
-    def add_table(self):
-        columns = ("Parameter", "Value")
-        parameters = ["Order", 
-                    "LD (l/mm)",
-                    "Energy (eV)",
-                    "$c_{ff}$",
-                    "$b$ (mm)",
-                    "$a$ (mm)",
-                    "$c$ (mm)",
-                    "$h$ (mm)",
-                    "$v$ (mm)",
-                    r"$\alpha$ ($^\circ$)",
-                    r"$\beta$ ($^\circ$)",
-                    r"$\theta$ ($^\circ$)"]
-        values = [self.pgm.grating.order,
-                  self.pgm.grating.line_density,
-                  self.pgm.energy,
-                  self.pgm.grating.cff,
-                  self.pgm.beam_offset,
-                  self.pgm.mirror.hoffset,
-                  self.pgm.mirror.voffset,
-                  self.pgm.mirror.axis_hoffset,
-                  self.pgm.mirror.axis_voffset,
-                  self.pgm.grating.alpha,
-                  self.pgm.grating.beta,
-                  self.pgm.mirror.theta]
-        data = [(param, round(val, ndigits=3)) for param, val in zip(parameters, values)]
-        table = plt.table(cellText=data, colLabels=columns, loc='right', colWidths=(0.1,0.1),fontsize=11)
-        plt.subplots_adjust(right=0.7)
-        return table
+    
 
     def draw(self, window):
-        plt.figure(2)
-        plt.clf()
-        fig = plt.gcf()
-        DPI = fig.get_dpi()
-        fig.set_size_inches(self.size[0]/float(DPI), self.size[1]/float(DPI))
-        ax = fig.add_subplot(111)
-        ax.set_aspect('equal')
-        self.pgm.draw_sideview(ax)
-        y_low = self.pgm.grating.corners[0][1] - 30
-        y_high = self.pgm.grating.corners[5][1] + 10
-        x_low = self.pgm.grating.corners[0][2] - 75
-        x_high = self.pgm.grating.dimensions[0] + 50
-        ax.set_xlim(x_low, x_high)
-        ax.set_ylim(y_low, y_high)
-        xlim = ax.get_xlim()
-        ylim = ax.get_ylim()
-        ax.set_xticks(np.arange(xlim[0], xlim[1], 10), minor=True)
-        ax.set_yticks(np.arange(round(ylim[0]), ylim[1], 10))
-        ax.grid(which='both', alpha=0.6, linewidth=0.8)
-        #ax.annotate(fr'$\alpha ={self.pgm.grating.alpha:.3f}^\circ$', (xlim[1]-45, ylim[1]-10))
-        #ax.annotate(fr'$\beta ={self.pgm.grating.beta:.3f}^\circ$', (xlim[1]-45, ylim[1]-15))
-        #ax.annotate(fr'$\theta ={self.pgm.mirror.theta:.3f}^\circ$', (xlim[1]-45, ylim[1]-20))
-
-        # some calculations repeated, like xlim[1] - 90. Assign to variable to avoid recalculating.
-        #ax.annotate(fr'$b = {np.abs(self.pgm.beam_offset)}$ mm', (xlim[1]-90, ylim[1]-10))
-        #ax.annotate(fr'$a = {self.pgm.mirror.hoffset}$ mm', (xlim[1]-90, ylim[1]-15))
-        #ax.annotate(fr'$c = {self.pgm.mirror.voffset}$ mm', (xlim[1]-90, ylim[1]-20))
-        #ax.annotate(fr'$h = {self.pgm.mirror.axis_hoffset}$ mm', (xlim[1]-90, ylim[1]-25))
-        #ax.annotate(fr'$v = {self.pgm.mirror.axis_voffset}$ mm', (xlim[1]-90, ylim[1]-30))
-
-        #ax.annotate(fr'Order = {self.pgm.grating.order}', (xlim[0]+5, ylim[1]-10))
-        #ax.annotate(fr'Line Density = {self.pgm.grating.line_density} l/mm', (xlim[0]+5, ylim[1]-15))
-        #ax.annotate(fr'Energy = {self.pgm.energy} eV', (xlim[0]+5, ylim[1]-20))
-        #ax.annotate(fr'$c_{{ff}} = {self.pgm.grating.cff:.3}$', (xlim[0]+5, ylim[1]-25))
-        draw_figure_w_toolbar(window[f'{self.key}'].TKCanvas, fig, window[f'{self.key}_control'].TKCanvas)
-        ax.set_xlabel('z (mm)')
-        ax.set_ylabel('y (mm)')
-        table = self.add_table()
-        table.scale(1, 1.43)
-        table.auto_set_font_size(False)
-        table.set_fontsize(10)
+        pass
+        
 def main():
     beam = Beam_Config()
     mirror = Plane_Mirror.mirror_from_file('config_pgm.ini')
@@ -1037,6 +962,66 @@ def initial_draw(window: sg.Window,
     topview_widget.draw(window)
     sideview_widget.draw(window)
     return
+
+def maketable(pgm: PGM)-> sg.Table:
+    """
+    Returns a PySimpleGUI table for the PGM parameters.
+
+    Parameters
+    ----------
+    pgm : PGM
+        The PGM object.
+
+    Returns
+    -------
+    table : PySimpleGUI.Table
+        The table.
+    """
+    columns = ("Parameter", "Value")
+    parameters = ["Order", 
+                "LD (l/mm)",
+                "Energy (eV)",
+                "Cff$",
+                "b (mm)",
+                "a (mm)",
+                "c (mm)",
+                "h (mm)",
+                "v (mm)",
+                "alpha (deg)",
+                "beta(deg)",
+                "theta (deg)"]
+    values = [pgm.grating.order,
+              pgm.grating.line_density,
+              pgm.energy,
+              pgm.grating.cff,
+              pgm.beam_offset,
+              pgm.mirror.hoffset,
+              pgm.mirror.voffset,
+              pgm.mirror.axis_hoffset,
+              pgm.mirror.axis_voffset,
+              pgm.grating.alpha,
+              pgm.grating.beta,
+              pgm.mirror.theta]
+    data = [(param, round(val, ndigits=3)) for param, val in zip(parameters, values)]
+    table = sg.Table(values=data, headings=columns, auto_size_columns=False, justification='left', num_rows=12, key='-TABLE-')
+    return table
+
+class ParamTable():
+    """
+    A class to provide a table of PGM parameters.
+    """
+    def __init__(self, pgm: PGM, key: str):
+        self.pgm = pgm
+        self.key = key
+        self.table = maketable(self.pgm)
+        self.frame = sg.Frame(title='PGM Parameters', layout=[[self.table]])
+    
+    def update(self, window: sg.Window)-> None:
+        """ 
+        Update the table.
+        """
+        self.table.update(values=maketable(self.pgm).Values)
+        return
 
 
 

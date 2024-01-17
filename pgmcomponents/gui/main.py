@@ -68,7 +68,7 @@ def main():
     config_frame = sg.Frame('Config', [[
         sg.Button('Beam'), sg.Button('Mirror'), sg.Button('Grating')
     ]])
-
+    table = ParamTable(pgm, "-TABLE-")
 
     layout = [[
         [sg.Menu(menu)],
@@ -78,10 +78,10 @@ def main():
             [config_frame], [offsets_control.frame], [sg.B('Update')]
         ]), 
         sg.Column([
-            [topview_widget.frame],
+            [topview_widget.frame]
         ])
         ],
-        [sideview_widget.frame]
+        [sideview_widget.frame, table.frame]
     ]]
     print(Fore.GREEN, "Widgets initialised!", Fore.RESET)
     print(Fore.CYAN, "Initialising window...", Fore.RESET)
@@ -111,15 +111,17 @@ def main():
         '-ENERGY-_up', '-ENERGY-_down', '-CFF-_up', '-CFF-_down', '-ORDER-_up', '-ORDER-_down', '-LINE_DENSITY-_up', '-LINE_DENSITY-_down', '-OFFSETS-_beam_vertical', '-OFFSETS-_mirror_vertical', '-OFFSETS-_mirror_axis_vertical', '-OFFSETS-_calculate',
         "Return:36", "KP_Enter:104"
     ]
+    
     while True:
         event, values = window.read()
         print(Fore.LIGHTYELLOW_EX, 'Event:',Fore.RESET, event)
         if event in update_events:
-
             update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
-        
+            table.update(window)
+
         if window.find_element_with_focus() is None:
             pass
+
         else:
             window.find_element_with_focus().set_focus(force=True)
 
@@ -138,6 +140,7 @@ def main():
             down_events[event].down(window, values, pgm)
 
         if event == 'Update':
+            table.update(window)
             update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
 
 
