@@ -981,7 +981,7 @@ def maketable(pgm: PGM)-> sg.Table:
     parameters = ["Order", 
                 "LD (l/mm)",
                 "Energy (eV)",
-                "Cff$",
+                "Cff",
                 "b (mm)",
                 "a (mm)",
                 "c (mm)",
