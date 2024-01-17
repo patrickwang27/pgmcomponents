@@ -4,27 +4,20 @@ Main program for PGM simulation GUI.
 
 Author: Patrick Wang, 2023
 Email: patrick.wang@diamond.ac.uk
-Version = 0.2.2
+Version = 0.4.1
 
 """
 
 import PySimpleGUI as sg
 from PySimpleGUI.PySimpleGUI import _upgrade_gui as upgrade
-# init not used
-from colorama import init, Fore
+from colorama import Fore
 import numpy as np
 import dill as pickle
 
-# plt not used
 import matplotlib.pyplot as plt
-# FigureCanvasTkAgg, NavigationToolbar2Tk not used
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-# best to explicitly import what you want, otherwise more difficult to follow
 from pgmcomponents.elements import *
 from pgmcomponents.geometry import *
 from pgmcomponents.gui import *
-# os not used
-import os
 
 
 # main function is more of a long script. Better to break down into smaller chunks of code in methods

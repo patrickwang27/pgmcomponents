@@ -6,30 +6,19 @@ Provides a set of widgets for use in the GUI.
 Author: Patrick Wang
 Email: patrick.wang@diamond.ac.uk
 Date: 2023-10-05
-Version = 0.2.2
+Version = 0.4.1
 
 """
 from __future__ import annotations
-# back not used
-from turtle import back
 import numpy as np
 import PySimpleGUI as sg
-# v not used
-from pyrsistent import v
-# calc_source_div and calc_source_size not used
-from pgmcomponents.geometry import calc_beam_size, calc_source_div, calc_source_size
+from pgmcomponents.geometry import calc_beam_size
 import traceback
 import matplotlib.pyplot as plt
-# Toolbar not used
-from pgmcomponents.gui.mplwidgets import draw_figure_w_toolbar, Toolbar
-# colorama import not used
+from pgmcomponents.gui.mplwidgets import draw_figure_w_toolbar
 from colorama import Fore, Back, Style, init
-# sleep not used
-from time import sleep
-# Better to explicitly import
 from pgmcomponents.elements import *
-# inspect not used
-import inspect
+
  
 
 class EPICScontrol(object):
@@ -152,6 +141,21 @@ class EPICScontrol(object):
 
                 except Exception as e:
                     sg.Popup('Order should be type int', e)
+                
+            elif self.key == "-CFF-":
+                print('1st loop')
+                test_update = round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3)
+                if test_update <= 1:
+                    print("Is condition triggered?")
+                    sg.Popup('Cff cannot be less than 1')
+                    return
+                else:
+                    updated = round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3)
+                    values[self.key] = updated
+                    window[self.key].update(value=updated)
+                    window.write_event_value('Update', values)
+                    setattr(pgm, self.properties[self.key], updated)
+
 
             else:
                 updated = round(float(window[self.key].get()) - float(window[f"{self.key}_inc"].get()), ndigits=3)
