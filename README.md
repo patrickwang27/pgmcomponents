@@ -1,30 +1,14 @@
-# PGM-Components Package
-[![Documentation Status](https://readthedocs.org/projects/pgmcomponents/badge/?version=latest)](https://pgmcomponents.readthedocs.io/en/latest/?badge=latest)
-[![Static Badge](https://img.shields.io/badge/unstable-v0.3-blue?labelColor=red&color=blue)](https://github.com/patrickwang27/pgmcomponents/releases)
+# pgmcomponents canvas branch
+
+This is the development branch for switching visualisation to using tkcanvas in lieu of matplotlib.
+Matplotlib suffers from performance issues when modifying parameters quickly which leads to a jarring
+user experience.
+
+## Roadmap/To-do:
+
+- Modify current visualisation widget classes to create a pysimplegui.graph instance 
+- Design how axes and axis labels are best presented
+- Modifying methods for drawing beam footprints in the new reference frame.
 
 
-The pgm-components package provides the class PGM for use in simple ray tracing calculations.
-
-The package also contains a linear algebra library for simple manipulation of 3D geometrical objects. These are provided by the pgmcomponents.geometry library.
-
-
-Picture of a setup is shown below:
-
-![Simple pgm diagram](gui.png "PGM-Components Demo")
-
-## Installation Instructions
-
-To install, download the latest [release](https://github.com/patrickwang27/pgmcomponents/releases) and run the following command in the directory containing setup.py:
-
-```bash
-pip install pgmcomponents-some-version.tar.gz
-```
-To run the GUI:
-```bash
-python -m pgmcomponents.gui.main
-```
-or
-```bash
-pgm-gui
-```
 
