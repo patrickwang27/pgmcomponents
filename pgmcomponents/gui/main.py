@@ -68,7 +68,7 @@ def main():
     config_frame = sg.Frame('Config', [[
         sg.Button('Beam'), sg.Button('Mirror'), sg.Button('Grating')
     ]])
-
+    zoomcontrol = ZoomControl(sideview_widget)
 
     layout = [[
         [sg.Menu(menu)],
@@ -78,7 +78,7 @@ def main():
             [config_frame], [offsets_control.frame], [sg.B('Update')]
         ]), 
         sg.Column([
-            [topview_widget.frame],
+            [topview_widget.frame]
         ])
         ],
         [sideview_widget.frame]
@@ -105,6 +105,8 @@ def main():
     #topview_widget.draw(window)
     #sideview_widget.draw(window)
     pgm.generate_rays()
+    
+
     initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control)
     print("Initialisation complete!")
     update_events = [
