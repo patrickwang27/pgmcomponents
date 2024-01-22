@@ -439,6 +439,101 @@ class PGM(object):
         ax.axhline(y=0, color='black', linestyle='--', linewidth=1.3)
         ax.axvline(x=0, color='black', linestyle='--', linewidth=1.3)
         
+    def draw_topview(self, ax: Axes)-> None:
+        """
+        Draws the top-view (x-z projection) of the setup on the current
+        axes.
+
+        """
+
+        m_corners = self.mirror_corners()
+        g_corners = self.grating_corners()
+        m_corners = np.array(m_corners)
+        # use your _width and _length setters
+        
+        self.generate_rays()
+        
+        # _, mirror_intercept, grating_intercept
+        grating_corners = np.array(self.grating_corners())
+        mirror_corners = np.array(self.mirror_corners())
+        grating_ray, mirror_int_1, grating_int_1 =  self.propagate(self.rays[1])
+        grating_ray, mirror_int_2, grating_int_2 =  self.propagate(self.rays[2])
+        grating_ray, mirror_int_3, grating_int_3 =  self.propagate(self.rays[3])
+        grating_ray, mirror_int_4, grating_int_4 =  self.propagate(self.rays[4])
+
+        mirror_intercepts = [
+            mirror_int_1[0].to_point(),
+            mirror_int_2[0].to_point(),
+            mirror_int_3[0].to_point(),
+            mirror_int_4[0].to_point()
+        ]
+
+        grating_intercepts = [
+            grating_int_1[0].to_point(),
+            grating_int_2[0].to_point(),
+            grating_int_3[0].to_point(),
+            grating_int_4[0].to_point()
+        ]
+
+        mirror_footprint_width, mirror_footprint_height = self.calc_footprint_size(mirror_intercepts)
+        grating_footprint_width, grating_footprint_height = self.calc_footprint_size(grating_intercepts)
+        print("Mirror footprint width:", mirror_footprint_width)
+        print("Mirror footprint height:", mirror_footprint_height)
+        print("Grating footprint width:", grating_footprint_width)
+        print("Grating footprint height:", grating_footprint_height)
+
+        mirr_footprint_corners = np.array([
+            [mirror_int_2[0].z, mirror_int_3[0].x],
+            [mirror_int_1[0].z, mirror_int_3[0].x],
+            [mirror_int_1[0].z, mirror_int_4[0].x],
+            [mirror_int_2[0].z, mirror_int_4[0].x]
+        ])
+
+        grating_footprint_corners = np.array([
+            [grating_int_2[0].z, grating_int_3[0].x],
+            [grating_int_1[0].z, grating_int_3[0].x],
+            [grating_int_1[0].z, grating_int_4[0].x],
+            [grating_int_2[0].z, grating_int_4[0].x]
+        ])
+
+        offset = 0.5*(self.mirror._width() + self.grating._width())* np.array([
+            [0,1],
+            [0,1],
+            [0,1],
+            [0,1]
+        ])
+
+        grating_corners = grating_corners + offset
+        grating_footprint_corners = grating_footprint_corners + offset
+
+        ax.fill(mirror_corners[:,0], mirror_corners[:,1], 'r',alpha=1, label='Mirror')
+        ax.fill(grating_corners[:,0], grating_corners[:,1], 'b',alpha=0.5, label='Grating')
+        ax.fill(mirr_footprint_corners[:,0], mirr_footprint_corners[:,1], c='black')
+        ax.fill(grating_footprint_corners[:,0], grating_footprint_corners[:,1], c='green')
+        ax.grid(axis='both', which='both', alpha = 0.5)
+        ax.set_xticks(np.arange(-1000, 1000, 10), minor=True)
+        ax.set_xticks(np.arange(-1000, 1000, 100), minor=False)
+        ax.set_yticks(np.arange(-1000, 1000, 10), minor=True)
+        ax.set_xlim(min(mirror_corners[:,0]), max(grating_corners[:,0]))
+        ax.set_ylim(min(mirror_corners[:,1]), max(grating_corners[:,1]))
+        #ax.fill(mirror_rect_borders[:,0], mirror_rect_borders[:,1], 'r',alpha=0.5)
+        #ax.fill(m_corners[:,] , 'r',alpha=1)
+        #x.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
+        #ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5, label='Grating')
+        
+        
+        #ax.fill([mirror_blz, mirror_blz + mirror_l, mirror_blz + mirror_l, mirror_blz], [mirror_blx, mirror_blx, mirror_blx + mirror_w, mirror_blx + mirror_w], 'g', alpha=0.5, label='Beam Footprint')
+        #ax.fill([grating_blz, grating_blz + grating_l, grating_blz + grating_l, grating_blz], [grating_blx, grating_blx, grating_blx + grating_w, grating_blx + grating_w], 'g', alpha=0.5)
+        legend_entries = [
+            Patch(facecolor=(1,0,0,1), edgecolor=(1,0,0,0.3), label='Mirror'),
+            Patch(facecolor=(0,0,1,1), edgecolor=(0,0,1,0.3), label='Grating'),
+            Patch(facecolor=(0,0,0,1), edgecolor=(0,1,0,0.3), label=rf'Beam Footprint (Mirror): {mirror_footprint_width:.2f} mm x {mirror_footprint_height:.2f} mm'),
+            Patch(facecolor=(0,1,0,1), edgecolor=(0,1,0,0.3), label=rf'Beam Footprint (Grating): {grating_footprint_width:.2f} mm x {grating_footprint_height:.2f} mm')
+
+        ]
+
+        ax.legend(handles=legend_entries, loc = 'upper left', fontsize=12, fancybox=True, shadow=True)
+
 
     def topview_trace(self)-> None:
         """
