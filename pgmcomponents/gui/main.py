@@ -67,22 +67,25 @@ def main():
 
     config_frame = sg.Frame('Config', [[
         sg.Button('Beam'), sg.Button('Mirror'), sg.Button('Grating')
-    ]])
+    ]], expand_x=True)
     table = ParamTable(pgm, "-TABLE-")
+    zoom_config = ZoomWidget(pgm, "ZOOM")
 
     layout = [[
         [sg.Menu(menu)],
         [sg.Column([
             [energy_control.frame, order_control.frame],
             [cff_control.frame, line_density_control.frame],
-            [config_frame], [offsets_control.frame], [sg.B('Update')]
+            [config_frame], [offsets_control.frame, table.frame], [zoom_config.frame],[sg.B('Update')]
         ]), 
         sg.Column([
             [topview_widget.frame]
         ])
         ],
-        [sideview_widget.frame, table.frame]
-    ]]
+        sg.Column([
+            [sideview_widget.frame]
+        ])
+        ]]
     print(Fore.GREEN, "Widgets initialised!", Fore.RESET)
     print(Fore.CYAN, "Initialising window...", Fore.RESET)
     window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resizable=True, return_keyboard_events=True)

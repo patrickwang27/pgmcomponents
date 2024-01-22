@@ -532,7 +532,19 @@ class PGM(object):
         return width, height
 
 
+    def centre_of_footprint(self):
+        """
+        Calculate the centre of the footprint of the beam on the grating or the mirror.
+        
+        Returns
+        -------
+        centre : Point3D
+            The centre of the footprint of the beam on the grating or the mirror
+        """
+        _, mirror_int_0, grating_int_0 =  self.propagate(self.rays[0])
 
+        return mirror_int_0, grating_int_0
+        
 
     def mirror_corners(self)-> tuple:
 
@@ -596,6 +608,35 @@ class PGM(object):
 
         return ((blbz, blbx), (brbz, brbx), (brfz, brfx), (blfz, blfx))
     
+    def corners(self)-> tuple[dict]:
+        """
+        Calculate the corners of the mirror and grating.
+        
+        Returns
+        -------
+        corners : dict
+            The corners of the grating and mirror in the following order:
+            bottom left back, bottom right back, bottom left front, bottom right front,
+            top left back, top right back, top left front, top right front
+        """
+        positions = [
+            "bottom left back",
+            "bottom right back",
+            "bottom left front",
+            "bottom right front",
+            "top left back",
+            "top right back",
+            "top left front",
+            "top right front"
+        ]
+        grating_corners = self.grating.compute_corners()
+        grating_corners_dict = dict(zip(positions, grating_corners))
+        mirror_corners = self.mirror.compute_corners()
+        mirror_corners_dict = dict(zip(positions, mirror_corners))
+
+        return grating_corners_dict, mirror_corners_dict
+            
+
     @staticmethod
     def undulator_size():
         pass
