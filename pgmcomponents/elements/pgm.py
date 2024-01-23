@@ -1,7 +1,7 @@
 from __future__ import annotations
 from matplotlib.axes import Axes
 import numpy as np
-from matplotlib.patches import Rectangle, Patch 
+from matplotlib.patches import Patch 
 import configparser
 from pgmcomponents.geometry import Point3D, Ray3D
 from scipy.spatial import ConvexHull
@@ -110,7 +110,7 @@ class PGM(object):
             mirror_args = [kwargs.get(x) for x in mirror_kwargs]
             mirror_kwargs = dict(zip(mirror_kwarg_keys, mirror_args))
             self._mirror = Plane_Mirror(**mirror_kwargs)
-        
+            
         else:
             self._mirror = mirror
 
