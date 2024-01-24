@@ -50,7 +50,7 @@ def make_pgm(grating_params, mirror_params):
 
     return pgm
 
-def shadow_dict(pgm):
+def shadow_dict(pgm: PGM)-> dict:
     """
     Create a dictionary of parameters for the PGM object.
 
@@ -97,7 +97,7 @@ def shadow_dict(pgm):
 
     return pgm_dict
 
-def config_oe(pgm, grating_oe:OE, mirror_oe:OE)-> None:
+def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE)-> None:
     """
     Configures the given OEs appropriately 
     for the given PGM object.
