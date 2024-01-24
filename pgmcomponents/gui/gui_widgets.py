@@ -71,7 +71,7 @@ class EPICScontrol(object):
                               [sg.Push(), sg.Input(default_text=increments, key=f"{key}_inc", size=(8,1),justification='center'), sg.Push()]]),
                               sg.Button(button_text='+',font=('Arial', 16),image_data=button_image, image_size=(20,30), auto_size_button=False,key=f"{key}_up")],
                 ]
-        self.frame = sg.Frame(title=name, layout=layout)
+        self.frame = sg.Frame(title=name, layout=layout, expand_x=True, expand_y=True)
 
         # don't need return
         return
@@ -606,7 +606,7 @@ class OffsetsControl(object):
             [sg.Text('Mirror Axis Horizontal Offset (h):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_horizontal', size=(8,1), default_text=values['mirror_axis_hoffset'], readonly=False)],
             [sg.Text('Mirror Axis Vertical Offset (v):'), sg.Push(), sg.Input(key=f'{key}_mirror_axis_vertical', size=(8,1), default_text=values['mirror_axis_voffset'], readonly=True)],
             ]
-        self.frame = sg.Frame(title='Offsets', layout=layout)
+        self.frame = sg.Frame(title='Offsets', layout=layout, expand_x=True, expand_y=True)
         self._calculate = True
     
     def updatepgm(self, window, pgm):
@@ -1006,14 +1006,22 @@ def maketable(pgm: PGM)-> sg.Table:
     table = sg.Table(values=data, headings=columns, auto_size_columns=False, justification='left', num_rows=12, key='-TABLE-')
     return table
 
-class ZoomControl(object):
-    """
-    A class to supply the zoom control widget.
-    """
 
-    def __init__(self, sideview: Sideview_Widget)-> None:
-        self.sideview = sideview
-        self.frame = sg.Frame(title='Side View Zoom Control', layout=[[sg.Column([sg.Text("z min"), sg.Text("z max"), sg.Text("x min"), sg.Text("x max")])], [sg.Column([sg.Input(key="zmin"), sg.Input(key="zmax"), sg.Input(key="xmin"), sg.Input(key="xmax")])]])
+class ParamTable():
+    """
+    A class to provide a table of PGM parameters.
+    """
+    def __init__(self, pgm: PGM, key: str):
+        self.pgm = pgm
+        self.key = key
+        self.table = maketable(self.pgm)
+        self.frame = sg.Frame(title='PGM Parameters', layout=[[self.table]])
+    
+    def update(self, window: sg.Window)-> None:
+        """ 
+        Update the table.
+        """
+        self.table.update(values=maketable(self.pgm).Values)
         return
 
 class ParamTable():
@@ -1034,6 +1042,21 @@ class ParamTable():
         return
 
 
+class ZoomWidget(object):
+    """
+    A class to provide a widget to configure
+    plotting ranges.
+    """
+
+    def __init__(self, pgm: PGM, key: str)-> None:
+        self.pgm = pgm
+        self.key = key
+        layout = [[sg.Text("z min"),sg.Input(key="-ZMIN-", size=(8,8)),
+                  sg.Text("z max"),sg.Input(key="-ZMAX-", size=(8,8)),
+                  sg.Text("x min"),sg.Input(key="-XMIN-", size=(8,8)),
+                  sg.Text("x max"),sg.Input(key="-XMAX-", size=(8,8))]]
+        self.frame = sg.Frame(layout=layout, title='Zoom', expand_x=True)
+    
 
 
 if __name__ == "__main__":

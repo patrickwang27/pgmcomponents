@@ -67,22 +67,26 @@ def main():
 
     config_frame = sg.Frame('Config', [[
         sg.Button('Beam'), sg.Button('Mirror'), sg.Button('Grating')
-    ]])
-    zoomcontrol = ZoomControl(sideview_widget)
+    ]], expand_x=True)
+    table = ParamTable(pgm, "-TABLE-")
+    zoom_config = ZoomWidget(pgm, "ZOOM")
+
 
     layout = [[
         [sg.Menu(menu)],
         [sg.Column([
             [energy_control.frame, order_control.frame],
             [cff_control.frame, line_density_control.frame],
-            [config_frame], [offsets_control.frame], [sg.B('Update')]
+            [config_frame], [offsets_control.frame, table.frame], [zoom_config.frame],[sg.B('Update')]
         ]), 
         sg.Column([
             [topview_widget.frame]
         ])
         ],
-        [sideview_widget.frame]
-    ]]
+        sg.Column([
+            [sideview_widget.frame]
+        ])
+        ]]
     print(Fore.GREEN, "Widgets initialised!", Fore.RESET)
     print(Fore.CYAN, "Initialising window...", Fore.RESET)
     window = sg.Window('PGM Simulation', layout, finalize=True,icon='icon.png', resizable=True, return_keyboard_events=True)
@@ -113,15 +117,17 @@ def main():
         '-ENERGY-_up', '-ENERGY-_down', '-CFF-_up', '-CFF-_down', '-ORDER-_up', '-ORDER-_down', '-LINE_DENSITY-_up', '-LINE_DENSITY-_down', '-OFFSETS-_beam_vertical', '-OFFSETS-_mirror_vertical', '-OFFSETS-_mirror_axis_vertical', '-OFFSETS-_calculate',
         "Return:36", "KP_Enter:104"
     ]
+    
     while True:
         event, values = window.read()
         print(Fore.LIGHTYELLOW_EX, 'Event:',Fore.RESET, event)
         if event in update_events:
-
             update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
-        
+            table.update(window)
+
         if window.find_element_with_focus() is None:
             pass
+
         else:
             window.find_element_with_focus().set_focus(force=True)
 
@@ -140,6 +146,7 @@ def main():
             down_events[event].down(window, values, pgm)
 
         if event == 'Update':
+            table.update(window)
             update_and_draw(window, pgm, values, topview_widget, sideview_widget, energy_control, cff_control, order_control, line_density_control, offsets_control)
 
 

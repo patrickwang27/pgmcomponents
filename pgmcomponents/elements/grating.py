@@ -95,7 +95,7 @@ class Grating(object):
                  energy=250, 
                  cff=2, 
                  order=1, 
-                 dimensions = np.array([1,1,1]), 
+                 dimensions = np.array([150,40,50]), 
                  borders = np.array([0,0,0,0])):
 
         self._line_density=line_density

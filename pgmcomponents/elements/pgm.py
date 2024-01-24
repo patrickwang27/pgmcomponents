@@ -1,7 +1,7 @@
 from __future__ import annotations
 from matplotlib.axes import Axes
 import numpy as np
-from matplotlib.patches import Rectangle, Patch 
+from matplotlib.patches import Patch 
 import configparser
 from pgmcomponents.geometry import Point3D, Ray3D
 from scipy.spatial import ConvexHull
@@ -110,7 +110,7 @@ class PGM(object):
             mirror_args = [kwargs.get(x) for x in mirror_kwargs]
             mirror_kwargs = dict(zip(mirror_kwarg_keys, mirror_args))
             self._mirror = Plane_Mirror(**mirror_kwargs)
-        
+            
         else:
             self._mirror = mirror
 
@@ -439,7 +439,6 @@ class PGM(object):
         ax.axhline(y=0, color='black', linestyle='--', linewidth=1.3)
         ax.axvline(x=0, color='black', linestyle='--', linewidth=1.3)
         
-
     def draw_topview(self, ax: Axes)-> None:
         """
         Draws the top-view (x-z projection) of the setup on the current
@@ -535,6 +534,71 @@ class PGM(object):
 
         ax.legend(handles=legend_entries, loc = 'upper left', fontsize=12, fancybox=True, shadow=True)
 
+
+    def topview_trace(self)-> None:
+        """
+        Draws the top-view (x-z projection) of the setup on the current
+        axes.
+
+        """
+
+        m_corners = self.mirror_corners()
+        g_corners = self.grating_corners()
+        m_corners = np.array(m_corners)
+        # use your _width and _length setters
+        
+        self.generate_rays()
+        
+        # _, mirror_intercept, grating_intercept
+        grating_corners = np.array(self.grating_corners())
+        mirror_corners = np.array(self.mirror_corners())
+        grating_ray, mirror_int_1, grating_int_1 =  self.propagate(self.rays[1])
+        grating_ray, mirror_int_2, grating_int_2 =  self.propagate(self.rays[2])
+        grating_ray, mirror_int_3, grating_int_3 =  self.propagate(self.rays[3])
+        grating_ray, mirror_int_4, grating_int_4 =  self.propagate(self.rays[4])
+
+        mirror_intercepts = [
+            mirror_int_1[0].to_point(),
+            mirror_int_2[0].to_point(),
+            mirror_int_3[0].to_point(),
+            mirror_int_4[0].to_point()
+        ]
+
+        grating_intercepts = [
+            grating_int_1[0].to_point(),
+            grating_int_2[0].to_point(),
+            grating_int_3[0].to_point(),
+            grating_int_4[0].to_point()
+        ]
+
+        mirror_footprint_width, mirror_footprint_height = self.calc_footprint_size(mirror_intercepts)
+        grating_footprint_width, grating_footprint_height = self.calc_footprint_size(grating_intercepts)
+
+        mirr_footprint_corners = np.array([
+            [mirror_int_2[0].z, mirror_int_3[0].x],
+            [mirror_int_1[0].z, mirror_int_3[0].x],
+            [mirror_int_1[0].z, mirror_int_4[0].x],
+            [mirror_int_2[0].z, mirror_int_4[0].x]
+        ])
+
+        grating_footprint_corners = np.array([
+            [grating_int_2[0].z, grating_int_3[0].x],
+            [grating_int_1[0].z, grating_int_3[0].x],
+            [grating_int_1[0].z, grating_int_4[0].x],
+            [grating_int_2[0].z, grating_int_4[0].x]
+        ])
+
+        offset = 0.5*(self.mirror._width() + self.grating._width())* np.array([
+            [0,1],
+            [0,1],
+            [0,1],
+            [0,1]
+        ])
+
+        grating_corners = grating_corners + offset
+        grating_footprint_corners = grating_footprint_corners + offset
+
+        return mirror_intercepts, grating_intercepts
         
 
     def calc_footprint_size(self, intercepts: list[Point3D])-> tuple:
@@ -563,7 +627,19 @@ class PGM(object):
         return width, height
 
 
+    def centre_of_footprint(self):
+        """
+        Calculate the centre of the footprint of the beam on the grating or the mirror.
+        
+        Returns
+        -------
+        centre : Point3D
+            The centre of the footprint of the beam on the grating or the mirror
+        """
+        _, mirror_int_0, grating_int_0 =  self.propagate(self.rays[0])
 
+        return mirror_int_0, grating_int_0
+        
 
     def mirror_corners(self)-> tuple:
 
@@ -627,6 +703,35 @@ class PGM(object):
 
         return ((blbz, blbx), (brbz, brbx), (brfz, brfx), (blfz, blfx))
     
+    def corners(self)-> tuple[dict]:
+        """
+        Calculate the corners of the mirror and grating.
+        
+        Returns
+        -------
+        corners : dict
+            The corners of the grating and mirror in the following order:
+            bottom left back, bottom right back, bottom left front, bottom right front,
+            top left back, top right back, top left front, top right front
+        """
+        positions = [
+            "bottom left back",
+            "bottom right back",
+            "bottom left front",
+            "bottom right front",
+            "top left back",
+            "top right back",
+            "top left front",
+            "top right front"
+        ]
+        grating_corners = self.grating.compute_corners()
+        grating_corners_dict = dict(zip(positions, grating_corners))
+        mirror_corners = self.mirror.compute_corners()
+        mirror_corners_dict = dict(zip(positions, mirror_corners))
+
+        return grating_corners_dict, mirror_corners_dict
+            
+
     @staticmethod
     def undulator_size():
         pass
