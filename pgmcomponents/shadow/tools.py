@@ -1,5 +1,7 @@
 from pgmcomponents.elements import *
 from pgmcomponents.geometry import *
+from Shadow import OE
+from colorama import Fore
 
 def make_pgm(grating_params, mirror_params):
     """
@@ -94,3 +96,44 @@ def shadow_dict(pgm):
     pgm_dict = dict(zip(keys, values))
 
     return pgm_dict
+
+def config_oe(pgm, grating_oe:OE, mirror_oe:OE)-> None:
+    """
+    Configures the given OEs appropriately 
+    for the given PGM object.
+
+    Parameters
+    ----------
+    pgm : PGM
+        The PGM object.
+    grating_oe : OE
+        The grating OE.
+    mirror_oe : OE
+        The mirror OE.
+    
+    Returns
+    -------
+    None
+    """
+
+    mirror_offsets, grating_offsets = pgm.centre_of_footprint()
+
+    print(Fore.YELLOW + f"Initialising grating, \n alpha= {pgm.grating.alpha}, \n beta= {pgm.grating.beta}, \n offset = {grating_offsets.z} mm, \n line_density= {pgm.grating.line_density}"+ Fore.RESET)
+    grating_oe.T_INCIDENCE = pgm.grating.alpha
+    grating_oe.T_REFLECTION = pgm.grating.beta
+    grating_oe.RULING = pgm.grating.line_density
+    grating_oe.F_MOVE = 1
+    grating_oe.OFFY = grating_offsets[2]
+    print(Fore.GREEN + "Grating initialised"+ Fore.RESET)
+
+    print(Fore.YELLOW + f"Initialising mirror, \n theta = {pgm.theta} \n offset = {mirror_offsets.z} mm"+ Fore.RESET)
+    
+    mirror_oe.T_INCIDENCE = pgm.theta
+    mirror_oe.T_REFLECTION = pgm.theta
+    mirror_oe.F_MOVE = 1
+    mirror_oe.OFFY = mirror_offsets[2]
+    print(Fore.GREEN + "Mirror initialised"+ Fore.RESET)
+
+    print(Fore.GREEN + "Initialisation complete"+ Fore.RESET)
+
+    return None
