@@ -1006,6 +1006,24 @@ def maketable(pgm: PGM)-> sg.Table:
     table = sg.Table(values=data, headings=columns, auto_size_columns=False, justification='left', num_rows=12, key='-TABLE-')
     return table
 
+
+class ParamTable():
+    """
+    A class to provide a table of PGM parameters.
+    """
+    def __init__(self, pgm: PGM, key: str):
+        self.pgm = pgm
+        self.key = key
+        self.table = maketable(self.pgm)
+        self.frame = sg.Frame(title='PGM Parameters', layout=[[self.table]])
+    
+    def update(self, window: sg.Window)-> None:
+        """ 
+        Update the table.
+        """
+        self.table.update(values=maketable(self.pgm).Values)
+        return
+
 class ParamTable():
     """
     A class to provide a table of PGM parameters.

@@ -71,6 +71,7 @@ def main():
     table = ParamTable(pgm, "-TABLE-")
     zoom_config = ZoomWidget(pgm, "ZOOM")
 
+
     layout = [[
         [sg.Menu(menu)],
         [sg.Column([
@@ -108,6 +109,8 @@ def main():
     #topview_widget.draw(window)
     #sideview_widget.draw(window)
     pgm.generate_rays()
+    
+
     initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control)
     print("Initialisation complete!")
     update_events = [
