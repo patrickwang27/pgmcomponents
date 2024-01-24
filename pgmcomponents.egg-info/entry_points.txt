@@ -1,2 +1,0 @@
-[console_scripts]
-pgm-gui = pgmcomponents.gui.main:main
