@@ -116,10 +116,10 @@ class PGM(object):
 
         
         self._rays = []
-        self._beam_offset = 0 
-        self._beam_width = 0
-        self._beam_height = 0
-        self._energy = 250
+        self._beam_offset = 13
+        self._beam_width = 6.43
+        self._beam_height = 5
+        self._energy = 2400
 
     def __repr__(self):
         return """PGM(grating={}, \nmirror={}, \nb={},\nbeam_width={},\nbeam_height={})""".format(self.grating, 
@@ -520,8 +520,6 @@ class PGM(object):
         #ax.fill(m_corners[:,] , 'r',alpha=1)
         #x.fill(grating_rect_borders[:,0], grating_rect_borders[:,1], 'b',alpha=1)
         #ax.fill(grating_rect[:,0], grating_rect[:,1], 'b',alpha=0.5, label='Grating')
-        
-        
         #ax.fill([mirror_blz, mirror_blz + mirror_l, mirror_blz + mirror_l, mirror_blz], [mirror_blx, mirror_blx, mirror_blx + mirror_w, mirror_blx + mirror_w], 'g', alpha=0.5, label='Beam Footprint')
         #ax.fill([grating_blz, grating_blz + grating_l, grating_blz + grating_l, grating_blz], [grating_blx, grating_blx, grating_blx + grating_w, grating_blx + grating_w], 'g', alpha=0.5)
         legend_entries = [
@@ -640,6 +638,24 @@ class PGM(object):
 
         return mirror_int_0, grating_int_0
         
+    def find_offset(self):
+
+        mirror_int, grating_int = self.centre_of_footprint()
+        mirror_int = mirror_int[0]
+        grating_int = grating_int[0]
+        mirror_corners = self.mirror.compute_corners()
+        mirror_corners = np.array(mirror_corners)
+        print(mirror_corners)
+        centre_of_mirror_top = np.mean([mirror_corners[0], mirror_corners[1], mirror_corners[4], mirror_corners[5]], axis=0)
+        print([mirror_corners[0], mirror_corners[1], mirror_corners[4], mirror_corners[5]])
+        print(centre_of_mirror_top)
+        mirror_offset =  np.array([mirror_int.x, mirror_int.y, mirror_int.z]) - centre_of_mirror_top
+        print(mirror_offset)
+        mirror_offset = np.linalg.norm(mirror_offset) * mirror_offset[1]/np.abs(mirror_offset[1])
+
+        return mirror_offset
+        
+
 
     def mirror_corners(self)-> tuple:
 

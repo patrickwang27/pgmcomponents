@@ -92,10 +92,10 @@ class Grating(object):
     # Run a code formatter and linter to fix code style adn syntax errors. Black & Falke8 are good for this.
     def __init__(self, 
                  line_density=600, 
-                 energy=250, 
+                 energy=2400, 
                  cff=2, 
                  order=1, 
-                 dimensions = np.array([150,40,50]), 
+                 dimensions = np.array([200,40,50]), 
                  borders = np.array([0,0,0,0])):
 
         self._line_density=line_density

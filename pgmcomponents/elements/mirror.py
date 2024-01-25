@@ -92,9 +92,9 @@ class Plane_Mirror(object):
     """
 
     def __init__(self, 
-                 voffset=20, 
-                 hoffset=0, 
-                 axis_voffset=0, 
+                 voffset=13, 
+                 hoffset=40, 
+                 axis_voffset=6.5, 
                  axis_hoffset=0, 
                  dimensions = np.array([450, 70, 50]),
                  theta=45, 

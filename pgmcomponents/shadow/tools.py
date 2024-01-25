@@ -117,21 +117,26 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE)-> None:
     """
 
     mirror_offsets, grating_offsets = pgm.centre_of_footprint()
+    mirror_offsets = mirror_offsets[0]
+    grating_offsets = grating_offsets[0]
+    print(mirror_offsets, grating_offsets)
+    delta_y_mirror = np.sqrt(mirror_offsets[1]**2 + mirror_offsets[2]**2) * mirror_offsets[1]/np.abs(mirror_offsets[2])
+    delta_y_grating = np.sqrt(grating_offsets[1]**2 + grating_offsets[2]**2) * grating_offsets[1]/np.abs(grating_offsets[2])
 
-    print(Fore.YELLOW + f"Initialising grating, \n alpha= {pgm.grating.alpha}, \n beta= {pgm.grating.beta}, \n offset = {grating_offsets.z} mm, \n line_density= {pgm.grating.line_density}"+ Fore.RESET)
+    print(Fore.YELLOW + f"Initialising grating, \n alpha= {pgm.grating.alpha}, \n beta= {pgm.grating.beta}, \n offset = {delta_y_grating} mm, \n line_density= {pgm.grating.line_density}"+ Fore.RESET)
     grating_oe.T_INCIDENCE = pgm.grating.alpha
     grating_oe.T_REFLECTION = pgm.grating.beta
     grating_oe.RULING = pgm.grating.line_density
     grating_oe.F_MOVE = 1
-    grating_oe.OFFY = grating_offsets[2]
+    grating_oe.OFFY = delta_y_grating
     print(Fore.GREEN + "Grating initialised"+ Fore.RESET)
 
-    print(Fore.YELLOW + f"Initialising mirror, \n theta = {pgm.theta} \n offset = {mirror_offsets.z} mm"+ Fore.RESET)
+    print(Fore.YELLOW + f"Initialising mirror, \n theta = {pgm.theta} \n offset = {delta_y_mirror} mm"+ Fore.RESET)
     
     mirror_oe.T_INCIDENCE = pgm.theta
     mirror_oe.T_REFLECTION = pgm.theta
     mirror_oe.F_MOVE = 1
-    mirror_oe.OFFY = mirror_offsets[2]
+    mirror_oe.OFFY = delta_y_mirror
     print(Fore.GREEN + "Mirror initialised"+ Fore.RESET)
 
     print(Fore.GREEN + "Initialisation complete"+ Fore.RESET)
