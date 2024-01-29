@@ -449,17 +449,15 @@ class PGM(object):
         m_corners = self.mirror_corners()
         g_corners = self.grating_corners()
         m_corners = np.array(m_corners)
-        # use your _width and _length setters
         
         self.generate_rays()
         
-        # _, mirror_intercept, grating_intercept
         grating_corners = np.array(self.grating_corners())
         mirror_corners = np.array(self.mirror_corners())
-        grating_ray, mirror_int_1, grating_int_1 =  self.propagate(self.rays[1])
-        grating_ray, mirror_int_2, grating_int_2 =  self.propagate(self.rays[2])
-        grating_ray, mirror_int_3, grating_int_3 =  self.propagate(self.rays[3])
-        grating_ray, mirror_int_4, grating_int_4 =  self.propagate(self.rays[4])
+        _, mirror_int_1, grating_int_1 =  self.propagate(self.rays[1])
+        _, mirror_int_2, grating_int_2 =  self.propagate(self.rays[2])
+        _, mirror_int_3, grating_int_3 =  self.propagate(self.rays[3])
+        _, mirror_int_4, grating_int_4 =  self.propagate(self.rays[4])
 
         mirror_intercepts = [
             mirror_int_1[0].to_point(),
@@ -481,7 +479,7 @@ class PGM(object):
         print("Mirror footprint height:", mirror_footprint_height)
         print("Grating footprint width:", grating_footprint_width)
         print("Grating footprint height:", grating_footprint_height)
-
+        
         mirr_footprint_corners = np.array([
             [mirror_int_2[0].z, mirror_int_3[0].x],
             [mirror_int_1[0].z, mirror_int_3[0].x],
@@ -603,7 +601,7 @@ class PGM(object):
         """
         Calculate the size of the footprint of the beam on the grating or the mirror
         when given the intercepts of the beam with the grating or the mirror.
-        
+         
         
         Parameters
         ----------
@@ -654,7 +652,20 @@ class PGM(object):
         mirror_offset = np.linalg.norm(mirror_offset) * mirror_offset[1]/np.abs(mirror_offset[1])
 
         return mirror_offset
+    
+    def centre_of_mirror(self):
+        """
+        Calculate the centre of the mirror.
         
+        Returns
+        -------
+        centre : Point3D
+            The centre of the mirror
+        """
+        mirror_corners = self.mirror.compute_corners()
+        mirror_corners = np.array(mirror_corners)
+        centre_of_mirror = np.mean([mirror_corners[0], mirror_corners[1], mirror_corners[4], mirror_corners[5]], axis=0)
+        return centre_of_mirror
 
 
     def mirror_corners(self)-> tuple:
