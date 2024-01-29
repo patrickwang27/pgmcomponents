@@ -17,7 +17,7 @@ Classes
 
 
 
-.. py:class:: Grating(line_density=600, energy=250, cff=2, order=1, dimensions=np.array([1, 1, 1]), borders=np.array([0, 0, 0, 0]))
+.. py:class:: Grating(line_density=600, energy=2400, cff=2, order=1, dimensions=np.array([200, 40, 50]), borders=np.array([0, 0, 0, 0]))
 
 
    Bases: :py:obj:`object`
@@ -38,6 +38,17 @@ Classes
                       dimensions are also accessible with lambda functions as:
                       self._length(), self._width(), self._height()
    :type dimensions: array_like
+   :param borders:  Specifies the borders of a realistic grating component.
+                    |-----------Top------------|
+                    |                          |
+                   Left   Grating Plane      Right
+                    |                          |      ----> +z direction
+                    |----------Bottom----------|
+                    [top, bottom, left, right]
+
+                    Left - Right => Tangential
+                    Top - Bottom => Sagittal
+   :type borders: array_like
 
    .. attribute:: line_density
 
@@ -114,7 +125,7 @@ Classes
 
       Set the incident and diffraction angles of the grating
 
-   .. method:: wavelength()
+   .. method:: energy_to_wavelength()
 
       Calculate the wavelength of the beam in Angstroms
 
@@ -136,33 +147,42 @@ Classes
 
 
    .. py:property:: line_density
+      :type: float
 
 
    .. py:property:: energy
+      :type: float
 
 
    .. py:property:: cff
+      :type: float
 
 
    .. py:property:: order
+      :type: int
 
 
    .. py:property:: alpha
+      :type: float
 
 
    .. py:property:: beta
+      :type: float
 
 
    .. py:property:: dimensions
 
 
    .. py:property:: plane
+      :type: pgmcomponents.geometry.Plane
 
 
    .. py:property:: borders
+      :type: numpy.ndarray
 
 
    .. py:property:: corners
+      :type: numpy.ndarray
 
 
    .. py:method:: __repr__()
@@ -181,13 +201,27 @@ Classes
       :type filename: str
 
 
-   .. py:method:: set_angles(alpha, beta)
+   .. py:method:: set_angles(alpha: float, beta: float) -> None
+
+      Set the incident and diffraction angles of the grating.
+
+      :param alpha: The incident angle in degrees
+      :type alpha: float
+      :param beta: The diffraction angle in degrees
+      :type beta: float
+
+      :raises ValueError: If the wavelength is zero
 
 
-   .. py:method:: compute_beta()
+   .. py:method:: compute_beta() -> float
+
+      Compute the diffraction angle beta from the incident angle alpha.
+
+      :returns: **beta** -- The diffraction angle in degrees
+      :rtype: float
 
 
-   .. py:method:: compute_angles()
+   .. py:method:: compute_angles() -> tuple[float, float]
 
       Compute the incident and diffraction angles of the grating.
       The incident angle is calculated from the diffraction angle
@@ -197,47 +231,45 @@ Classes
                 * **beta** (*float*) -- The diffraction angle in degrees
 
 
-   .. py:method:: diffract(*args)
+   .. py:method:: diffract(*args: pgmcomponents.geometry.Ray3D | list) -> list
 
       A method to diffract rays off the grating.
 
-      :param rays: The rays to be diffracted
-      :type rays: list
+      :param \*args: The rays to be diffracted
+      :type \*args: Ray3D or list of Ray3D
 
       :returns: **diffracted_rays** -- A list of diffracted rays
-      :rtype: list
+      :rtype: list of Ray3D
+
+      :raises raises ValueError too:
+      :raises TypeError: If the rays are not Ray3D objects
 
 
-   .. py:method:: calc_beta(alpha, line_density, energy, order)
-      :staticmethod:
-
-      Calculate the diffraction angle beta from the incident angle alpha.
-
-      :param alpha: The incident angle in degrees
-      :type alpha: float
-      :param line_density: The line density of the grating in lines per mm
-      :type line_density: float
-      :param energy: The energy of the incident beam in eV
-      :type energy: float
-      :param order: The diffraction order of the grating
-      :type order: int
-
-      :returns: **beta** -- The diffraction angle in degrees
-      :rtype: float
+   .. py:method:: energy_to_wavelength(energy: float) -> float
 
 
-   .. py:method:: wavelength(energy)
+   .. py:method:: compute_corners() -> numpy.ndarray
+
+      Compute the corners of the grating in the global coordinate system.
+
+      :returns: **corners** -- The corners of the grating in the global coordinate system:
+                [bottom left back,
+                bottom right back,
+                bottom left front,
+                bottom right front,
+                top left back,
+                top right back,
+                top left front,
+                top right front]
+      :rtype: array_like
 
 
-   .. py:method:: compute_corners()
-
-
-   .. py:method:: reflect(*args)
+   .. py:method:: reflect(*args, zero_order=False) -> list
 
       A method to reflect rays off the grating.
 
       :param \*args: The rays to be reflected
-      :type \*args: Ray3D
+      :type \*args: Ray3D or list of Ray3D
 
       :returns: **reflected_rays** -- A list of reflected rays
       :rtype: list

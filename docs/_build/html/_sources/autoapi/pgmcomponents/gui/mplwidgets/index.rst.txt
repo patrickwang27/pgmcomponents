@@ -8,6 +8,8 @@
    File supplies necessary mpl widgets for
    gui_widgets.py
 
+   version: 0.2.2
+
 
 
 Module Contents
@@ -32,6 +34,15 @@ Functions
 
 
 .. py:function:: draw_figure_w_toolbar(canvas, fig, canvas_toolbar)
+
+   Method to draw on a given canvas and toolbar.
+
+   :param canvas: Canvas to draw on.
+   :type canvas: Canvas
+   :param fig: Figure to draw.
+   :type fig: Figure
+   :param canvas_toolbar: Canvas to draw toolbar on.
+   :type canvas_toolbar: Canvas
 
 
 .. py:class:: Toolbar(*args, **kwargs)

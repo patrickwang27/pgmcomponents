@@ -11,7 +11,7 @@
    Author: Patrick Wang
    Email: patrick.wang@diamond.ac.uk
 
-   Version: 0.1
+   Version: 0.2.2
    Date: 2023-09-15
 
 
@@ -26,8 +26,8 @@ Classes
 
    pgmcomponents.geometry.geometry.Ray3D
    pgmcomponents.geometry.geometry.Image
-   pgmcomponents.geometry.geometry.Vector3D
    pgmcomponents.geometry.geometry.Point3D
+   pgmcomponents.geometry.geometry.Vector3D
    pgmcomponents.geometry.geometry.Plane
    pgmcomponents.geometry.geometry.Image
 
@@ -108,6 +108,140 @@ Functions
    .. py:method:: __repr__()
 
       Return repr(self).
+
+
+
+.. py:class:: Point3D(x, y, z)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a simple 3D point.
+
+   :param x: The x coordinate of the point
+   :type x: float
+   :param y: The y coordinate of the point
+   :type y: float
+   :param z: The z coordinate of the point
+   :type z: float
+
+   .. method:: __repr__ : str
+
+      Returns a string representation of the point
+
+   .. method:: __add__ : Point3D
+
+      Adds two points together
+
+   .. method:: __sub__ : Point3D
+
+      Subtracts two points
+
+   .. method:: __eq__ : bool
+
+      Checks if two points are equal
+
+   .. method:: __ne__ : bool
+
+      Checks if two points are not equal
+
+   .. method:: __getitem__ : float
+
+      Returns the x, y or z coordinate of the point
+
+   .. method:: __setitem__ : float
+
+      Sets the x, y or z coordinate of the point
+
+   .. method:: __iter__ : float
+
+      Returns an iterator over the point
+
+   .. method:: __len__ : int
+
+      Returns the length of the point
+
+   .. method:: __hash__ : int
+
+      Returns the hash of the point
+
+   .. method:: __copy__ : Point3D
+
+      Returns a copy of the point
+
+   .. method:: __deepcopy__ : Point3D
+
+      Returns a deep copy of the point
+
+   .. method:: copy : Point3D
+
+      Returns a copy of the point
+
+   .. method:: distance : float
+
+      Finds the distance between two points
+
+
+   .. py:property:: x
+
+
+   .. py:property:: y
+
+
+   .. py:property:: z
+
+
+   .. py:property:: list
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __add__(other)
+
+
+   .. py:method:: __sub__(other)
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+   .. py:method:: __ne__(other)
+
+      Return self!=value.
+
+
+   .. py:method:: __getitem__(key)
+
+
+   .. py:method:: __setitem__(key, value)
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: __hash__()
+
+      Return hash(self).
+
+
+   .. py:method:: __copy__()
+
+
+   .. py:method:: __deepcopy__(memo)
+
+
+   .. py:method:: copy()
+
+
+   .. py:method:: distance(other)
 
 
 
@@ -305,138 +439,9 @@ Functions
    .. py:method:: rotate_z(angle)
 
 
+   .. py:method:: to_point() -> Point3D
 
-.. py:class:: Point3D(x, y, z)
-
-
-   Bases: :py:obj:`object`
-
-   A class for a simple 3D point.
-
-   :param x: The x coordinate of the point
-   :type x: float
-   :param y: The y coordinate of the point
-   :type y: float
-   :param z: The z coordinate of the point
-   :type z: float
-
-   .. method:: __repr__ : str
-
-      Returns a string representation of the point
-
-   .. method:: __add__ : Point3D
-
-      Adds two points together
-
-   .. method:: __sub__ : Point3D
-
-      Subtracts two points
-
-   .. method:: __eq__ : bool
-
-      Checks if two points are equal
-
-   .. method:: __ne__ : bool
-
-      Checks if two points are not equal
-
-   .. method:: __getitem__ : float
-
-      Returns the x, y or z coordinate of the point
-
-   .. method:: __setitem__ : float
-
-      Sets the x, y or z coordinate of the point
-
-   .. method:: __iter__ : float
-
-      Returns an iterator over the point
-
-   .. method:: __len__ : int
-
-      Returns the length of the point
-
-   .. method:: __hash__ : int
-
-      Returns the hash of the point
-
-   .. method:: __copy__ : Point3D
-
-      Returns a copy of the point
-
-   .. method:: __deepcopy__ : Point3D
-
-      Returns a deep copy of the point
-
-   .. method:: copy : Point3D
-
-      Returns a copy of the point
-
-   .. method:: distance : float
-
-      Finds the distance between two points
-
-
-   .. py:property:: x
-
-
-   .. py:property:: y
-
-
-   .. py:property:: z
-
-
-   .. py:property:: list
-
-
-   .. py:method:: __repr__()
-
-      Return repr(self).
-
-
-   .. py:method:: __add__(other)
-
-
-   .. py:method:: __sub__(other)
-
-
-   .. py:method:: __eq__(other)
-
-      Return self==value.
-
-
-   .. py:method:: __ne__(other)
-
-      Return self!=value.
-
-
-   .. py:method:: __getitem__(key)
-
-
-   .. py:method:: __setitem__(key, value)
-
-
-   .. py:method:: __iter__()
-
-
-   .. py:method:: __len__()
-
-
-   .. py:method:: __hash__()
-
-      Return hash(self).
-
-
-   .. py:method:: __copy__()
-
-
-   .. py:method:: __deepcopy__(memo)
-
-
-   .. py:method:: copy()
-
-
-   .. py:method:: distance(other)
+      Converts the vector to a Point3D
 
 
 
@@ -534,7 +539,7 @@ Functions
 
 
 
-.. py:function:: calc_beam_size(electron_size, electron_div, wavelength, distance, length, num_of_sigmas=3, insertion_device='undulator')
+.. py:function:: calc_beam_size(electron_size: float, electron_div: float, wavelength: float, distance: float, length: float, num_of_sigmas=3, insertion_device='undulator') -> float
 
    Calculate the beam size based on the electron size and divergence.
 
@@ -542,6 +547,7 @@ Functions
    :type electron_size: float
    :param electron_div: The electron divergence in urad
    :type electron_div: float
+   :param wavelength not photon_energy in params:
    :param photon_energy: The photon energy in eV
    :type photon_energy: float
    :param distance: The distance from the source to the image plane in m
@@ -557,7 +563,7 @@ Functions
    :rtype: float
 
 
-.. py:function:: calc_source_size(electron_size, wavelength, length)
+.. py:function:: calc_source_size(electron_size: float, wavelength: float, length: float) -> float
 
    Calculates the source size based on provided parameters.
 
@@ -572,7 +578,7 @@ Functions
    :rtype: float
 
 
-.. py:function:: calc_source_div(electron_div, wavelength, length)
+.. py:function:: calc_source_div(electron_div: float, wavelength: float, length: float) -> float
 
    Calculates the source divergence based on provided parameters.
 

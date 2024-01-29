@@ -12,6 +12,7 @@
    Author: Patrick Wang
    Email: patrick.wang@diamond.ac.uk
    Date: 2023-10-05
+   Version = 0.4.1
 
 
 
@@ -28,6 +29,9 @@ Classes
    pgmcomponents.gui.gui_widgets.OffsetsControl
    pgmcomponents.gui.gui_widgets.Topview_Widget
    pgmcomponents.gui.gui_widgets.Sideview_Widget
+   pgmcomponents.gui.gui_widgets.ParamTable
+   pgmcomponents.gui.gui_widgets.ParamTable
+   pgmcomponents.gui.gui_widgets.ZoomWidget
 
 
 
@@ -40,39 +44,27 @@ Functions
    pgmcomponents.gui.gui_widgets.main
    pgmcomponents.gui.gui_widgets.update_and_draw
    pgmcomponents.gui.gui_widgets.initial_draw
+   pgmcomponents.gui.gui_widgets.maketable
 
 
 
-.. py:class:: EPICScontrol(name, value, increments, key, pgm=None)
+.. py:class:: EPICScontrol(name: str, value: float, increments: float, key: str, pgm=None)
 
 
    Bases: :py:obj:`object`
 
    A EPICS like control widget.
 
-   .. attribute:: name
-
-      The name of the control.
-
-      :type: str
-
-   .. attribute:: value
-
-      The default value of the control
-
-      :type: float
-
-   .. attribute:: increments
-
-      The default increment value of the control.
-
-      :type: float
-
-   .. attribute:: key
-
-      The key of the control.
-
-      :type: str
+   :param name: The name of the control.
+   :type name: str
+   :param value: The default value of the control
+   :type value: float
+   :param increments: The default increment value of the control.
+   :type increments: float
+   :param key: The key of the control.
+   :type key: str
+   :param pgm: The PGM object.
+   :type pgm: PGM
 
    .. method:: up(window)
 
@@ -90,34 +82,46 @@ Functions
 
       Write a value to the control.
 
-   .. py:method:: up(window, values, pgm)
+   .. py:method:: up(window: PySimpleGUI.Window, values: dict, pgm: pgmcomponents.elements.PGM) -> None
 
-      Add increment to value, needs the window object to update the value.
+      :param window: The window object containing the control.
+      :type window: PySimpleGUI.Window
+      :param values: The values of the window.
+      :type values: dict
+      :param pgm: The PGM object.
+      :type pgm: PGM
+
+      :returns: * *None*
+                * *Add increment to value, needs the window object to update the value.*
 
 
-   .. py:method:: down(window, values, pgm)
+   .. py:method:: down(window: PySimpleGUI.Window, values: dict, pgm: pgmcomponents.elements.PGM) -> None
 
       Subtract the increment value from the current value of the widget.
       If the widget is an order widget, the current value is converted to an integer before subtraction.
       The updated value is then set as the new value of the widget and also updated in the corresponding attribute of the pgm object.
 
-      :param window: The window object containing the widget.
+      :param window: The window object containing the control.
       :type window: PySimpleGUI.Window
-      :param pgm: The pgm object containing the attribute to be updated.
-      :type pgm: components.PGM
+      :param values: The values of the window.
+      :type values: dict
+      :param pgm: The PGM object.
+      :type pgm: PGM20
 
 
-   .. py:method:: update(window, pgm)
+   .. py:method:: update(window: PySimpleGUI.Window, pgm: pgmcomponents.elements.PGM) -> None
 
       Update the value of the control.
 
-      :param window: The window object containing the control.
-      :param pgm: The program object containing the property to be updated.
+      :param window:
+      :type window: The window object containing the control.
+      :param pgm:
+      :type pgm: The program object containing the property to be updated.
 
-      :returns: None
+      :rtype: None
 
 
-   .. py:method:: write(window, value, pgm)
+   .. py:method:: write(window: PySimpleGUI.Window, value: dict, pgm: pgmcomponents.elements.PGM) -> None
 
       Subroutine to write the values of a known pgm to
       the window.
@@ -130,13 +134,18 @@ Functions
       :type pgm: PGM
 
 
-   .. py:method:: update_inc(window)
+   .. py:method:: update_inc(window: PySimpleGUI.Window) -> None
 
       Update the increment of the control.
 
+      :param window: The window object containing the control.
+      :type window: PySimpleGUI.Window
+
+      :rtype: None
 
 
-.. py:function:: configuration_popup(title, key, element, window)
+
+.. py:function:: configuration_popup(title: str, key: str, element: pgmcomponents.elements.Plane_Mirror | pgmcomponents.elements.Grating, window) -> dict
 
    Creates a popup window for configuration of Plane_Mirror or Grating.
 
@@ -216,7 +225,7 @@ Functions
 
       Pops up a window for beam configuration.
 
-   .. py:method:: window(pgm, window)
+   .. py:method:: window(pgm: pgmcomponents.elements.PGM, window: PySimpleGUI.Window) -> None
 
       Pops up a window for beam configuration.
 
@@ -350,7 +359,7 @@ Functions
    :type line_density_control: EPICScontrol
 
 
-.. py:function:: initial_draw(window, pgm, topview_widget, sideview_widget, offsets_control)
+.. py:function:: initial_draw(window: PySimpleGUI.Window, pgm: pgmcomponents.elements.PGM, topview_widget: Topview_Widget, sideview_widget: Sideview_Widget, offsets_control: OffsetsControl) -> None
 
    Draw the topview and sideview widgets.
 
@@ -364,5 +373,47 @@ Functions
    :type sideview_widget: Sideview_Widget
    :param offsets_control: The offsets control widget.
    :type offsets_control: OffsetsControl
+
+
+.. py:function:: maketable(pgm: pgmcomponents.elements.PGM) -> PySimpleGUI.Table
+
+   Returns a PySimpleGUI table for the PGM parameters.
+
+   :param pgm: The PGM object.
+   :type pgm: PGM
+
+   :returns: **table** -- The table.
+   :rtype: PySimpleGUI.Table
+
+
+.. py:class:: ParamTable(pgm: pgmcomponents.elements.PGM, key: str)
+
+
+   A class to provide a table of PGM parameters.
+
+   .. py:method:: update(window: PySimpleGUI.Window) -> None
+
+      Update the table.
+
+
+
+.. py:class:: ParamTable(pgm: pgmcomponents.elements.PGM, key: str)
+
+
+   A class to provide a table of PGM parameters.
+
+   .. py:method:: update(window: PySimpleGUI.Window) -> None
+
+      Update the table.
+
+
+
+.. py:class:: ZoomWidget(pgm: pgmcomponents.elements.PGM, key: str)
+
+
+   Bases: :py:obj:`object`
+
+   A class to provide a widget to configure
+   plotting ranges.
 
 

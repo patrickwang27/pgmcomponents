@@ -17,21 +17,39 @@ Classes
 
 
 
-.. py:class:: Plane_Mirror(voffset=20, hoffset=0, axis_voffset=0, axis_hoffset=0, dimensions=np.array([450, 70, 50]), theta=45, plane=Plane(), borders=np.array([0, 0, 0, 0]))
+.. py:class:: Plane_Mirror(voffset=13, hoffset=40, axis_voffset=6.5, axis_hoffset=0, dimensions=np.array([450, 70, 50]), theta=45, plane=Plane(), borders=np.array([0, 0, 0, 0]))
 
 
    Bases: :py:obj:`object`
 
    A class for a simple plane mirror.
 
-   :param dimensions: The dimensions of the mirror in mm
-   :type dimensions: array_like
-   :param position: The position of the mirror
-   :type position: Point3D
-   :param normal: The normal vector of the mirror
-   :type normal: Vector3D
-   :param orientation:
-   :type orientation: Vector3D
+   :param voffset: The vertical offset of the mirror in mm
+   :type voffset: float, optional
+   :param hoffset: The horizontal offset of the mirror in mm
+   :type hoffset: float, optional
+   :param axis_voffset: The vertical offset of the mirror axis in mm
+   :type axis_voffset: float, optional
+   :param axis_hoffset: The horizontal offset of the mirror axis in mm
+   :type axis_hoffset: float, optional
+   :param dimensions: The dimensions of the mirror in mm [length, width, height]
+                      Dimensions are also accessible with lambda functions as:
+                      self._length(), self._width(), self._height()
+   :type dimensions: array_like, optional
+   :param theta: The angle of the mirror in degrees
+   :type theta: float, optional
+   :param plane: The plane of the mirror
+   :type plane: Plane, optional
+   :param borders:  Specifies the borders for a realistic plane mirror:
+                    borders : array_like
+                    Specifies the borders of a realistic grating component.
+                    |-----------Top------------|
+                    |                          |
+                   Left   Mirror Plane       Right
+                    |                          |       ---> +z direction
+                    |----------Bottom----------|
+                    [top, bottom, left, right]
+   :type borders: array_like, optional
 
    .. attribute:: dimensions
 
@@ -116,30 +134,39 @@ Classes
       Compute the corners of the mirror in the global coordinate system,
 
    .. py:property:: voffset
+      :type: float
 
 
    .. py:property:: hoffset
+      :type: float
 
 
    .. py:property:: axis_voffset
+      :type: float
 
 
    .. py:property:: axis_hoffset
+      :type: float
 
 
    .. py:property:: dimensions
+      :type: numpy.ndarray
 
 
    .. py:property:: plane
+      :type: pgmcomponents.geometry.Plane
 
 
    .. py:property:: theta
+      :type: float
 
 
    .. py:property:: corners
+      :type: numpy.ndarray
 
 
    .. py:property:: borders
+      :type: numpy.ndarray
 
 
    .. py:method:: __repr__()
@@ -158,13 +185,13 @@ Classes
       :type filename: str
 
 
-   .. py:method:: set_position(position)
+   .. py:method:: set_position(position: pgmcomponents.geometry.Point3D) -> None
 
 
-   .. py:method:: set_normal(normal)
+   .. py:method:: set_normal(normal: pgmcomponents.geometry.Vector3D) -> None
 
 
-   .. py:method:: set_dimensions(*args)
+   .. py:method:: set_dimensions(*args: numpy.ndarray | float) -> None
 
       Set the dimensions of the mirror.
 
@@ -174,23 +201,28 @@ Classes
       :raises ValueError: If the number of arguments is not one or three
 
 
-   .. py:method:: set_offsets(voffset, hoffset, axis_voffset, axis_hoffset)
+   .. py:method:: set_offsets(voffset: float, hoffset: float, axis_voffset: float, axis_hoffset: float) -> None
 
 
-   .. py:method:: compute_corners()
+   .. py:method:: compute_corners() -> numpy.ndarray
 
       Compute the corners of the mirror in the global coordinate system,
       in addition to the plane and normal of the mirror.
 
 
       :returns: **corners** -- The corners of the mirror in the global coordinate system
-      :rtype: array_like
+                [bottom left back,
+                bottom right back,
+                bottom left front,
+                bottom right front,
+                top left back,
+                top right back,
+                top left front,
+                top right front]
+      :rtype: np.ndarray
 
 
-   .. py:method:: draw(ax)
-
-
-   .. py:method:: mirror_from_file(filename)
+   .. py:method:: mirror_from_file(filename: str) -> Plane_Mirror
       :classmethod:
 
       Create a mirror from a file.
@@ -202,7 +234,7 @@ Classes
       :type filename: str
 
 
-   .. py:method:: reflect(*args)
+   .. py:method:: reflect(*args: pgmcomponents.geometry.Ray3D | list) -> list
 
       A method to reflect rays off the mirror.
 
@@ -210,7 +242,7 @@ Classes
       :type \*args: Ray3D
 
       :returns: **reflected_rays** -- A list of reflected rays
-      :rtype: list
+      :rtype: list of Ray3D
 
 
 

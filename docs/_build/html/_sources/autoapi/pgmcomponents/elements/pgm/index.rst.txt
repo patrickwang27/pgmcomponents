@@ -94,48 +94,39 @@ Classes
 
 
    .. py:property:: grating
+      :type: pgmcomponents.elements.Grating
 
 
    .. py:property:: mirror
+      :type: pgmcomponents.elements.Plane_Mirror
 
 
    .. py:property:: rays
+      :type: list[pgmcomponents.geometry.Ray3D]
 
 
    .. py:property:: beam_offset
+      :type: float
 
 
    .. py:property:: beam_width
+      :type: float
 
 
    .. py:property:: beam_height
-
-
-   .. py:property:: grating
-
-
-   .. py:property:: mirror
-
-
-   .. py:property:: rays
-
-
-   .. py:property:: beam_offset
-
-
-   .. py:property:: beam_width
-
-
-   .. py:property:: beam_height
+      :type: float
 
 
    .. py:property:: mirror_intercept
+      :type: pgmcomponents.geometry.Point3D
 
 
    .. py:property:: grating_intercept
+      :type: pgmcomponents.geometry.Point3D
 
 
    .. py:property:: cff
+      :type: float
 
 
    .. py:method:: __repr__()
@@ -163,10 +154,10 @@ Classes
       Set the angle of the grating.
 
 
-   .. py:method:: values()
+   .. py:method:: values() -> dict
 
 
-   .. py:method:: pgm_from_file(filename)
+   .. py:method:: pgm_from_file(filename: float) -> PGM
       :classmethod:
 
       Create a PGM from a file.
@@ -177,7 +168,7 @@ Classes
       :type filename: str
 
 
-   .. py:method:: propagate(*args)
+   .. py:method:: propagate(*args: pgmcomponents.geometry.Ray3D | list) -> tuple
 
       Propagate rays through the PGM setup.
 
@@ -189,7 +180,7 @@ Classes
                 * **grating_intercept** (*list of array_like*) -- A list of the grating intercepts
 
 
-   .. py:method:: draw_sideview(ax)
+   .. py:method:: draw_sideview(ax: matplotlib.axes.Axes)
 
       Draws the setup on a y-z projection on a given axis.
 
@@ -197,17 +188,67 @@ Classes
       :type ax: matplotlib.axes
 
 
-   .. py:method:: draw_topview(ax)
+   .. py:method:: draw_topview(ax: matplotlib.axes.Axes) -> None
 
       Draws the top-view (x-z projection) of the setup on the current
       axes.
 
 
 
-   .. py:method:: mirror_corners()
+   .. py:method:: topview_trace() -> None
+
+      Draws the top-view (x-z projection) of the setup on the current
+      axes.
 
 
-   .. py:method:: grating_corners()
+
+   .. py:method:: calc_footprint_size(intercepts: list[pgmcomponents.geometry.Point3D]) -> tuple
+
+      Calculate the size of the footprint of the beam on the grating or the mirror
+      when given the intercepts of the beam with the grating or the mirror.
+
+
+      :param intercepts: The intercepts of the beam with the grating or the mirror
+                         [r_1, r_2, r_3, r_4]
+      :type intercepts: list of Point3D objects
+
+      :returns: **size** -- The size of the footprint of the beam on the grating or the mirror in mm
+      :rtype: tuple
+
+
+   .. py:method:: centre_of_footprint()
+
+      Calculate the centre of the footprint of the beam on the grating or the mirror.
+
+      :returns: **centre** -- The centre of the footprint of the beam on the grating or the mirror
+      :rtype: Point3D
+
+
+   .. py:method:: find_offset()
+
+
+   .. py:method:: centre_of_mirror()
+
+      Calculate the centre of the mirror.
+
+      :returns: **centre** -- The centre of the mirror
+      :rtype: Point3D
+
+
+   .. py:method:: mirror_corners() -> tuple
+
+
+   .. py:method:: grating_corners() -> tuple
+
+
+   .. py:method:: corners() -> tuple[dict]
+
+      Calculate the corners of the mirror and grating.
+
+      :returns: **corners** -- The corners of the grating and mirror in the following order:
+                bottom left back, bottom right back, bottom left front, bottom right front,
+                top left back, top right back, top left front, top right front
+      :rtype: dict
 
 
    .. py:method:: undulator_size()

@@ -10,11 +10,19 @@ plane grating monochromators.
 
 The library contains an application programming interface (API) and a graphical user interface fron-end.
 
-To install, visit the `releases page <https://github.com/patrickwang27/pgmcomponents/releases>`_ and download the latest release. 
+To install the latest release, visit the `releases page <https://github.com/patrickwang27/pgmcomponents/releases>`_ and download the latest release. 
 
 .. code-block:: bash
 
    pip install pgmcomponents-version_number.tar.gz
+
+To install/upgrade to the lates development version, you can install directly from git:
+
+.. code-block:: bash
+
+   python -m pip install git+https://github.com/patrickwang27/pgmcomponents.git
+   python -m pip install --upgrade --no-deps --force-reinstall git+https://github.com/patrickwang27/pgmcomponents.git
+
 
 The API is documented below, it can be accessed via:
 

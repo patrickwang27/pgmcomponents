@@ -31,8 +31,10 @@ Classes
    pgmcomponents.elements.Point3D
    pgmcomponents.elements.Plane
    pgmcomponents.elements.Ray3D
-   pgmcomponents.elements.Vector3D
    pgmcomponents.elements.Grating
+   pgmcomponents.elements.Point3D
+   pgmcomponents.elements.Ray3D
+   pgmcomponents.elements.PGM
 
 
 
@@ -365,6 +367,11 @@ Classes
    .. py:method:: rotate_z(angle)
 
 
+   .. py:method:: to_point() -> Point3D
+
+      Converts the vector to a Point3D
+
+
 
 .. py:class:: Plane(*args)
 
@@ -475,21 +482,39 @@ Classes
 
 
 
-.. py:class:: Plane_Mirror(voffset=20, hoffset=0, axis_voffset=0, axis_hoffset=0, dimensions=np.array([450, 70, 50]), theta=45, plane=Plane(), borders=np.array([0, 0, 0, 0]))
+.. py:class:: Plane_Mirror(voffset=13, hoffset=40, axis_voffset=6.5, axis_hoffset=0, dimensions=np.array([450, 70, 50]), theta=45, plane=Plane(), borders=np.array([0, 0, 0, 0]))
 
 
    Bases: :py:obj:`object`
 
    A class for a simple plane mirror.
 
-   :param dimensions: The dimensions of the mirror in mm
-   :type dimensions: array_like
-   :param position: The position of the mirror
-   :type position: Point3D
-   :param normal: The normal vector of the mirror
-   :type normal: Vector3D
-   :param orientation:
-   :type orientation: Vector3D
+   :param voffset: The vertical offset of the mirror in mm
+   :type voffset: float, optional
+   :param hoffset: The horizontal offset of the mirror in mm
+   :type hoffset: float, optional
+   :param axis_voffset: The vertical offset of the mirror axis in mm
+   :type axis_voffset: float, optional
+   :param axis_hoffset: The horizontal offset of the mirror axis in mm
+   :type axis_hoffset: float, optional
+   :param dimensions: The dimensions of the mirror in mm [length, width, height]
+                      Dimensions are also accessible with lambda functions as:
+                      self._length(), self._width(), self._height()
+   :type dimensions: array_like, optional
+   :param theta: The angle of the mirror in degrees
+   :type theta: float, optional
+   :param plane: The plane of the mirror
+   :type plane: Plane, optional
+   :param borders:  Specifies the borders for a realistic plane mirror:
+                    borders : array_like
+                    Specifies the borders of a realistic grating component.
+                    |-----------Top------------|
+                    |                          |
+                   Left   Mirror Plane       Right
+                    |                          |       ---> +z direction
+                    |----------Bottom----------|
+                    [top, bottom, left, right]
+   :type borders: array_like, optional
 
    .. attribute:: dimensions
 
@@ -574,30 +599,39 @@ Classes
       Compute the corners of the mirror in the global coordinate system,
 
    .. py:property:: voffset
+      :type: float
 
 
    .. py:property:: hoffset
+      :type: float
 
 
    .. py:property:: axis_voffset
+      :type: float
 
 
    .. py:property:: axis_hoffset
+      :type: float
 
 
    .. py:property:: dimensions
+      :type: numpy.ndarray
 
 
    .. py:property:: plane
+      :type: pgmcomponents.geometry.Plane
 
 
    .. py:property:: theta
+      :type: float
 
 
    .. py:property:: corners
+      :type: numpy.ndarray
 
 
    .. py:property:: borders
+      :type: numpy.ndarray
 
 
    .. py:method:: __repr__()
@@ -616,13 +650,13 @@ Classes
       :type filename: str
 
 
-   .. py:method:: set_position(position)
+   .. py:method:: set_position(position: pgmcomponents.geometry.Point3D) -> None
 
 
-   .. py:method:: set_normal(normal)
+   .. py:method:: set_normal(normal: pgmcomponents.geometry.Vector3D) -> None
 
 
-   .. py:method:: set_dimensions(*args)
+   .. py:method:: set_dimensions(*args: numpy.ndarray | float) -> None
 
       Set the dimensions of the mirror.
 
@@ -632,23 +666,28 @@ Classes
       :raises ValueError: If the number of arguments is not one or three
 
 
-   .. py:method:: set_offsets(voffset, hoffset, axis_voffset, axis_hoffset)
+   .. py:method:: set_offsets(voffset: float, hoffset: float, axis_voffset: float, axis_hoffset: float) -> None
 
 
-   .. py:method:: compute_corners()
+   .. py:method:: compute_corners() -> numpy.ndarray
 
       Compute the corners of the mirror in the global coordinate system,
       in addition to the plane and normal of the mirror.
 
 
       :returns: **corners** -- The corners of the mirror in the global coordinate system
-      :rtype: array_like
+                [bottom left back,
+                bottom right back,
+                bottom left front,
+                bottom right front,
+                top left back,
+                top right back,
+                top left front,
+                top right front]
+      :rtype: np.ndarray
 
 
-   .. py:method:: draw(ax)
-
-
-   .. py:method:: mirror_from_file(filename)
+   .. py:method:: mirror_from_file(filename: str) -> Plane_Mirror
       :classmethod:
 
       Create a mirror from a file.
@@ -660,7 +699,7 @@ Classes
       :type filename: str
 
 
-   .. py:method:: reflect(*args)
+   .. py:method:: reflect(*args: pgmcomponents.geometry.Ray3D | list) -> list
 
       A method to reflect rays off the mirror.
 
@@ -668,7 +707,7 @@ Classes
       :type \*args: Ray3D
 
       :returns: **reflected_rays** -- A list of reflected rays
-      :rtype: list
+      :rtype: list of Ray3D
 
 
 
@@ -915,202 +954,7 @@ Classes
 
 
 
-.. py:class:: Vector3D(x, y, z)
-
-
-   Bases: :py:obj:`object`
-
-   A class for a simple 3D vector
-
-   :param x:
-   :type x: float
-   :param The x component of the vector:
-   :param y:
-   :type y: float
-   :param The y component of the vector:
-   :param z:
-   :type z: float
-   :param The z component of the vector:
-   :param Methods:
-   :param ----------:
-   :param __repr__:
-   :type __repr__: str
-   :param Returns a string representation of the vector:
-   :param __add__:
-   :type __add__: Vector3D
-   :param Adds two vectors together:
-   :param __sub__:
-   :type __sub__: Vector3D
-   :param Subtracts two vectors:
-   :param __mul__:
-   :type __mul__: Vector3D
-   :param Finds the dot product of two vectors:
-   :param __div__:
-   :type __div__: Vector3D
-   :param Finds the cross product of two vectors:
-   :param __abs__:
-   :type __abs__: float
-   :param Finds the magnitude of the vector:
-   :param __neg__:
-   :type __neg__: Vector3D
-   :param Finds the negative of the vector:
-   :param __eq__:
-   :type __eq__: bool
-   :param Checks if two vectors are equal:
-   :param __ne__:
-   :type __ne__: bool
-   :param Checks if two vectors are not equal:
-   :param __getitem__:
-   :type __getitem__: float
-   :param Returns the x:
-   :param y or z component of the vector:
-   :param __setitem__:
-   :type __setitem__: float
-   :param Sets the x:
-   :param y or z component of the vector:
-   :param __iter__:
-   :type __iter__: float
-   :param Returns an iterator over the vector:
-   :param __len__:
-   :type __len__: int
-   :param Returns the length of the vector:
-   :param __hash__:
-   :type __hash__: int
-   :param Returns the hash of the vector:
-   :param __copy__:
-   :type __copy__: Vector3D
-   :param Returns a copy of the vector:
-   :param __deepcopy__:
-   :type __deepcopy__: Vector3D
-   :param Returns a deep copy of the vector:
-   :param copy:
-   :type copy: Vector3D
-   :param Returns a copy of the vector:
-   :param dot:
-   :type dot: float
-   :param Finds the dot product of two vectors:
-   :param cross:
-   :type cross: Vector3D
-   :param Finds the cross product of two vectors:
-   :param norm:
-   :type norm: float
-   :param Finds the magnitude of the vector:
-   :param normalize:
-   :type normalize: Vector3D
-   :param Normalizes the vector:
-   :param angle:
-   :type angle: float
-   :param Finds the angle between two vectors:
-   :param rotate:
-   :type rotate: Vector3D
-   :param Rotates the vector around an axis:
-   :param rotate_x:
-   :type rotate_x: Vector3D
-   :param Rotates the vector around the x axis:
-   :param rotate_y:
-   :type rotate_y: Vector3D
-   :param Rotates the vector around the y axis:
-   :param rotate_z:
-   :type rotate_z: Vector3D
-   :param Rotates the vector around the z axis:
-
-   .. py:property:: x
-
-
-   .. py:property:: y
-
-
-   .. py:property:: z
-
-
-   .. py:method:: __repr__()
-
-      Return repr(self).
-
-
-   .. py:method:: __add__(other)
-
-
-   .. py:method:: __sub__(other)
-
-
-   .. py:method:: __mul__(other)
-
-
-   .. py:method:: __div__(other)
-
-
-   .. py:method:: __abs__()
-
-
-   .. py:method:: __neg__()
-
-
-   .. py:method:: __eq__(other)
-
-      Return self==value.
-
-
-   .. py:method:: __ne__(other)
-
-      Return self!=value.
-
-
-   .. py:method:: __getitem__(key)
-
-
-   .. py:method:: __setitem__(key, value)
-
-
-   .. py:method:: __iter__()
-
-
-   .. py:method:: __len__()
-
-
-   .. py:method:: __hash__()
-
-      Return hash(self).
-
-
-   .. py:method:: __copy__()
-
-
-   .. py:method:: __deepcopy__(memo)
-
-
-   .. py:method:: copy()
-
-
-   .. py:method:: dot(other)
-
-
-   .. py:method:: cross(other)
-
-
-   .. py:method:: norm()
-
-
-   .. py:method:: normalize()
-
-
-   .. py:method:: angle(other)
-
-
-   .. py:method:: rotate(axis, angle)
-
-
-   .. py:method:: rotate_x(angle)
-
-
-   .. py:method:: rotate_y(angle)
-
-
-   .. py:method:: rotate_z(angle)
-
-
-
-.. py:class:: Grating(line_density=600, energy=250, cff=2, order=1, dimensions=np.array([1, 1, 1]), borders=np.array([0, 0, 0, 0]))
+.. py:class:: Grating(line_density=600, energy=2400, cff=2, order=1, dimensions=np.array([200, 40, 50]), borders=np.array([0, 0, 0, 0]))
 
 
    Bases: :py:obj:`object`
@@ -1131,6 +975,17 @@ Classes
                       dimensions are also accessible with lambda functions as:
                       self._length(), self._width(), self._height()
    :type dimensions: array_like
+   :param borders:  Specifies the borders of a realistic grating component.
+                    |-----------Top------------|
+                    |                          |
+                   Left   Grating Plane      Right
+                    |                          |      ----> +z direction
+                    |----------Bottom----------|
+                    [top, bottom, left, right]
+
+                    Left - Right => Tangential
+                    Top - Bottom => Sagittal
+   :type borders: array_like
 
    .. attribute:: line_density
 
@@ -1207,7 +1062,7 @@ Classes
 
       Set the incident and diffraction angles of the grating
 
-   .. method:: wavelength()
+   .. method:: energy_to_wavelength()
 
       Calculate the wavelength of the beam in Angstroms
 
@@ -1229,33 +1084,42 @@ Classes
 
 
    .. py:property:: line_density
+      :type: float
 
 
    .. py:property:: energy
+      :type: float
 
 
    .. py:property:: cff
+      :type: float
 
 
    .. py:property:: order
+      :type: int
 
 
    .. py:property:: alpha
+      :type: float
 
 
    .. py:property:: beta
+      :type: float
 
 
    .. py:property:: dimensions
 
 
    .. py:property:: plane
+      :type: pgmcomponents.geometry.Plane
 
 
    .. py:property:: borders
+      :type: numpy.ndarray
 
 
    .. py:property:: corners
+      :type: numpy.ndarray
 
 
    .. py:method:: __repr__()
@@ -1274,13 +1138,27 @@ Classes
       :type filename: str
 
 
-   .. py:method:: set_angles(alpha, beta)
+   .. py:method:: set_angles(alpha: float, beta: float) -> None
+
+      Set the incident and diffraction angles of the grating.
+
+      :param alpha: The incident angle in degrees
+      :type alpha: float
+      :param beta: The diffraction angle in degrees
+      :type beta: float
+
+      :raises ValueError: If the wavelength is zero
 
 
-   .. py:method:: compute_beta()
+   .. py:method:: compute_beta() -> float
+
+      Compute the diffraction angle beta from the incident angle alpha.
+
+      :returns: **beta** -- The diffraction angle in degrees
+      :rtype: float
 
 
-   .. py:method:: compute_angles()
+   .. py:method:: compute_angles() -> tuple[float, float]
 
       Compute the incident and diffraction angles of the grating.
       The incident angle is calculated from the diffraction angle
@@ -1290,47 +1168,45 @@ Classes
                 * **beta** (*float*) -- The diffraction angle in degrees
 
 
-   .. py:method:: diffract(*args)
+   .. py:method:: diffract(*args: pgmcomponents.geometry.Ray3D | list) -> list
 
       A method to diffract rays off the grating.
 
-      :param rays: The rays to be diffracted
-      :type rays: list
+      :param \*args: The rays to be diffracted
+      :type \*args: Ray3D or list of Ray3D
 
       :returns: **diffracted_rays** -- A list of diffracted rays
-      :rtype: list
+      :rtype: list of Ray3D
+
+      :raises raises ValueError too:
+      :raises TypeError: If the rays are not Ray3D objects
 
 
-   .. py:method:: calc_beta(alpha, line_density, energy, order)
-      :staticmethod:
-
-      Calculate the diffraction angle beta from the incident angle alpha.
-
-      :param alpha: The incident angle in degrees
-      :type alpha: float
-      :param line_density: The line density of the grating in lines per mm
-      :type line_density: float
-      :param energy: The energy of the incident beam in eV
-      :type energy: float
-      :param order: The diffraction order of the grating
-      :type order: int
-
-      :returns: **beta** -- The diffraction angle in degrees
-      :rtype: float
+   .. py:method:: energy_to_wavelength(energy: float) -> float
 
 
-   .. py:method:: wavelength(energy)
+   .. py:method:: compute_corners() -> numpy.ndarray
+
+      Compute the corners of the grating in the global coordinate system.
+
+      :returns: **corners** -- The corners of the grating in the global coordinate system:
+                [bottom left back,
+                bottom right back,
+                bottom left front,
+                bottom right front,
+                top left back,
+                top right back,
+                top left front,
+                top right front]
+      :rtype: array_like
 
 
-   .. py:method:: compute_corners()
-
-
-   .. py:method:: reflect(*args)
+   .. py:method:: reflect(*args, zero_order=False) -> list
 
       A method to reflect rays off the grating.
 
       :param \*args: The rays to be reflected
-      :type \*args: Ray3D
+      :type \*args: Ray3D or list of Ray3D
 
       :returns: **reflected_rays** -- A list of reflected rays
       :rtype: list
@@ -1346,6 +1222,420 @@ Classes
 
       :param filename: The name of the file to read from
       :type filename: str
+
+
+
+.. py:class:: Point3D(x, y, z)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a simple 3D point.
+
+   :param x: The x coordinate of the point
+   :type x: float
+   :param y: The y coordinate of the point
+   :type y: float
+   :param z: The z coordinate of the point
+   :type z: float
+
+   .. method:: __repr__ : str
+
+      Returns a string representation of the point
+
+   .. method:: __add__ : Point3D
+
+      Adds two points together
+
+   .. method:: __sub__ : Point3D
+
+      Subtracts two points
+
+   .. method:: __eq__ : bool
+
+      Checks if two points are equal
+
+   .. method:: __ne__ : bool
+
+      Checks if two points are not equal
+
+   .. method:: __getitem__ : float
+
+      Returns the x, y or z coordinate of the point
+
+   .. method:: __setitem__ : float
+
+      Sets the x, y or z coordinate of the point
+
+   .. method:: __iter__ : float
+
+      Returns an iterator over the point
+
+   .. method:: __len__ : int
+
+      Returns the length of the point
+
+   .. method:: __hash__ : int
+
+      Returns the hash of the point
+
+   .. method:: __copy__ : Point3D
+
+      Returns a copy of the point
+
+   .. method:: __deepcopy__ : Point3D
+
+      Returns a deep copy of the point
+
+   .. method:: copy : Point3D
+
+      Returns a copy of the point
+
+   .. method:: distance : float
+
+      Finds the distance between two points
+
+
+   .. py:property:: x
+
+
+   .. py:property:: y
+
+
+   .. py:property:: z
+
+
+   .. py:property:: list
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: __add__(other)
+
+
+   .. py:method:: __sub__(other)
+
+
+   .. py:method:: __eq__(other)
+
+      Return self==value.
+
+
+   .. py:method:: __ne__(other)
+
+      Return self!=value.
+
+
+   .. py:method:: __getitem__(key)
+
+
+   .. py:method:: __setitem__(key, value)
+
+
+   .. py:method:: __iter__()
+
+
+   .. py:method:: __len__()
+
+
+   .. py:method:: __hash__()
+
+      Return hash(self).
+
+
+   .. py:method:: __copy__()
+
+
+   .. py:method:: __deepcopy__(memo)
+
+
+   .. py:method:: copy()
+
+
+   .. py:method:: distance(other)
+
+
+
+.. py:class:: Ray3D(position, vector)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a simple 3D ray
+
+   :param position: The position of the ray
+   :type position: Point3D
+   :param vector: The vector of the ray
+   :type vector: Vector3D
+
+   .. method:: __repr__ : str
+
+      Returns a string representation of the ray
+
+
+   .. attribute:: position
+
+      The position of the ray
+
+      :type: Point3D
+
+   .. attribute:: vector
+
+      The vector of the ray
+
+      :type: Vector3D
+
+   .. py:property:: position
+
+
+   .. py:property:: vector
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+
+.. py:class:: PGM(grating=None, mirror=None, **kwargs)
+
+
+   Bases: :py:obj:`object`
+
+   A class for a PGM setup.
+
+   :param grating: The grating component of the PGM
+   :type grating: Grating
+   :param mirror: The mirror component of the PGM
+   :type mirror: Plane_Mirror
+
+   .. attribute:: grating
+
+      The grating component of the PGM
+
+      :type: Grating
+
+   .. attribute:: mirror
+
+      The mirror component of the PGM
+
+      :type: Plane_Mirror
+
+   .. attribute:: rays
+
+      The rays to be propagated through the PGM
+
+      :type: list
+
+   .. attribute:: beam_offset
+
+      The vertical offset of the beam in mm
+
+      :type: float
+
+   .. attribute:: beam_width
+
+      The width of the beam in mm
+
+      :type: float
+
+   .. attribute:: beam_height
+
+      The height of the beam in mm
+
+      :type: float
+
+   .. method:: read_file(filename)
+
+      Read PGM parameters from a file.
+      See config_pgm.ini for an example.
+      The config file should contain a grating and a mirror section.
+
+   .. method:: propagate(*args)
+
+      Propagate rays through the PGM setup.
+
+   .. method:: draw_sideview(ax)
+
+      Draws the setup on a y-z projection on a given axis.
+
+   .. method:: draw_topview(ax)
+
+      Draws the setup on a x-z projection on a given axis, along with the beam footprints.
+
+
+   .. py:property:: theta
+
+
+   .. py:property:: energy
+
+
+   .. py:property:: wavelength
+
+
+   .. py:property:: grating
+      :type: pgmcomponents.elements.Grating
+
+
+   .. py:property:: mirror
+      :type: pgmcomponents.elements.Plane_Mirror
+
+
+   .. py:property:: rays
+      :type: list[pgmcomponents.geometry.Ray3D]
+
+
+   .. py:property:: beam_offset
+      :type: float
+
+
+   .. py:property:: beam_width
+      :type: float
+
+
+   .. py:property:: beam_height
+      :type: float
+
+
+   .. py:property:: mirror_intercept
+      :type: pgmcomponents.geometry.Point3D
+
+
+   .. py:property:: grating_intercept
+      :type: pgmcomponents.geometry.Point3D
+
+
+   .. py:property:: cff
+      :type: float
+
+
+   .. py:method:: __repr__()
+
+      Return repr(self).
+
+
+   .. py:method:: generate_rays()
+
+      Generate rays for the PGM setup.
+
+
+   .. py:method:: read_file(filename)
+
+      Read PGM parameters from a file.
+      See config_pgm.ini for an example.
+      The config file should contain a grating and a mirror section.
+
+      :param filename: The name of the file to read from
+      :type filename: str
+
+
+   .. py:method:: set_theta()
+
+      Set the angle of the grating.
+
+
+   .. py:method:: values() -> dict
+
+
+   .. py:method:: pgm_from_file(filename: float) -> PGM
+      :classmethod:
+
+      Create a PGM from a file.
+      See config_pgm.ini for an example.
+      The config file should contain a grating and a mirror section.
+
+      :param filename: The name of the file to read from
+      :type filename: str
+
+
+   .. py:method:: propagate(*args: pgmcomponents.geometry.Ray3D | list) -> tuple
+
+      Propagate rays through the PGM setup.
+
+      :param \*args: The rays to be propagated
+      :type \*args: Ray3D
+
+      :returns: * **grating_ray** (*list of Ray3D objects*) -- A list of propagated rays originating at the grating intercept
+                * **mirror_intercept** (*list of array_like*) -- A list of the mirror intercepts
+                * **grating_intercept** (*list of array_like*) -- A list of the grating intercepts
+
+
+   .. py:method:: draw_sideview(ax: matplotlib.axes.Axes)
+
+      Draws the setup on a y-z projection on a given axis.
+
+      :param ax: The axis to draw on
+      :type ax: matplotlib.axes
+
+
+   .. py:method:: draw_topview(ax: matplotlib.axes.Axes) -> None
+
+      Draws the top-view (x-z projection) of the setup on the current
+      axes.
+
+
+
+   .. py:method:: topview_trace() -> None
+
+      Draws the top-view (x-z projection) of the setup on the current
+      axes.
+
+
+
+   .. py:method:: calc_footprint_size(intercepts: list[pgmcomponents.geometry.Point3D]) -> tuple
+
+      Calculate the size of the footprint of the beam on the grating or the mirror
+      when given the intercepts of the beam with the grating or the mirror.
+
+
+      :param intercepts: The intercepts of the beam with the grating or the mirror
+                         [r_1, r_2, r_3, r_4]
+      :type intercepts: list of Point3D objects
+
+      :returns: **size** -- The size of the footprint of the beam on the grating or the mirror in mm
+      :rtype: tuple
+
+
+   .. py:method:: centre_of_footprint()
+
+      Calculate the centre of the footprint of the beam on the grating or the mirror.
+
+      :returns: **centre** -- The centre of the footprint of the beam on the grating or the mirror
+      :rtype: Point3D
+
+
+   .. py:method:: find_offset()
+
+
+   .. py:method:: centre_of_mirror()
+
+      Calculate the centre of the mirror.
+
+      :returns: **centre** -- The centre of the mirror
+      :rtype: Point3D
+
+
+   .. py:method:: mirror_corners() -> tuple
+
+
+   .. py:method:: grating_corners() -> tuple
+
+
+   .. py:method:: corners() -> tuple[dict]
+
+      Calculate the corners of the mirror and grating.
+
+      :returns: **corners** -- The corners of the grating and mirror in the following order:
+                bottom left back, bottom right back, bottom left front, bottom right front,
+                top left back, top right back, top left front, top right front
+      :rtype: dict
+
+
+   .. py:method:: undulator_size()
+      :staticmethod:
 
 
 

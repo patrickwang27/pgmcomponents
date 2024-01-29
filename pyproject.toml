@@ -29,7 +29,7 @@ dependencies = [
 
 [tool.setuptools]
 
-packages = ["pgmcomponents", "pgmcomponents.gui", "pgmcomponents.elements", "pgmcomponents.geometry"]
+packages = ["pgmcomponents", "pgmcomponents.gui", "pgmcomponents.elements", "pgmcomponents.geometry", "pgmcomponents.shadow"]
 
 [project.scripts]
 pgm-gui = "pgmcomponents.gui.main:main"

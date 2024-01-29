@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 
-<html lang="en" data-content_root="../../../">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>pgmcomponents.elements.grating &#8212; pgmcomponents 0.2 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b3523f8e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=4f649999" />
     <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=039e1c02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=eafc0fe6" />
-    <script src="../../../_static/documentation_options.js?v=10f1778b"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=d7c963c3"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -30,16 +30,14 @@
           <div class="body" role="main">
             
   <h1>Source code for pgmcomponents.elements.grating</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">configparser</span>
-<span class="kn">from</span> <span class="nn">pgmcomponents.geometry</span> <span class="kn">import</span> <span class="n">Point3D</span><span class="p">,</span> <span class="n">Plane</span><span class="p">,</span> <span class="n">Ray3D</span><span class="p">,</span> <span class="n">Vector3D</span>
+<span class="kn">from</span> <span class="nn">pgmcomponents.geometry</span> <span class="kn">import</span> <span class="n">Point3D</span><span class="p">,</span> <span class="n">Plane</span><span class="p">,</span> <span class="n">Ray3D</span>
 <span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">c</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">e</span>
 
 
-
-<div class="viewcode-block" id="Grating">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating">[docs]</a>
-<span class="k">class</span> <span class="nc">Grating</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Grating"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating">[docs]</a><span class="k">class</span> <span class="nc">Grating</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for a simple grating</span>
 
@@ -59,6 +57,17 @@
 <span class="sd">        The dimensions of the grating in mm [length, width, height],</span>
 <span class="sd">        dimensions are also accessible with lambda functions as:</span>
 <span class="sd">        self._length(), self._width(), self._height()</span>
+<span class="sd">    borders : array_like</span>
+<span class="sd">        Specifies the borders of a realistic grating component.</span>
+<span class="sd">        |-----------Top------------|</span>
+<span class="sd">        |                          |</span>
+<span class="sd">       Left   Grating Plane      Right</span>
+<span class="sd">        |                          |      ----&gt; +z direction</span>
+<span class="sd">        |----------Bottom----------|</span>
+<span class="sd">        [top, bottom, left, right]</span>
+
+<span class="sd">        Left - Right =&gt; Tangential</span>
+<span class="sd">        Top - Bottom =&gt; Sagittal</span>
 <span class="sd">    </span>
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------</span>
@@ -101,7 +110,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    set_angles(alpha, beta)</span>
 <span class="sd">        Set the incident and diffraction angles of the grating</span>
-<span class="sd">    wavelength()</span>
+<span class="sd">    energy_to_wavelength()</span>
 <span class="sd">        Calculate the wavelength of the beam in Angstroms</span>
 <span class="sd">    compute_corners()</span>
 <span class="sd">        Compute the corners of the grating in the global coordinate system</span>
@@ -112,12 +121,13 @@
 <span class="sd">    reflect(*args)</span>
 <span class="sd">        A method to &#39;reflect&#39; rays off the grating</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Run a code formatter and linter to fix code style adn syntax errors. Black &amp; Falke8 are good for this.</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> 
                  <span class="n">line_density</span><span class="o">=</span><span class="mi">600</span><span class="p">,</span> 
-                 <span class="n">energy</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> 
+                 <span class="n">energy</span><span class="o">=</span><span class="mi">2400</span><span class="p">,</span> 
                  <span class="n">cff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
                  <span class="n">order</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> 
-                 <span class="n">dimensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]),</span> 
+                 <span class="n">dimensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">200</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="mi">50</span><span class="p">]),</span> 
                  <span class="n">borders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">])):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_line_density</span><span class="o">=</span><span class="n">line_density</span>
@@ -136,20 +146,11 @@
 
 
 
-<div class="viewcode-block" id="Grating.__repr__">
-<a class="viewcode-back" href="../../../autoapi/pgmcomponents/gui/index.html#pgmcomponents.elements.grating.Grating.__repr__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s2">&quot;Grating(line_density=</span><span class="si">{}</span><span class="s2">,</span><span class="se">\n</span><span class="s2"> energy=</span><span class="si">{}</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> cff=</span><span class="si">{}</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> order=</span><span class="si">{}</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> dimensions=</span><span class="si">{}</span><span class="s2">,</span><span class="se">\n</span><span class="s2"> borders=</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_density</span><span class="p">,</span> 
-                                                                                             <span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span> 
-                                                                                             <span class="bp">self</span><span class="o">.</span><span class="n">cff</span><span class="p">,</span> 
-                                                                                             <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span> 
-                                                                                             <span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="p">,</span>
-                                                                                             <span class="bp">self</span><span class="o">.</span><span class="n">borders</span><span class="p">)</span></div>
-
+<div class="viewcode-block" id="Grating.__repr__"><a class="viewcode-back" href="../../../autoapi/pgmcomponents/shadow/index.html#pgmcomponents.elements.grating.Grating.__repr__">[docs]</a>    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Use f-strings</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Grating(line_density=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">line_density</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2"> energy=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="si">}</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> cff=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cff</span><span class="si">}</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> order=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="si">}</span><span class="s2">, </span><span class="se">\n</span><span class="s2"> dimensions=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dimensions</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2"> borders=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">borders</span><span class="si">}</span><span class="s2">)&quot;</span></div>
     
-<div class="viewcode-block" id="Grating.read_file">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.read_file">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="Grating.read_file"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Read grating parameters from a file. </span>
 <span class="sd">        See config_pgm.ini for an example.</span>
@@ -165,17 +166,21 @@
         <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;grating&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="c1"># You could add config[&#39;grating&#39;] into the error message</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected exactly five parameters in grating file&quot;</span><span class="p">)</span>
 
-        <span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;line_density&#39;</span><span class="p">,</span> <span class="s1">&#39;energy&#39;</span><span class="p">,</span> <span class="s1">&#39;cff&#39;</span><span class="p">,</span> <span class="s1">&#39;order&#39;</span><span class="p">,</span> <span class="s1">&#39;dimensions&#39;</span><span class="p">]</span>
+        <span class="c1"># Could use tuple instead of list</span>
+        <span class="n">variables</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;line_density&#39;</span><span class="p">,</span> <span class="s1">&#39;energy&#39;</span><span class="p">,</span> <span class="s1">&#39;cff&#39;</span><span class="p">,</span> <span class="s1">&#39;order&#39;</span><span class="p">,</span> <span class="s1">&#39;dimensions&#39;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">variables</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">var</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;grating&#39;</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Missing parameter </span><span class="si">{}</span><span class="s2"> in grating file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">var</span><span class="p">))</span>
             
+        <span class="c1"># You already check if variables in config[&#39;grating&#39;] above and repeat below.</span>
+        <span class="c1"># Could use sets to create items from variable and config[&#39;grating&#39;] to avoid list comprehension.</span>
         <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">variables</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;grating&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;dimensions&#39;</span> <span class="ow">and</span> <span class="n">x</span> <span class="o">!=</span> <span class="s1">&#39;borders&#39;</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;grating&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
-            <span class="n">exec</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;self._</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> = float(</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
         
@@ -183,53 +188,68 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;grating&#39;</span><span class="p">][</span><span class="s1">&#39;dimensions&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_borders</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;grating&#39;</span><span class="p">][</span><span class="s1">&#39;borders&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)])</span></div>
 
-
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">line_density</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">line_density</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_line_density</span>
     
     <span class="nd">@line_density</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">line_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_line_density</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">def</span> <span class="nf">line_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected positive line density&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_line_density</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy</span>
     
     <span class="nd">@energy</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_energy</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">def</span> <span class="nf">energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected positive energy&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_energy</span> <span class="o">=</span> <span class="n">value</span>
         
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">cff</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">cff</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cff</span>
     
     <span class="nd">@cff</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">cff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_cff</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">def</span> <span class="nf">cff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected positive cff&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cff</span> <span class="o">=</span> <span class="n">value</span>
     
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_order</span><span class="p">)</span>
     
     <span class="nd">@order</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_order</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-    
+    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_order</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;order set!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected positive integer order&quot;</span><span class="p">)</span>
+
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>   
+    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>   
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span>
     
     <span class="nd">@alpha</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">value</span>
+    <span class="k">def</span> <span class="nf">alpha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">180</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="nb">int</span><span class="p">)):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected float alpha with magnitude less than 180 degrees&quot;</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">beta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">beta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beta</span>
     
     <span class="nd">@beta</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">beta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">beta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_beta</span> <span class="o">=</span> <span class="n">value</span>
     
     <span class="nd">@property</span>
@@ -243,65 +263,87 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_dimensions</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">plane</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">plane</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="n">Plane</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grating_plane</span>
     
     <span class="nd">@plane</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">plane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_grating_plane</span> <span class="o">=</span> <span class="n">value</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Plane</span><span class="p">)</span> <span class="k">else</span> <span class="n">Plane</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">plane</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Plane</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">Plane</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grating_plane</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected Plane object for plane&quot;</span><span class="p">)</span>
+
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">borders</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">borders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_borders</span>
     
     <span class="nd">@borders</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">borders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected exactly 1D array of length 4 for borders&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_borders</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="k">def</span> <span class="nf">borders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected exactly four values for borders&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_borders</span> <span class="o">=</span> <span class="n">value</span>
 
+<div class="viewcode-block" id="Grating.set_angles"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.set_angles">[docs]</a>    <span class="k">def</span> <span class="nf">set_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the incident and diffraction angles of the grating.</span>
 
-<div class="viewcode-block" id="Grating.set_angles">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.set_angles">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        alpha : float</span>
+<span class="sd">            The incident angle in degrees</span>
+<span class="sd">        beta : float </span>
+<span class="sd">            The diffraction angle in degrees</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the wavelength is zero</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">wavelength</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">beta</span><span class="p">)))</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">line_density</span><span class="o">*</span><span class="mi">1000</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_order</span><span class="p">)</span>
         
-        <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">wavelength</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected positive, non-zero wavelength&quot;</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_energy</span> <span class="o">=</span> <span class="mf">12398.42</span> <span class="o">/</span> <span class="n">wavelength</span> <span class="c1">#converts wavelength to eV</span>
-        <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected divide by zero in grating.set_angles&quot;</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span> <span class="o">=</span> <span class="n">alpha</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_beta</span> <span class="o">=</span> <span class="n">beta</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cff</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cff</span></div>
 
-
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_corners</span>
     
     <span class="nd">@corners</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Corners should be calculated via compute_corners().&quot;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">corners</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span><span class="nb">any</span><span class="p">)</span><span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Input ignored, corners are computed from dimensions&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_corners</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_corners</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Grating.compute_beta">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.compute_beta">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_beta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grating.compute_beta"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.compute_beta">[docs]</a>    <span class="k">def</span> <span class="nf">compute_beta</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute the diffraction angle beta from the incident angle alpha.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        beta : float</span>
+<span class="sd">            The diffraction angle in degrees</span>
+<span class="sd">        </span>
+<span class="sd">    </span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">wavelength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">)</span>
-            <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">line_density</span><span class="o">*</span><span class="mi">1000</span><span class="o">*</span><span class="n">wavelength</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">))</span>
-            <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
         
-        <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in grating.compute_beta&#39;</span><span class="p">)</span>
+        <span class="n">wavelength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_to_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">line_density</span><span class="o">*</span><span class="mi">1000</span><span class="o">*</span><span class="n">wavelength</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">alpha</span><span class="p">))</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
+        
         
         <span class="k">return</span> <span class="n">beta</span></div>
 
-
-<div class="viewcode-block" id="Grating.compute_angles">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.compute_angles">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grating.compute_angles"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.compute_angles">[docs]</a>    <span class="k">def</span> <span class="nf">compute_angles</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Compute the incident and diffraction angles of the grating.</span>
 <span class="sd">        The incident angle is calculated from the diffraction angle</span>
@@ -318,7 +360,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         
         
-        <span class="n">wavelength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">wavelength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">)</span>
+        <span class="n">wavelength</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">energy_to_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">energy</span><span class="p">,</span>
               <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">,</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">line_density</span><span class="p">,</span>
@@ -332,34 +374,38 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_beta</span></div>
 
-
-<div class="viewcode-block" id="Grating.diffract">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.diffract">[docs]</a>
-    <span class="k">def</span> <span class="nf">diffract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+    <span class="c1"># Could add type annotations on all your functions</span>
+<div class="viewcode-block" id="Grating.diffract"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.diffract">[docs]</a>    <span class="k">def</span> <span class="nf">diffract</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Ray3D</span> <span class="o">|</span> <span class="nb">list</span> <span class="p">)</span><span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A method to diffract rays off the grating.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        rays : list</span>
+<span class="sd">        *args : Ray3D or list of Ray3D</span>
 <span class="sd">            The rays to be diffracted</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        diffracted_rays : list</span>
+<span class="sd">        diffracted_rays : list of Ray3D</span>
 <span class="sd">            A list of diffracted rays</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        raises ValueError too</span>
+<span class="sd">        TypeError</span>
+<span class="sd">            If the rays are not Ray3D objects</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">diffracted_rays</span> <span class="o">=</span> <span class="p">[]</span>
         
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected at least one ray&quot;</span><span class="p">)</span>
-        
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
             <span class="n">args</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected at least one ray&quot;</span><span class="p">)</span>
 
-        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">ray</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">ray</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ray</span><span class="p">,</span> <span class="n">Ray3D</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Expected Ray3D object&quot;</span><span class="p">)</span>
             <span class="n">raydotplane</span> <span class="o">=</span> <span class="n">ray</span><span class="o">.</span><span class="n">vector</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grating_plane</span><span class="o">.</span><span class="n">normal</span><span class="p">)</span>
@@ -373,56 +419,33 @@
             <span class="n">diff_ray</span><span class="o">.</span><span class="n">vector</span> <span class="o">=</span> <span class="n">diff_ray</span><span class="o">.</span><span class="n">vector</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">diff_ray</span><span class="o">.</span><span class="n">vector</span><span class="p">)</span>
             <span class="n">diffracted_rays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">diff_ray</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">diffracted_rays</span></div>
-
     
-<div class="viewcode-block" id="Grating.calc_beta">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.calc_beta">[docs]</a>
-    <span class="nd">@staticmethod</span>
+    
 
-    <span class="k">def</span> <span class="nf">calc_beta</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">line_density</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
+    <span class="c1"># rename something like energy_to_wavelength</span>
+<div class="viewcode-block" id="Grating.energy_to_wavelength"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.energy_to_wavelength">[docs]</a>    <span class="k">def</span> <span class="nf">energy_to_wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">h</span><span class="o">*</span><span class="n">c</span><span class="o">/</span><span class="p">(</span><span class="n">e</span><span class="o">*</span><span class="n">energy</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="Grating.compute_corners"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.compute_corners">[docs]</a>    <span class="k">def</span> <span class="nf">compute_corners</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Calculate the diffraction angle beta from the incident angle alpha.</span>
-<span class="sd">        </span>
-<span class="sd">        Parameters</span>
-<span class="sd">        ----------</span>
-<span class="sd">        alpha : float</span>
-<span class="sd">            The incident angle in degrees</span>
-<span class="sd">        line_density : float</span>
-<span class="sd">            The line density of the grating in lines per mm</span>
-<span class="sd">        energy : float</span>
-<span class="sd">            The energy of the incident beam in eV</span>
-<span class="sd">        order : int</span>
-<span class="sd">            The diffraction order of the grating</span>
+<span class="sd">        Compute the corners of the grating in the global coordinate system.</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        -------</span>
-<span class="sd">        beta : float</span>
-<span class="sd">            The diffraction angle in degrees</span>
+<span class="sd">        corners : array_like</span>
+<span class="sd">            The corners of the grating in the global coordinate system:</span>
+<span class="sd">            [bottom left back, </span>
+<span class="sd">            bottom right back, </span>
+<span class="sd">            bottom left front, </span>
+<span class="sd">            bottom right front,</span>
+<span class="sd">            top left back,</span>
+<span class="sd">            top right back,</span>
+<span class="sd">            top left front,</span>
+<span class="sd">            top right front]</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">beta</span> <span class="o">=</span> <span class="mi">0</span> 
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">wavelength</span> <span class="o">=</span> <span class="n">Grating</span><span class="o">.</span><span class="n">wavelength</span><span class="p">(</span><span class="n">energy</span><span class="p">)</span>
-            <span class="n">u</span> <span class="o">=</span> <span class="n">order</span><span class="o">*</span><span class="n">line_density</span><span class="o">*</span><span class="mi">1000</span><span class="o">*</span><span class="n">wavelength</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">alpha</span><span class="p">))</span>
-            <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span><span class="n">u</span><span class="p">))</span>
-
-        <span class="k">except</span> <span class="ne">ZeroDivisionError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unexpected divide by zero in grating.calc_beta&quot;</span><span class="p">)</span>
-        
-        <span class="k">return</span> <span class="n">beta</span></div>
-
-    
-<div class="viewcode-block" id="Grating.wavelength">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.wavelength">[docs]</a>
-    <span class="k">def</span> <span class="nf">wavelength</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">energy</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">h</span><span class="o">*</span><span class="n">c</span><span class="o">/</span><span class="p">(</span><span class="n">e</span><span class="o">*</span><span class="n">energy</span><span class="p">)</span></div>
-
-    
-<div class="viewcode-block" id="Grating.compute_corners">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.compute_corners">[docs]</a>
-    <span class="k">def</span> <span class="nf">compute_corners</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         
         <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_beta</span><span class="p">)</span>
+        <span class="c1"># beta_g not used</span>
         <span class="n">beta_g</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_beta</span> <span class="o">+</span> <span class="mi">90</span><span class="p">)</span>
         <span class="n">l</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_length</span><span class="p">()</span>
         <span class="n">w</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_width</span><span class="p">()</span>
@@ -493,16 +516,13 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_corners</span></div>
 
-
-<div class="viewcode-block" id="Grating.reflect">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.reflect">[docs]</a>
-    <span class="k">def</span> <span class="nf">reflect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+<div class="viewcode-block" id="Grating.reflect"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.reflect">[docs]</a>    <span class="k">def</span> <span class="nf">reflect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">zero_order</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span><span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        A method to reflect rays off the grating.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
-<span class="sd">        *args : Ray3D</span>
+<span class="sd">        *args : Ray3D or list of Ray3D</span>
 <span class="sd">            The rays to be reflected</span>
 
 <span class="sd">        Returns</span>
@@ -513,9 +533,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">reflected_rays</span> <span class="o">=</span> <span class="p">[]</span>
         
+        <span class="c1"># Check after determining if list</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected at least one ray&quot;</span><span class="p">)</span>
         
+        <span class="c1"># se isinstance</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nb">list</span><span class="p">:</span>
             <span class="n">args</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         
@@ -530,17 +552,18 @@
                 <span class="k">continue</span>
             <span class="n">ray_array</span> <span class="o">=</span> <span class="n">ray</span><span class="o">.</span><span class="n">vector</span>
             <span class="n">grating_normal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grating_plane</span><span class="o">.</span><span class="n">normal</span>
-            <span class="n">reflected_ray_array</span> <span class="o">=</span> <span class="n">ray_array</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ray_array</span><span class="p">,</span> <span class="n">grating_normal</span><span class="p">)</span> <span class="o">*</span> <span class="n">grating_normal</span>
+            <span class="k">if</span> <span class="n">zero_order</span><span class="p">:</span>
+                
+                <span class="n">reflected_ray_array</span> <span class="o">=</span> <span class="n">ray_array</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ray_array</span><span class="p">,</span> <span class="o">-</span><span class="n">grating_normal</span><span class="p">)</span> <span class="o">*</span> <span class="n">grating_normal</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">reflected_ray_array</span> <span class="o">=</span> <span class="n">ray_array</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">ray_array</span><span class="p">,</span> <span class="n">grating_normal</span><span class="p">)</span> <span class="o">*</span> <span class="n">grating_normal</span>
             <span class="n">reflected_ray_array</span> <span class="o">=</span> <span class="n">reflected_ray_array</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">reflected_ray_array</span><span class="p">)</span>
             <span class="n">reflected_ray</span> <span class="o">=</span> <span class="n">Ray3D</span><span class="p">(</span><span class="n">plane_intersection</span><span class="p">,</span> <span class="n">reflected_ray_array</span><span class="p">)</span>
             <span class="n">reflected_rays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reflected_ray</span><span class="p">)</span>
         
         <span class="k">return</span> <span class="n">reflected_rays</span></div>
 
-
-<div class="viewcode-block" id="Grating.grating_from_file">
-<a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.grating_from_file">[docs]</a>
-    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Grating.grating_from_file"><a class="viewcode-back" href="../../../pgmcomponents.elements.html#pgmcomponents.elements.grating.Grating.grating_from_file">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">grating_from_file</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a grating from a file. </span>
@@ -555,9 +578,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">grating</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
         <span class="n">grating</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">grating</span></div>
-</div>
-
+        <span class="k">return</span> <span class="n">grating</span></div></div>
     
 </pre></div>
 
@@ -579,6 +600,13 @@
 <h3>Navigation</h3>
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../pgmcomponents.elements.html">pgmcomponents.elements package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pgmcomponents.geometry.html">pgmcomponents.geometry package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pgmcomponents.gui.html">pgmcomponents.gui package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pgmcomponents.html">pgmcomponents package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../example.html#indices-and-tables">Indices and tables</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../acknowledgements.html">acknowledgements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
 </ul>
 
@@ -617,7 +645,7 @@
       &copy;2023, Patrick Wang.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.1.2</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
