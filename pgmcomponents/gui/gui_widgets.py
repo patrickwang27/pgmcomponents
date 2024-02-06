@@ -661,7 +661,7 @@ class Topview_Widget(object):
     footprint plot of a given PGM.
     
     """
-    def __init__(self, pgm, key='-TOPVIEW-', size=(800, 400)):
+    def __init__(self, pgm, key='-TOPVIEW-', size=(800,400)):
         
         self._pgm = pgm
         self._key = key
@@ -703,15 +703,43 @@ class Topview_Widget(object):
     
 
     def make_canvas(self):
+        mirror_corners = self.pgm.mirror_corners()
+        grating_corners = self.pgm.grating_corners()
+        top_right_x = grating_corners[2][1] + self.pgm.mirror._width()*0.5 + self.pgm.grating._width()*0.5
+        top_right_z = grating_corners[2][0]
         self.canvas = sg.Graph(canvas_size=self.size, 
-                               graph_bottom_left=self.pgm.mirror_corners()[0], 
-                               graph_top_right=self.pgm.mirror_corners()[1], 
+                               enable_events=True,
+                               graph_bottom_left=self.pgm.mirror_corners()[-1], 
+                               graph_top_right=[top_right_z, top_right_x], 
                                key=self.key, 
                                background_color='white',
-                               right_click_menu=[[''],['Reset', 'Save As...']])
-    
-    def draw(self, window):
+                               right_click_menu=[[''],['Reset', 'Save As...']],
+                               motion_events=True)
+        print('grating corners:', grating_corners)
+        print('mirror corners:', mirror_corners)
+        print('graph bottom left:', self.pgm.mirror_corners()[-1])
+        print('graph top right:', [top_right_z, top_right_x])
+    def draw(self):
+        mirror_corners = self.pgm.mirror_corners()
+        grating_corners = self.pgm.grating_corners()
+        grating_corners = np.array(grating_corners) + np.array([0, 0.5*(self.pgm.mirror._width() + self.pgm.grating._width())])
+        top_left = np.array(mirror_corners[2])
+        bottom_right = [mirror_corners[0][0], mirror_corners[0][1]]
+
+        print('rectangle:', top_left, bottom_right)
+        self.canvas.draw_rectangle(top_left, bottom_right, line_color='black', line_width=2, fill_color='red')
+        self.canvas.draw_rectangle(grating_corners[1], grating_corners[-1], line_color='black', line_width=2, fill_color='blue')
         pass
+
+    def corners(self)-> tuple:
+        """
+        Returns the corners of the mirror, grating and the canvas.
+        """
+        mirror_corners = self.pgm.mirror_corners()
+        grating_corners = self.pgm.grating_corners()
+        top_right_x = grating_corners[2][1] + self.pgm.mirror._width()*0.5 + self.pgm.grating._width()*0.5
+        top_right_z = grating_corners[2][0]
+        return mirror_corners, grating_corners, [top_right_z, top_right_x]
 
 class Sideview_Widget(object):
 
@@ -767,21 +795,33 @@ class Sideview_Widget(object):
         
 def main():
     beam = Beam_Config()
-    mirror = Plane_Mirror.mirror_from_file('config_pgm.ini')
-    grating = Grating.grating_from_file('config_pgm.ini')
+    mirror = Plane_Mirror()
+    grating = Grating()
     pgm=PGM(mirror=mirror, grating=grating)
+    pgm.beam_height = 5.
+    pgm.beam_width = 5.
+    pgm.generate_rays()
+    _,_ = pgm.grating.compute_angles()
+    pgm.set_theta()
+    
     offsetscontrol = OffsetsControl(pgm.values(), 'offsets_test')
+    topview = Topview_Widget(pgm, key='topview_test')
+    #sideview = Sideview_Widget(pgm, key='sideview_test')
     test = EPICScontrol('Energy (eV)', 1100, 10, 'test')
     window = sg.Window('EPICS Control', layout=[[test.frame], 
                                                 [sg.Button('OK'), 
                                                  sg.Button('Cancel'),
                                                  sg.Button('Beam Config')],
-                                                 [offsetscontrol.frame]
+                                                 [offsetscontrol.frame],
+                                                 [topview.frame]
                                                  ])
+    window.Finalize()
+    topview.draw()
     
     while True:
         # values not used
         event, values = window.read()
+        print(event, values)
         if event == sg.WIN_CLOSED:
             break
         elif event == 'OK':

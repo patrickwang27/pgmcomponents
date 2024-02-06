@@ -395,7 +395,7 @@ class PGM(object):
 
         self.generate_rays()
         grating_ray, mirror_int, grating_int = self.propagate(self.rays)
-        print("Side view r3 int:", mirror_int[3])
+        #print("Side view r3 int:", mirror_int[3])
         for index, ray in enumerate(grating_ray):
             r_z = np.array([
             self.rays[index].position.z,
@@ -475,10 +475,10 @@ class PGM(object):
 
         mirror_footprint_width, mirror_footprint_height = self.calc_footprint_size(mirror_intercepts)
         grating_footprint_width, grating_footprint_height = self.calc_footprint_size(grating_intercepts)
-        print("Mirror footprint width:", mirror_footprint_width)
-        print("Mirror footprint height:", mirror_footprint_height)
-        print("Grating footprint width:", grating_footprint_width)
-        print("Grating footprint height:", grating_footprint_height)
+        #print("Mirror footprint width:", mirror_footprint_width)
+       # print("Mirror footprint height:", mirror_footprint_height)
+        #print("Grating footprint width:", grating_footprint_width)
+       # print("Grating footprint height:", grating_footprint_height)
         
         mirr_footprint_corners = np.array([
             [mirror_int_2[0].z, mirror_int_3[0].x],
@@ -643,15 +643,16 @@ class PGM(object):
         grating_int = grating_int[0]
         mirror_corners = self.mirror.compute_corners()
         mirror_corners = np.array(mirror_corners)
-        print(mirror_corners)
+        #print(mirror_corners)
         centre_of_mirror_top = np.mean([mirror_corners[0], mirror_corners[1], mirror_corners[4], mirror_corners[5]], axis=0)
-        print([mirror_corners[0], mirror_corners[1], mirror_corners[4], mirror_corners[5]])
-        print(centre_of_mirror_top)
+        #print([mirror_corners[0], mirror_corners[1], mirror_corners[4], mirror_corners[5]])
+        #print(centre_of_mirror_top)
         mirror_offset =  np.array([mirror_int.x, mirror_int.y, mirror_int.z]) - centre_of_mirror_top
-        print(mirror_offset)
+        #print(mirror_offset)
         mirror_offset = np.linalg.norm(mirror_offset) * mirror_offset[1]/np.abs(mirror_offset[1])
 
-        return mirror_offset
+        grating_offset = np.linalg.norm(grating_int) * grating_int[1]/np.abs(grating_int[1])
+        return mirror_offset, grating_offset
     
     def centre_of_mirror(self):
         """
