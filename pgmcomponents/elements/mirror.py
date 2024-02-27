@@ -212,6 +212,13 @@ class Plane_Mirror(object):
             self._voffset = value  
         else:
             raise TypeError("Expected voffset to be float!")
+    @property
+    def a(self)-> float:
+        return self._voffset
+    
+    @a.setter
+    def a(self, value: float)-> None:
+        self.voffset = float(value)
 
     @property
     def hoffset(self)-> float:
@@ -225,6 +232,16 @@ class Plane_Mirror(object):
             raise TypeError("Expected hoffset to be float!")
 
     @property
+    def c(self)-> float:
+        return self._hoffset
+    
+    @c.setter
+    def c(self, value: float)-> None:
+        self.hoffset = float(value)
+
+    
+
+    @property
     def axis_voffset(self)-> float:
         return self._axis_voffset
 
@@ -236,6 +253,15 @@ class Plane_Mirror(object):
             raise TypeError("Expected axis voffset to be float!")
 
     @property
+    def v(self)-> float:
+        return self._axis_voffset
+    
+    @v.setter
+    def v(self, value: float)-> None:
+        self.axis_voffset = float(value)
+
+
+    @property
     def axis_hoffset(self)-> float:
         return self._axis_hoffset
 
@@ -245,6 +271,15 @@ class Plane_Mirror(object):
             self._axis_hoffset = value
         else:
             raise TypeError("Expected axis hoffset to be float!")
+
+    @property
+    def h(self)-> float:
+        return self._axis_hoffset
+    
+    @h.setter
+    def h(self, value: float)-> None:
+        self.axis_hoffset = float(value)
+    
 
     @property
     def dimensions(self)-> np.ndarray:

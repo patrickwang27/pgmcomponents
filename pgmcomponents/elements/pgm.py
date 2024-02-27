@@ -252,6 +252,15 @@ class PGM(object):
             self._beam_offset = -1*value
         else:
             raise TypeError("Expected float for beam_offset!")
+        
+    @property
+    def b(self)-> float:
+        return self._beam_offset
+    
+    @b.setter
+    def b(self, value: float)-> None:
+        self.beam_offset = value
+
     @property
     def beam_width(self)-> float:
         return self._beam_width
