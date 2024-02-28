@@ -402,14 +402,14 @@ class Plane_Mirror(object):
         -------
         corners : np.ndarray
             The corners of the mirror in the global coordinate system
-            [bottom left back,
-            bottom right back,
+            [top left front,
+            top right front,
             bottom left front,
             bottom right front,
             top left back,
             top right back,
-            top left front,
-            top right front]
+            bottom left back,
+            bottom right back]
         
         
         """
