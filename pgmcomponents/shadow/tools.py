@@ -90,8 +90,8 @@ def shadow_dict(pgm: PGM)-> dict:
         pgm.mirror.axis_hoffset, 
         pgm.mirror.dimensions,
         pgm.mirror.theta, 
-        pgm.mirror.alpha,
-        pgm.mirror.beta]
+        pgm.grating.alpha,
+        pgm.grating.beta]
     
     pgm_dict = dict(zip(keys, values))
 
@@ -182,11 +182,23 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE, slit1_oe:OE, slit2_oe:OE)->
     c = pgm.mirror.voffset
     v = pgm.mirror.axis_voffset
     h = pgm.mirror.axis_hoffset
-    delta_z_2 = delta_y_grating*np.cos(beta_rad) - ((-c)/np.sin(theta_rad) + (a - c*1/(np.tan(theta_rad)))*np.cos(theta_rad)+ v)
-    slit2_oe.CZ_SLIT = np.array([500 - delta_z_2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])#Centre of slit (z)
+
+    print(a == pgm.mirror._hoffset)
+    print(c == pgm.mirror._voffset)
+    print(v == pgm.mirror.axis_voffset)
+    print(h == pgm.mirror.axis_hoffset)
+
+
+    #print(f'B_prime_{delta_y_grating*np.cos(beta_rad)}')
+    #print(f'd_y:{((-c)/np.sin(theta_rad) + (a - c*1/(np.tan(theta_rad)))*np.cos(theta_rad)+ v - pgm.mirror._length()*np.cos(theta_rad))}')
+    B_prime = delta_y_grating*np.cos(beta_rad)
+    D_y = -(pgm.mirror._voffset / np.sin(theta_rad) + (pgm.mirror._hoffset - pgm.mirror._voffset*1/np.tan(theta_rad)) * np.cos(theta_rad)) + pgm.mirror._axis_voffset
+    delta_z_2 = B_prime - D_y
+    print('correct?',-(pgm.mirror._voffset / np.sin(theta_rad) + (pgm.mirror._hoffset - pgm.mirror._voffset*1/np.tan(theta_rad)) * np.cos(theta_rad)) + pgm.mirror._axis_voffset)
+    slit2_oe.CZ_SLIT = np.array([-500+delta_z_2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])#Centre of slit (z)
     t_source = np.abs(delta_y_grating*np.sin(beta_rad)- (-((a-c*1/(np.tan(theta_rad)))*np.sin(theta_rad) + h)))
     slit2_oe.T_SOURCE = t_source
-
+    slit2_oe.T_IMAGE = 1000
     print(Fore.GREEN + "Initialisation complete"+ Fore.RESET)
 
     return delta_z_2

@@ -214,11 +214,11 @@ class Plane_Mirror(object):
             raise TypeError("Expected voffset to be float!")
     @property
     def a(self)-> float:
-        return self._voffset
+        return self._hoffset
     
     @a.setter
     def a(self, value: float)-> None:
-        self.voffset = float(value)
+        self.hoffset = float(value)
 
     @property
     def hoffset(self)-> float:
@@ -233,11 +233,11 @@ class Plane_Mirror(object):
 
     @property
     def c(self)-> float:
-        return self._hoffset
+        return self._voffset
     
     @c.setter
     def c(self, value: float)-> None:
-        self.hoffset = float(value)
+        self.voffset = float(value)
 
     
 
