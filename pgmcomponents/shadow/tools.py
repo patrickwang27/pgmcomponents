@@ -142,6 +142,7 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE, slit1_oe:OE, slit2_oe:OE)->
     grating_oe.T_SOURCE = 500
     grating_oe.FHIT_C = 1
     grating_oe.F_RIPPLE = 0
+    grating_oe.ORDER = -1*pgm.grating.order
     print(Fore.GREEN + "Grating initialised"+ Fore.RESET)
 
     print(Fore.YELLOW + f"Initialising mirror, \n theta = {pgm.theta} \n offset = {delta_y_mirror} mm"+ Fore.RESET)
@@ -166,8 +167,7 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE, slit1_oe:OE, slit2_oe:OE)->
     mirror_oe.T_SOURCE = 500
     print(Fore.GREEN + "Mirror initialised"+ Fore.RESET)
 
-    #slit2_oe.DUMMY = 0.1
-    #slit2_oe.FWRITE = 3
+
     slit2_oe.F_REFRAC = 2
     slit2_oe.F_SCREEN = 1 #any screens 1-yes 0-no
     slit2_oe.I_SLIT = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]) #Aperature 1-yes 0-no
@@ -178,25 +178,26 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE, slit1_oe:OE, slit2_oe:OE)->
     slit2_oe.T_REFLECTION = 180.0
     beta_rad = np.abs(np.deg2rad(pgm.grating.beta))
     theta_rad = np.deg2rad(pgm.theta)
-    a = pgm.mirror.hoffset
-    c = pgm.mirror.voffset
-    v = pgm.mirror.axis_voffset
-    h = pgm.mirror.axis_hoffset
+    a = pgm.mirror._hoffset
+    c = pgm.mirror._voffset
+    v = pgm.mirror._axis_voffset
+    h = pgm.mirror._axis_hoffset
+    b = pgm.beam_offset
+    slit1_oe.F_REFRAC = 2
+    slit1_oe.F_SCREEN = 1 #any screens 1-yes 0-no
+    slit1_oe.I_SLIT = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0]) #Aperature 1-yes 0-no
+    slit1_oe.N_SCREEN = 1
+    slit1_oe.RX_SLIT = np.array([pgm.mirror._width(), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+    slit1_oe.RZ_SLIT = np.array([1000, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+    slit1_oe.T_INCIDENCE = 0.0
+    slit1_oe.T_REFLECTION = 180.0
 
-    print(a == pgm.mirror._hoffset)
-    print(c == pgm.mirror._voffset)
-    print(v == pgm.mirror.axis_voffset)
-    print(h == pgm.mirror.axis_hoffset)
-
-
-    #print(f'B_prime_{delta_y_grating*np.cos(beta_rad)}')
-    #print(f'd_y:{((-c)/np.sin(theta_rad) + (a - c*1/(np.tan(theta_rad)))*np.cos(theta_rad)+ v - pgm.mirror._length()*np.cos(theta_rad))}')
+    
     B_prime = delta_y_grating*np.cos(beta_rad)
     D_y = -(pgm.mirror._voffset / np.sin(theta_rad) + (pgm.mirror._hoffset - pgm.mirror._voffset*1/np.tan(theta_rad)) * np.cos(theta_rad)) + pgm.mirror._axis_voffset
     delta_z_2 = B_prime - D_y
     #print('correct?',-(pgm.mirror._voffset / np.sin(theta_rad) + (pgm.mirror._hoffset - pgm.mirror._voffset*1/np.tan(theta_rad)) * np.cos(theta_rad)) + pgm.mirror._axis_voffset)
     slit2_oe.CZ_SLIT = np.array([-500+delta_z_2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])#Centre of slit (z)
-    
     B_prime_z = delta_y_grating*np.sin(beta_rad)
     D_z = -((a-c*1/np.tan(theta_rad)*np.sin(theta_rad))) + h
     print(D_z)
@@ -204,6 +205,11 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE, slit1_oe:OE, slit2_oe:OE)->
     slit2_oe.T_IMAGE = 1000
     print(Fore.GREEN + "Initialisation complete"+ Fore.RESET)
 
+    s = (b + v - c*np.sin(theta_rad))/np.cos(theta_rad) - a
+    delta_z_1 = (pgm.grating._length()/2)*np.cos(beta_rad) - (v - c*np.sin(theta_rad) - (s + a)*np.cos(theta_rad))
+    s = (np.abs(b) + v - c*np.sin(theta_rad))/np.cos(theta_rad) - a
+    slit1_oe.T_IMAGE =  (pgm.grating._length()/2)*np.sin(beta_rad) + (h - c*np.cos(theta_rad) - (s + a)*np.sin(theta_rad))
+    slit1_oe.CZ_SLIT = np.array([500+delta_z_1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
     return delta_z_2
 
 
