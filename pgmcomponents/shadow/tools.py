@@ -142,7 +142,7 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE, slit1_oe:OE, slit2_oe:OE, T
     
 
     print(Fore.YELLOW + f"Initialising grating, \n alpha= {pgm.grating.alpha}, \n beta= {pgm.grating.beta}, \n offset = {delta_y_grating} mm, \n line_density= {pgm.grating.line_density}"+ Fore.RESET)
-    grating_oe.ALPHA = 180
+    #grating_oe.ALPHA = 180
     grating_oe.DUMMY = 0.1
     grating_oe.RULING = pgm.grating.line_density
     grating_oe.F_MOVE = 1
@@ -155,7 +155,7 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE, slit1_oe:OE, slit2_oe:OE, T
     grating_oe.RLEN1 = pgm.grating._length()/2
     grating_oe.RLEN2 = pgm.grating._length()/2
     grating_oe.FHIT_C = 1
-    grating_oe.F_RIPPLE = 0
+    #grating_oe.F_RIPPLE = 0
     grating_oe.ORDER = -1*pgm.grating.order
 
     b_prime = np.abs(delta_y_grating + b)
@@ -168,7 +168,7 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE, slit1_oe:OE, slit2_oe:OE, T
 
     print(Fore.YELLOW + f"Initialising mirror, \n theta = {pgm.theta} \n offset = {delta_y_mirror} mm"+ Fore.RESET)
     
-    mirror_oe.ALPHA = 0
+    #mirror_oe.ALPHA = 0
     mirror_oe.DUMMY = 0.1
     mirror_oe.T_INCIDENCE = pgm.theta
     mirror_oe.T_REFLECTION = pgm.theta
@@ -183,8 +183,8 @@ def config_oe(pgm: PGM, grating_oe:OE, mirror_oe:OE, slit1_oe:OE, slit2_oe:OE, T
     mirror_oe.FHIT_C = 1
     mirror_oe.FWRITE = 0
     mirror_oe.F_G_S = 2
-    mirror_oe.F_REFLEC = 0
-    mirror_oe.F_RIPPLE = 0
+    #mirror_oe.F_REFLEC = 0
+    #mirror_oe.F_RIPPLE = 0
     mirror_oe.T_IMAGE = 0
     mirror_oe.T_SOURCE = 0
 
@@ -277,6 +277,6 @@ def intensity(beam:Beam)-> float:
     intensity : float
         The intensity of the beam.
     """
-    return np.sum([beam.getshonecol(6,nolost=1)**2,
-                   beam.getshonecol(7,nolost=1)**2,
-                   beam.getshonecol(8,nolost=1)**2])
+    return np.sum([beam.getshonecol(7,nolost=1)**2,
+                   beam.getshonecol(8,nolost=1)**2,
+                   beam.getshonecol(9,nolost=1)**2])

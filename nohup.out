@@ -152432,3 +152432,642 @@ dirname:  /tmp/.mount_math-nFc3ijE/resources/app.asar/common/main
 [I 2024-03-01 16:02:46.075 ServerApp] Shutting down 2 kernels
 [I 2024-03-01 16:02:46.078 ServerApp] Kernel shutdown: 8bba2b8e-c62c-436d-b574-745140950edb
 [I 2024-03-01 16:02:46.079 ServerApp] Kernel shutdown: b2e88768-3fdc-423c-9121-62176ebb0972
+[W 2024-03-05 10:39:07.691 ServerApp] nbclassic | error adding extension (enabled: True): The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+[I 2024-03-05 10:39:07.693 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2024-03-05 10:39:07.695 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2024-03-05 10:39:07.698 ServerApp] jupyterlab | extension was successfully linked.
+[I 2024-03-05 10:39:07.700 ServerApp] notebook | extension was successfully linked.
+[W 2024-03-05 10:39:07.849 ServerApp] voila | error adding extension (enabled: True): The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+[I 2024-03-05 10:39:07.849 ServerApp] notebook_shim | extension was successfully linked.
+[I 2024-03-05 10:39:07.872 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2024-03-05 10:39:07.873 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2024-03-05 10:39:07.873 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2024-03-05 10:39:07.877 LabApp] JupyterLab extension loaded from /home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyterlab
+[I 2024-03-05 10:39:07.877 LabApp] JupyterLab application directory is /home/sleepychemist/miniconda3/share/jupyter/lab
+[I 2024-03-05 10:39:07.877 LabApp] Extension Manager is 'pypi'.
+[I 2024-03-05 10:39:07.883 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2024-03-05 10:39:07.884 ServerApp] notebook | extension was successfully loaded.
+[I 2024-03-05 10:39:07.885 ServerApp] Serving notebooks from local directory: /home/sleepychemist/Diamond/pgmcomponents
+[I 2024-03-05 10:39:07.885 ServerApp] Jupyter Server 2.12.5 is running at:
+[I 2024-03-05 10:39:07.885 ServerApp] http://localhost:8888/lab?token=d61a58e4fe375d87e12f5a740a748d2f7538c3cf57cdfc3b
+[I 2024-03-05 10:39:07.885 ServerApp]     http://127.0.0.1:8888/lab?token=d61a58e4fe375d87e12f5a740a748d2f7538c3cf57cdfc3b
+[I 2024-03-05 10:39:07.885 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2024-03-05 10:39:07.896 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/sleepychemist/.local/share/jupyter/runtime/jpserver-54024-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/lab?token=d61a58e4fe375d87e12f5a740a748d2f7538c3cf57cdfc3b
+        http://127.0.0.1:8888/lab?token=d61a58e4fe375d87e12f5a740a748d2f7538c3cf57cdfc3b
+[I 2024-03-05 10:39:08.129 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[W 2024-03-05 10:39:09.956 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2024-03-05 10:39:11.323 ServerApp] Kernel started: c67ef9c5-41c2-4f89-8281-106467901f26
+[I 2024-03-05 10:39:11.331 ServerApp] Kernel started: 3d5b376d-66c9-4984-82c4-57cea7decc18
+[I 2024-03-05 10:39:11.783 ServerApp] Connecting to kernel 3d5b376d-66c9-4984-82c4-57cea7decc18.
+[I 2024-03-05 10:39:11.799 ServerApp] Connecting to kernel c67ef9c5-41c2-4f89-8281-106467901f26.
+[I 2024-03-05 10:39:11.811 ServerApp] Connecting to kernel 3d5b376d-66c9-4984-82c4-57cea7decc18.
+[I 2024-03-05 10:39:11.825 ServerApp] Connecting to kernel 3d5b376d-66c9-4984-82c4-57cea7decc18.
+[I 2024-03-05 10:39:16.493 ServerApp] Interrupted...
+[IPKernelApp] WARNING | Parent appears to have exited, shutting down.
+[IPKernelApp] WARNING | Parent appears to have exited, shutting down.
+[W 2024-03-05 10:39:25.242 ServerApp] nbclassic | error adding extension (enabled: True): The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+[I 2024-03-05 10:39:25.244 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2024-03-05 10:39:25.246 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2024-03-05 10:39:25.248 ServerApp] jupyterlab | extension was successfully linked.
+[I 2024-03-05 10:39:25.251 ServerApp] notebook | extension was successfully linked.
+[W 2024-03-05 10:39:25.366 ServerApp] voila | error adding extension (enabled: True): The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+[I 2024-03-05 10:39:25.366 ServerApp] notebook_shim | extension was successfully linked.
+[I 2024-03-05 10:39:25.385 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2024-03-05 10:39:25.386 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2024-03-05 10:39:25.387 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2024-03-05 10:39:25.388 LabApp] JupyterLab extension loaded from /home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyterlab
+[I 2024-03-05 10:39:25.388 LabApp] JupyterLab application directory is /home/sleepychemist/miniconda3/share/jupyter/lab
+[I 2024-03-05 10:39:25.388 LabApp] Extension Manager is 'pypi'.
+[I 2024-03-05 10:39:25.394 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2024-03-05 10:39:25.395 ServerApp] notebook | extension was successfully loaded.
+[I 2024-03-05 10:39:25.395 ServerApp] Serving notebooks from local directory: /home/sleepychemist/Diamond/pgmcomponents
+[I 2024-03-05 10:39:25.395 ServerApp] Jupyter Server 2.12.5 is running at:
+[I 2024-03-05 10:39:25.395 ServerApp] http://localhost:8888/lab?token=83b93850bb25c63e5991b20927a84c313aa624f26d9fdfb5
+[I 2024-03-05 10:39:25.395 ServerApp]     http://127.0.0.1:8888/lab?token=83b93850bb25c63e5991b20927a84c313aa624f26d9fdfb5
+[I 2024-03-05 10:39:25.395 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2024-03-05 10:39:25.416 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/sleepychemist/.local/share/jupyter/runtime/jpserver-54208-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/lab?token=83b93850bb25c63e5991b20927a84c313aa624f26d9fdfb5
+        http://127.0.0.1:8888/lab?token=83b93850bb25c63e5991b20927a84c313aa624f26d9fdfb5
+[I 2024-03-05 10:39:25.579 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[W 2024-03-05 10:39:27.275 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2024-03-05 10:39:28.621 ServerApp] Kernel started: a2ab1fc8-5a4f-4711-b79e-8288fd97a08a
+[I 2024-03-05 10:39:28.628 ServerApp] Kernel started: f64474d2-2dc1-474c-8782-2aadd7f21687
+[I 2024-03-05 10:39:29.049 ServerApp] Connecting to kernel f64474d2-2dc1-474c-8782-2aadd7f21687.
+[I 2024-03-05 10:39:29.064 ServerApp] Connecting to kernel a2ab1fc8-5a4f-4711-b79e-8288fd97a08a.
+[I 2024-03-05 10:39:29.076 ServerApp] Connecting to kernel f64474d2-2dc1-474c-8782-2aadd7f21687.
+[I 2024-03-05 10:39:29.088 ServerApp] Connecting to kernel f64474d2-2dc1-474c-8782-2aadd7f21687.
+[C 2024-03-05 10:39:33.496 ServerApp] received signal 15, stopping
+[I 2024-03-05 10:39:33.496 ServerApp] Shutting down 5 extensions
+[I 2024-03-05 10:39:33.497 ServerApp] Shutting down 2 kernels
+[I 2024-03-05 10:39:33.497 ServerApp] Kernel shutdown: a2ab1fc8-5a4f-4711-b79e-8288fd97a08a
+[I 2024-03-05 10:39:33.497 ServerApp] Kernel shutdown: f64474d2-2dc1-474c-8782-2aadd7f21687
+[W 2024-03-05 10:39:44.115 ServerApp] nbclassic | error adding extension (enabled: True): The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+[I 2024-03-05 10:39:44.117 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2024-03-05 10:39:44.119 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2024-03-05 10:39:44.121 ServerApp] jupyterlab | extension was successfully linked.
+[I 2024-03-05 10:39:44.124 ServerApp] notebook | extension was successfully linked.
+[W 2024-03-05 10:39:44.239 ServerApp] voila | error adding extension (enabled: True): The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+[I 2024-03-05 10:39:44.239 ServerApp] notebook_shim | extension was successfully linked.
+[I 2024-03-05 10:39:44.257 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2024-03-05 10:39:44.258 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2024-03-05 10:39:44.259 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2024-03-05 10:39:44.260 LabApp] JupyterLab extension loaded from /home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyterlab
+[I 2024-03-05 10:39:44.260 LabApp] JupyterLab application directory is /home/sleepychemist/miniconda3/share/jupyter/lab
+[I 2024-03-05 10:39:44.260 LabApp] Extension Manager is 'pypi'.
+[I 2024-03-05 10:39:44.266 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2024-03-05 10:39:44.267 ServerApp] notebook | extension was successfully loaded.
+[I 2024-03-05 10:39:44.267 ServerApp] Serving notebooks from local directory: /home/sleepychemist/Diamond/pgmcomponents
+[I 2024-03-05 10:39:44.267 ServerApp] Jupyter Server 2.12.5 is running at:
+[I 2024-03-05 10:39:44.268 ServerApp] http://localhost:8888/lab?token=69186f162ba5c3c72b4256a58954bae8f9e7ac7fb93f53a3
+[I 2024-03-05 10:39:44.268 ServerApp]     http://127.0.0.1:8888/lab?token=69186f162ba5c3c72b4256a58954bae8f9e7ac7fb93f53a3
+[I 2024-03-05 10:39:44.268 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2024-03-05 10:39:44.280 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/sleepychemist/.local/share/jupyter/runtime/jpserver-54446-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/lab?token=69186f162ba5c3c72b4256a58954bae8f9e7ac7fb93f53a3
+        http://127.0.0.1:8888/lab?token=69186f162ba5c3c72b4256a58954bae8f9e7ac7fb93f53a3
+[I 2024-03-05 10:39:44.437 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[W 2024-03-05 10:39:46.319 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2024-03-05 10:39:48.099 ServerApp] Kernel started: 8f6df709-c644-4208-a332-13a97d79d74b
+[I 2024-03-05 10:39:48.110 ServerApp] Kernel started: 2c061151-968e-45fb-b2b7-70db3e4971ad
+[I 2024-03-05 10:39:48.500 ServerApp] Connecting to kernel 2c061151-968e-45fb-b2b7-70db3e4971ad.
+[I 2024-03-05 10:39:48.515 ServerApp] Connecting to kernel 8f6df709-c644-4208-a332-13a97d79d74b.
+[I 2024-03-05 10:39:48.527 ServerApp] Connecting to kernel 2c061151-968e-45fb-b2b7-70db3e4971ad.
+[I 2024-03-05 10:39:48.539 ServerApp] Connecting to kernel 2c061151-968e-45fb-b2b7-70db3e4971ad.
+ Generated          250  rays out of         5000
+                    500
+                    750
+                   1000
+                   1250
+                   1500
+                   1750
+                   2000
+                   2250
+                   2500
+                   2750
+                   3000
+                   3250
+                   3500
+                   3750
+                   4000
+                   4250
+                   4500
+                   4750
+                   5000
+ Exit from SOURCE
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ Exit from MIRROR
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ Exit from MIRROR
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+[I 2024-03-05 10:43:48.091 ServerApp] Saving file at /APITesting.ipynb
+ Generated          250  rays out of         5000
+                    500
+                    750
+                   1000
+                   1250
+                   1500
+                   1750
+                   2000
+                   2250
+                   2500
+                   2750
+                   3000
+                   3250
+                   3500
+                   3750
+                   4000
+                   4250
+                   4500
+                   4750
+                   5000
+ Exit from SOURCE
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ SETSOUR: Error: user_units_to_cm <=0. Reset to 1.0 (using cm)
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ MIRROR1: Warning: Empty element (no mirr.xx file)
+ Call to SCREEN
+ Exit from SCREEN
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ Exit from MIRROR
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ Exit from MIRROR
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ SETSOUR: Error: user_units_to_cm <=0. Reset to 1.0 (using cm)
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ MIRROR1: Warning: Empty element (no mirr.xx file)
+ Call to SCREEN
+ Exit from SCREEN
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+ Generated          250  rays out of         5000
+                    500
+                    750
+                   1000
+                   1250
+                   1500
+                   1750
+                   2000
+                   2250
+                   2500
+                   2750
+                   3000
+                   3250
+                   3500
+                   3750
+                   4000
+                   4250
+                   4500
+                   4750
+                   5000
+ Exit from SOURCE
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ SETSOUR: Error: user_units_to_cm <=0. Reset to 1.0 (using cm)
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ MIRROR1: Warning: Empty element (no mirr.xx file)
+ Call to SCREEN
+ Exit from SCREEN
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ Exit from MIRROR
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ Exit from MIRROR
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+ Call to RESET
+ Exit from RESET
+ Call to SETSOUR
+ SETSOUR: Error: user_units_to_cm <=0. Reset to 1.0 (using cm)
+ Exit from SETSOUR
+ Call to IMREF
+ Exit from IMREF
+ Call to OPTAXIS
+ Exit from OPTAXIS
+ Call to MSETUP
+ Exit from MSETUP
+ Call to RESTART
+ Exit from RESTART
+ Call to MIRROR
+ MIRROR1: Warning: Empty element (no mirr.xx file)
+ Call to SCREEN
+ Exit from SCREEN
+ Call to IMAGE
+ Exit from IMAGE
+ Call to DEALLOC
+ Exit from DEALLOC
+[I 2024-03-05 10:45:49.108 ServerApp] Saving file at /APITesting.ipynb
+[I 2024-03-05 16:34:09.411 ServerApp] Starting buffering for 2c061151-968e-45fb-b2b7-70db3e4971ad:fefbf859-e431-4a55-a36a-bf02e1c27a2b
+[I 2024-03-05 16:34:09.411 ServerApp] Starting buffering for 8f6df709-c644-4208-a332-13a97d79d74b:96c4a0da-e9c4-4c4c-bd25-8e3f3d3a2714
+[I 2024-03-05 16:34:09.427 ServerApp] Connecting to kernel 2c061151-968e-45fb-b2b7-70db3e4971ad.
+[I 2024-03-05 16:34:09.427 ServerApp] Restoring connection for 2c061151-968e-45fb-b2b7-70db3e4971ad:fefbf859-e431-4a55-a36a-bf02e1c27a2b
+[I 2024-03-05 16:34:09.447 ServerApp] Connecting to kernel 8f6df709-c644-4208-a332-13a97d79d74b.
+[I 2024-03-05 16:34:09.447 ServerApp] Restoring connection for 8f6df709-c644-4208-a332-13a97d79d74b:96c4a0da-e9c4-4c4c-bd25-8e3f3d3a2714
+[I 2024-03-05 17:04:42.565 ServerApp] Saving file at /APITesting.ipynb
+[I 2024-03-05 17:06:44.565 ServerApp] Saving file at /APITesting.ipynb
+[I 2024-03-05 17:08:45.680 ServerApp] Saving file at /APITesting.ipynb
+[I 2024-03-05 17:10:46.706 ServerApp] Saving file at /APITesting.ipynb
+[I 2024-03-05 17:12:48.606 ServerApp] Saving file at /APITesting.ipynb
+[I 2024-03-05 17:14:49.669 ServerApp] Saving file at /APITesting.ipynb
+[I 2024-03-05 17:16:29.892 ServerApp] Starting buffering for 2c061151-968e-45fb-b2b7-70db3e4971ad:fefbf859-e431-4a55-a36a-bf02e1c27a2b
+[I 2024-03-05 17:16:29.893 ServerApp] Starting buffering for 8f6df709-c644-4208-a332-13a97d79d74b:96c4a0da-e9c4-4c4c-bd25-8e3f3d3a2714
+[C 2024-03-05 17:16:29.962 ServerApp] received signal 15, stopping
+[I 2024-03-05 17:16:29.963 ServerApp] Shutting down 5 extensions
+[I 2024-03-05 17:16:29.963 ServerApp] Shutting down 2 kernels
+[I 2024-03-05 17:16:29.964 ServerApp] Kernel shutdown: 8f6df709-c644-4208-a332-13a97d79d74b
+[I 2024-03-05 17:16:29.965 ServerApp] Kernel shutdown: 2c061151-968e-45fb-b2b7-70db3e4971ad
+[W 2024-03-06 10:23:30.553 ServerApp] nbclassic | error adding extension (enabled: True): The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+[I 2024-03-06 10:23:30.555 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2024-03-06 10:23:30.558 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2024-03-06 10:23:30.560 ServerApp] jupyterlab | extension was successfully linked.
+[I 2024-03-06 10:23:30.563 ServerApp] notebook | extension was successfully linked.
+[W 2024-03-06 10:23:30.689 ServerApp] voila | error adding extension (enabled: True): The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+[I 2024-03-06 10:23:30.689 ServerApp] notebook_shim | extension was successfully linked.
+[I 2024-03-06 10:23:30.709 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2024-03-06 10:23:30.710 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2024-03-06 10:23:30.711 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2024-03-06 10:23:30.712 LabApp] JupyterLab extension loaded from /home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyterlab
+[I 2024-03-06 10:23:30.712 LabApp] JupyterLab application directory is /home/sleepychemist/miniconda3/share/jupyter/lab
+[I 2024-03-06 10:23:30.713 LabApp] Extension Manager is 'pypi'.
+[I 2024-03-06 10:23:30.719 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2024-03-06 10:23:30.721 ServerApp] notebook | extension was successfully loaded.
+[I 2024-03-06 10:23:30.721 ServerApp] The port 8888 is already in use, trying another port.
+[I 2024-03-06 10:23:30.721 ServerApp] Serving notebooks from local directory: /home/sleepychemist/Diamond/pgmcomponents
+[I 2024-03-06 10:23:30.721 ServerApp] Jupyter Server 2.12.5 is running at:
+[I 2024-03-06 10:23:30.721 ServerApp] http://localhost:8889/lab?token=309ea701f218870e7168a727aa9d4ae2b8749df2c5255f24
+[I 2024-03-06 10:23:30.721 ServerApp]     http://127.0.0.1:8889/lab?token=309ea701f218870e7168a727aa9d4ae2b8749df2c5255f24
+[I 2024-03-06 10:23:30.721 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2024-03-06 10:23:30.732 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/sleepychemist/.local/share/jupyter/runtime/jpserver-7685-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8889/lab?token=309ea701f218870e7168a727aa9d4ae2b8749df2c5255f24
+        http://127.0.0.1:8889/lab?token=309ea701f218870e7168a727aa9d4ae2b8749df2c5255f24
+[I 2024-03-06 10:23:30.899 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[W 2024-03-06 10:23:32.654 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2024-03-06 10:23:38.501 ServerApp] Kernel started: 2c41cb5b-3d80-406d-9d89-9b58fd28f11c
+[I 2024-03-06 10:23:38.922 ServerApp] Connecting to kernel 2c41cb5b-3d80-406d-9d89-9b58fd28f11c.
+[I 2024-03-06 10:23:38.935 ServerApp] Connecting to kernel 2c41cb5b-3d80-406d-9d89-9b58fd28f11c.
+[I 2024-03-06 10:23:38.959 ServerApp] Connecting to kernel 2c41cb5b-3d80-406d-9d89-9b58fd28f11c.
+[I 2024-03-06 10:25:39.119 ServerApp] Saving file at /APITesting.ipynb
+[I 2024-03-06 10:30:08.333 ServerApp] Starting buffering for 2c41cb5b-3d80-406d-9d89-9b58fd28f11c:fffb9179-fc10-494d-a76e-6bb2d87e8fbe
+[W 2024-03-06 12:11:47.240 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2024-03-06 12:11:47.245 ServerApp] Connecting to kernel 2c41cb5b-3d80-406d-9d89-9b58fd28f11c.
+[I 2024-03-06 12:11:47.408 ServerApp] Starting buffering for 2c41cb5b-3d80-406d-9d89-9b58fd28f11c:ccb30a8d-b5de-40ae-9e8e-7645c9796107
+[W 2024-03-06 12:11:47.538 ServerApp] 404 GET /api/contents/EnergyGap.ipynb?content=0&hash=0&1709727107535 (1569af4ada5740dfa2b6298f1ba10655@127.0.0.1) 1.51ms referer=http://localhost:8889/lab/tree/APITesting.ipynb
+[W 2024-03-06 12:11:47.539 ServerApp] 404 GET /api/contents/EnergyGap.ipynb?content=0&hash=0&1709727107535 (127.0.0.1): No such file or directory: EnergyGap.ipynb
+[I 2024-03-06 12:11:50.763 ServerApp] Connecting to kernel 2c41cb5b-3d80-406d-9d89-9b58fd28f11c.
+[I 2024-03-06 12:27:47.593 ServerApp] Starting buffering for 2c41cb5b-3d80-406d-9d89-9b58fd28f11c:cc78b97c-b71c-4374-b959-f80b129c4bb5
+[C 2024-03-06 17:14:33.872 ServerApp] received signal 15, stopping
+[I 2024-03-06 17:14:33.873 ServerApp] Shutting down 5 extensions
+[I 2024-03-06 17:14:33.873 ServerApp] Shutting down 1 kernel
+[I 2024-03-06 17:14:33.874 ServerApp] Kernel shutdown: 2c41cb5b-3d80-406d-9d89-9b58fd28f11c
+[W 2024-03-07 09:38:50.599 ServerApp] nbclassic | error adding extension (enabled: True): The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'nbclassic' could not be found (No module named 'nbclassic'). Are you sure the extension is installed?
+[I 2024-03-07 09:38:50.601 ServerApp] jupyter_lsp | extension was successfully linked.
+[I 2024-03-07 09:38:50.604 ServerApp] jupyter_server_terminals | extension was successfully linked.
+[I 2024-03-07 09:38:50.606 ServerApp] jupyterlab | extension was successfully linked.
+[I 2024-03-07 09:38:50.608 ServerApp] notebook | extension was successfully linked.
+[W 2024-03-07 09:38:50.762 ServerApp] voila | error adding extension (enabled: True): The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+    Traceback (most recent call last):
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 322, in add_extension
+        extpkg = ExtensionPackage(name=extension_name, enabled=enabled)
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 186, in __init__
+        self._load_metadata()
+      File "/home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyter_server/extension/manager.py", line 201, in _load_metadata
+        raise ExtensionModuleNotFound(msg) from None
+    jupyter_server.extension.utils.ExtensionModuleNotFound: The module 'voila' could not be found (No module named 'voila'). Are you sure the extension is installed?
+[I 2024-03-07 09:38:50.762 ServerApp] notebook_shim | extension was successfully linked.
+[I 2024-03-07 09:38:50.785 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2024-03-07 09:38:50.786 ServerApp] jupyter_lsp | extension was successfully loaded.
+[I 2024-03-07 09:38:50.787 ServerApp] jupyter_server_terminals | extension was successfully loaded.
+[I 2024-03-07 09:38:50.789 LabApp] JupyterLab extension loaded from /home/sleepychemist/miniconda3/lib/python3.8/site-packages/jupyterlab
+[I 2024-03-07 09:38:50.789 LabApp] JupyterLab application directory is /home/sleepychemist/miniconda3/share/jupyter/lab
+[I 2024-03-07 09:38:50.789 LabApp] Extension Manager is 'pypi'.
+[I 2024-03-07 09:38:50.795 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2024-03-07 09:38:50.797 ServerApp] notebook | extension was successfully loaded.
+[I 2024-03-07 09:38:50.797 ServerApp] Serving notebooks from local directory: /home/sleepychemist/Diamond/pgmcomponents
+[I 2024-03-07 09:38:50.797 ServerApp] Jupyter Server 2.12.5 is running at:
+[I 2024-03-07 09:38:50.797 ServerApp] http://localhost:8888/lab?token=2efa40af6c480c183fe03a5928b873d71fa94ff2a197c0ee
+[I 2024-03-07 09:38:50.797 ServerApp]     http://127.0.0.1:8888/lab?token=2efa40af6c480c183fe03a5928b873d71fa94ff2a197c0ee
+[I 2024-03-07 09:38:50.797 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2024-03-07 09:38:50.808 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/sleepychemist/.local/share/jupyter/runtime/jpserver-5010-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/lab?token=2efa40af6c480c183fe03a5928b873d71fa94ff2a197c0ee
+        http://127.0.0.1:8888/lab?token=2efa40af6c480c183fe03a5928b873d71fa94ff2a197c0ee
+[I 2024-03-07 09:38:51.036 ServerApp] Skipped non-installed server(s): bash-language-server, dockerfile-language-server-nodejs, javascript-typescript-langserver, jedi-language-server, julia-language-server, pyright, python-language-server, python-lsp-server, r-languageserver, sql-language-server, texlab, typescript-language-server, unified-language-server, vscode-css-languageserver-bin, vscode-html-languageserver-bin, vscode-json-languageserver-bin, yaml-language-server
+[W 2024-03-07 09:38:52.777 LabApp] Could not determine jupyterlab build status without nodejs
+[W 2024-03-07 09:38:52.888 ServerApp] 404 GET /api/contents/EnergyGap.ipynb?content=0&hash=0&1709804332886 (3c5b685013544d11ab89755370841451@127.0.0.1) 1.03ms referer=http://localhost:8888/lab
+[W 2024-03-07 09:38:52.889 ServerApp] 404 GET /api/contents/EnergyGap.ipynb?content=0&hash=0&1709804332886 (127.0.0.1): No such file or directory: EnergyGap.ipynb
+[I 2024-03-07 09:39:00.708 ServerApp] Kernel started: 2fcf89c5-7326-49d9-9a1b-39e75d04d7dd
+[I 2024-03-07 09:39:01.060 ServerApp] Connecting to kernel 2fcf89c5-7326-49d9-9a1b-39e75d04d7dd.
+[I 2024-03-07 09:39:01.071 ServerApp] Connecting to kernel 2fcf89c5-7326-49d9-9a1b-39e75d04d7dd.
+[I 2024-03-07 09:39:01.083 ServerApp] Connecting to kernel 2fcf89c5-7326-49d9-9a1b-39e75d04d7dd.
+[I 2024-03-07 09:39:06.170 ServerApp] Kernel started: 3f0a7d28-8170-4ac4-bdf2-299038676d56
+[I 2024-03-07 09:39:06.461 ServerApp] Connecting to kernel 3f0a7d28-8170-4ac4-bdf2-299038676d56.
+[I 2024-03-07 09:39:07.063 ServerApp] Kernel started: 2ccd6fd4-fe5c-4577-a698-e4cdbaac18af
+[I 2024-03-07 09:39:07.350 ServerApp] Connecting to kernel 2ccd6fd4-fe5c-4577-a698-e4cdbaac18af.
+[I 2024-03-07 09:39:08.203 ServerApp] Kernel started: 6d3c0e94-eadd-4bcb-8b32-0d2d25de2292
+[I 2024-03-07 09:39:08.518 ServerApp] Connecting to kernel 6d3c0e94-eadd-4bcb-8b32-0d2d25de2292.
+[I 2024-03-07 09:39:18.345 ServerApp] Kernel shutdown: 6d3c0e94-eadd-4bcb-8b32-0d2d25de2292
+[W 2024-03-07 09:39:18.586 ServerApp] delete /未命名2.ipynb
+[I 2024-03-07 09:39:23.143 ServerApp] Kernel shutdown: 2ccd6fd4-fe5c-4577-a698-e4cdbaac18af
+[W 2024-03-07 09:39:23.381 ServerApp] delete /未命名1.ipynb
+[I 2024-03-07 09:39:42.987 ServerApp] Kernel started: 3d9ebf12-2df9-4bf3-8256-085fc982c519
+[I 2024-03-07 09:39:43.351 ServerApp] Connecting to kernel 3d9ebf12-2df9-4bf3-8256-085fc982c519.
+[I 2024-03-07 09:39:53.547 ServerApp] Kernel started: c8a8168b-63c5-4dff-ad75-a88c125746a9
+[I 2024-03-07 09:39:53.926 ServerApp] Connecting to kernel c8a8168b-63c5-4dff-ad75-a88c125746a9.
+[I 2024-03-07 09:40:59.870 ServerApp] Saving file at /Untitled.ipynb
+[I 2024-03-07 09:41:05.979 ServerApp] Saving file at /未命名.ipynb
+[I 2024-03-07 09:43:43.628 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 09:45:44.628 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 09:47:45.541 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 09:48:08.124 ServerApp] Kernel interrupted: 3d9ebf12-2df9-4bf3-8256-085fc982c519
+[I 2024-03-07 09:48:45.616 ServerApp] Kernel interrupted: 3d9ebf12-2df9-4bf3-8256-085fc982c519
+[I 2024-03-07 09:49:28.255 ServerApp] Kernel interrupted: 3d9ebf12-2df9-4bf3-8256-085fc982c519
+[I 2024-03-07 09:49:45.594 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 09:53:47.622 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:14:49.631 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:16:49.679 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:18:49.721 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:22:49.767 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:24:50.627 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:37:08.773 ServerApp] Kernel interrupted: 3d9ebf12-2df9-4bf3-8256-085fc982c519
+[I 2024-03-07 11:37:27.396 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:39:27.425 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:41:27.468 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:43:27.515 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:45:27.553 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:47:27.601 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:49:27.646 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:51:27.697 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:53:27.739 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:55:28.622 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 11:59:29.625 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 12:01:29.651 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 12:02:33.661 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 12:04:33.707 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 12:06:33.764 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 12:08:33.807 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 12:10:33.857 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 12:32:49.630 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:17:49.630 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:19:49.676 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:21:49.719 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:23:50.625 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:25:50.665 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:31:50.709 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:33:50.758 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:35:50.794 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:39:51.627 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:41:52.626 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:43:52.672 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:45:52.722 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:47:52.756 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:49:53.637 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:53:54.642 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 14:59:55.636 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:01:55.710 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:03:55.762 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:05:56.642 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:13:58.645 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:15:58.719 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:17:58.794 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:19:58.866 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:50:32.991 ServerApp] Starting buffering for c8a8168b-63c5-4dff-ad75-a88c125746a9:3ec51d68-b292-49ca-984f-4d77e6f8f1e4
+[I 2024-03-07 15:50:33.934 ServerApp] Starting buffering for 3f0a7d28-8170-4ac4-bdf2-299038676d56:1f4460c5-3e85-4a9c-84e8-0be14aa53f28
+[I 2024-03-07 15:52:49.702 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:56:51.652 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 15:58:52.643 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 16:00:52.718 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 16:26:54.044 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 16:28:54.649 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[I 2024-03-07 16:29:39.826 ServerApp] Starting buffering for 2fcf89c5-7326-49d9-9a1b-39e75d04d7dd:26edb6e4-3426-4c9b-91c8-b320c9238e56
+[I 2024-03-07 16:29:39.827 ServerApp] Starting buffering for 3d9ebf12-2df9-4bf3-8256-085fc982c519:a4bfdaeb-5e2c-4bf3-89a9-49987add79ac
+[C 2024-03-07 16:29:54.449 ServerApp] received signal 15, stopping
+[I 2024-03-07 16:29:54.449 ServerApp] Shutting down 5 extensions
+[I 2024-03-07 16:29:54.450 ServerApp] Shutting down 4 kernels
+[I 2024-03-07 16:29:54.451 ServerApp] Kernel shutdown: 3f0a7d28-8170-4ac4-bdf2-299038676d56
+[I 2024-03-07 16:29:54.451 ServerApp] Kernel shutdown: c8a8168b-63c5-4dff-ad75-a88c125746a9
+[I 2024-03-07 16:29:54.456 ServerApp] Kernel shutdown: 3d9ebf12-2df9-4bf3-8256-085fc982c519
+[I 2024-03-07 16:29:54.457 ServerApp] Kernel shutdown: 2fcf89c5-7326-49d9-9a1b-39e75d04d7dd
