@@ -27,7 +27,7 @@ star.**
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-
+./b07craytracing/*.csv
 # C extensions
 *.so
 vscode/

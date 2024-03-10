@@ -18,31 +18,41 @@ def trace(list_oe, beam):
     iwrite = 0
     num_oe = len(list_oe)
     int_dict = {}
-    with open(f'./trash/subprocess_outputPID{os.getpid()}.txt', 'w') as f_out:
-        for i in range(num_oe):
-            oe = list_oe[i]
-            print(f"Running optical element: {i+1}")
-            if iwrite:
-                oe.write(f"start.{i:02d}")
+    height_dict = {}
+    ray_dict = {}
+    for i in range(num_oe):
+        oe = list_oe[i]
+        print(f"Running optical element: {i+1}")
+        if iwrite:
+            oe.write(f"start.{i:02d}")
+        
+        
+        
+        # Redirect stdout and stderr to the file
+        beam.traceOE(oe, i+1)
+        intensity_val = beam.getshonecol(23, nolost=1).sum()
+        int_dict[f"OE{i+1}"] = intensity_val
+        if intensity_val == 0:
+            height_dict[f'OE{i+1}'] = 0
+            ray_dict[f"OE{i+1}"] = 0
+        else:
+            height_dict[f'OE{i+1}'] = beam.histo1(3, nbins=50, nolost=1)['fwhm']
+            ray_dict[f"OE{i+1}"] = len(beam.getshonecol(23, nolost=1))
+        
+        print(f"Intensity after OE{i+1}: {intensity_val}")
 
-            # Redirect stdout and stderr to the file
-            with contextlib.redirect_stdout(f_out), contextlib.redirect_stderr(f_out):
-                beam.traceOE(oe, i+1)
-                intensity_val = beam.getshonecol(23, nolost=1).sum()
-                int_dict[f"OE{i+1}"] = intensity_val
-            print(f"Intensity after OE{i+1}: {intensity_val}")
+        if iwrite:
+            oe.write(f"end.{i:02d}")
+            beam.write(f"star.{i:02d}")
+        if i == 8:
+            
+            if intensity_val == 0:
+                print("Intensity too low, skipping")
+                return 0, 0, int_dict, height_dict
+            else:
 
-            if iwrite:
-                oe.write(f"end.{i:02d}")
-                beam.write(f"star.{i:02d}")
-            if i == 8:
-                
-                if intensity_val == 0:
-                    print("Intensity too low, skipping")
-                    return 0, 0, int_dict
-                else:
-                    result = Shadow.ShadowTools.histo1(beam, 11, nbins=50, nolost=1)
-                    return result['fwhm'], intensity_val, int_dict
+                result = Shadow.ShadowTools.histo1(beam, 11, nbins=50, nolost=1)
+                return result['fwhm'], intensity_val, int_dict, height_dict, ray_dict
 
 # write (1) or not (0) SHADOW files start.xx end.xx star.xx
 def set_up(E, delta_E, cff, order):
@@ -126,8 +136,8 @@ def set_up(E, delta_E, cff, order):
     oe1.ALPHA = 90.0
     oe1.DUMMY = 0.1
     oe1.FHIT_C = 1
-    oe1.FILE_RIP = b'/home/sleepychemist/Oasys/B07_m1c_se.dat'
-    oe1.FILE_REFL = b'/home/sleepychemist/Oasys/Rhodium_coating.dat'
+    oe1.FILE_RIP = b'./b07c_raytracing/B07_m1c_se.dat'
+    oe1.FILE_REFL = b'./b07c_raytracing/Rhodium_coating.dat'
     oe1.FMIRR = 3
     oe1.FWRITE = 1
     oe1.F_EXT = 1
@@ -162,8 +172,8 @@ def set_up(E, delta_E, cff, order):
     oe3.ALPHA = 0
     oe3.DUMMY = 0.1
     oe3.FHIT_C = 1
-    oe3.FILE_RIP = b'/home/sleepychemist/Oasys/B07_m2c_se.dat'
-    oe3.FILE_REFL = b'/home/sleepychemist/Oasys/Platinum_coating.dat'
+    oe3.FILE_RIP = b'./b07c_raytracing/B07_m2c_se.dat'
+    oe3.FILE_REFL = b'./b07c_raytracing/Platinum_coating.dat'
     oe3.FWRITE = 1
     oe3.F_G_S = 2
     oe3.F_RIPPLE = 1
@@ -180,7 +190,7 @@ def set_up(E, delta_E, cff, order):
     oe4.ALPHA = 180.0
     oe4.DUMMY = 0.1
     oe4.FHIT_C = 1
-    oe4.FILE_RIP = b'/home/sleepychemist/Oasys/B07_PG1c_se.dat'
+    oe4.FILE_RIP = b'./b07c_raytracing/B07_PG1c_se.dat'
     oe4.FWRITE = 1
     oe4.F_GRATING = 1
     oe4.F_G_S = 2
@@ -219,8 +229,8 @@ def set_up(E, delta_E, cff, order):
     oe6.DUMMY = 0.1
     oe6.FCYL = 1
     oe6.FHIT_C = 1
-    oe6.FILE_REFL = b'/home/sleepychemist/Oasys/Rhodium_coating.dat'
-    oe6.FILE_RIP = b'/home/sleepychemist/Oasys/B07_M3c_se.dat'
+    oe6.FILE_REFL = b'./b07c_raytracing/Rhodium_coating.dat'
+    oe6.FILE_RIP = b'./b07c_raytracing/B07_M3c_se.dat'
     oe6.FMIRR = 1
     oe6.FWRITE = 1
     oe6.F_EXT = 1
@@ -254,8 +264,8 @@ def set_up(E, delta_E, cff, order):
     oe8.DUMMY = 0.1
     oe8.FCYL = 1
     oe8.FHIT_C = 1
-    oe8.FILE_RIP = b'/home/sleepychemist/Oasys/B07_M4c_se.dat'
-    oe8.FILE_REFL = b'/home/sleepychemist/Oasys/Rhodium_coating.dat'
+    oe8.FILE_RIP = b'./b07c_raytracing/B07_M4c_se.dat'
+    oe8.FILE_REFL = b'./b07c_raytracing/Rhodium_coating.dat'
     oe8.FMIRR = 1
     oe8.FWRITE = 1
     oe8.F_DEFAULT = 0
@@ -278,8 +288,8 @@ def set_up(E, delta_E, cff, order):
     oe9.DUMMY = 0.1
     oe9.FCYL = 1
     oe9.FHIT_C = 1
-    oe9.FILE_RIP = b'/home/sleepychemist/Oasys/B07_M5c_se.dat'
-    oe9.FILE_REFL = b'/home/sleepychemist/Oasys/Rhodium_coating.dat'
+    oe9.FILE_RIP = b'./b07c_raytracing/B07_M5c_se.dat'
+    oe9.FILE_REFL = b'/b07c_raytracing/Rhodium_coating.dat'
     oe9.FMIRR = 2
     oe9.FWRITE = 1
     oe9.F_DEFAULT = 0
@@ -328,28 +338,28 @@ def simulate(args):
     #print(f"{E}, {cff}, {order}, {grating_eff}, {flux}")
     delta_E = optimize(E, 0.1, cff, order)
     list_oe, beam = set_up(E, delta_E, cff, order)
-    fwhm, intensity, intensity_dict = trace(list_oe, beam)
+    fwhm, intensity, intensity_dict, height_dict, ray_dict = trace(list_oe, beam)
     bandwidth = delta_E / E
     flux_calc = bandwidth/0.001 * flux * grating_eff * intensity/50000
     
-    return E, fwhm, bandwidth, flux_calc, intensity, intensity_dict
+    return E, fwhm, bandwidth, flux_calc, intensity, intensity_dict, height_dict, ray_dict
 
 
 
 def main():
-    grating_E, grating_EFF = np.loadtxt("./b07c_raytracing/B07cN4C1p4O3F35.dat", unpack=True)
+    grating_E, grating_EFF = np.loadtxt("./b07c_raytracing/B07cN4C2p0O1F35.dat", unpack=True)
     interpolated_grating_eff = ip.CubicSpline(grating_E, grating_EFF)
     flux_E, flux = np.loadtxt("B07flux.dat", unpack=True, skiprows=1)
     interpolated_flux = ip.CubicSpline(flux_E, flux)
-    args = [(E, 1.4, 1, interpolated_grating_eff(E), interpolated_flux(E)) for E in np.arange(101,9051,50)]
+    args = [(E, 2.0, 1, interpolated_grating_eff(E), interpolated_flux(E)) for E in np.arange(101,3051,50)]
     
-    with Pool(5) as p:
+    with Pool(8) as p:
         results = list(tqdm.tqdm(p.imap(simulate, args), total=len(args)))
     
-    with open(f"./b07c_raytracing/resultscff14o3upto9000F35.csv", "w") as f:
+    with open(f"./b07c_raytracing/resultscff2o1upto3000F35withheightwithrays.csv", "w") as f:
         writer = csv.writer(f)
-        writer.writerow([f"cff = 1.4, order = 1, {datetime.now()}"])
-        writer.writerow(["E", "FWHM", "Bandwidth", "Flux", "Intensity", "Intensity_dict"])
+        writer.writerow([f"cff = 2, order = 1, {datetime.now()}"])
+        writer.writerow(["E", "FWHM", "Bandwidth", "Flux", "Intensity", "Intensity_dict", "Height_dict", "Ray Dict"])
         writer.writerows(results) 
     
     

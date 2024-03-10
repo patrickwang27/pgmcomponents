@@ -153071,3 +153071,287 @@ dirname:  /tmp/.mount_math-nFc3ijE/resources/app.asar/common/main
 [I 2024-03-07 16:29:54.451 ServerApp] Kernel shutdown: c8a8168b-63c5-4dff-ad75-a88c125746a9
 [I 2024-03-07 16:29:54.456 ServerApp] Kernel shutdown: 3d9ebf12-2df9-4bf3-8256-085fc982c519
 [I 2024-03-07 16:29:54.457 ServerApp] Kernel shutdown: 2fcf89c5-7326-49d9-9a1b-39e75d04d7dd
+[I 2024-03-08 11:02:40.373 ServerApp] jupyterlab | extension was successfully linked.
+[I 2024-03-08 11:02:40.376 ServerApp] nbclassic | extension was successfully linked.
+[I 2024-03-08 11:02:40.551 ServerApp] notebook_shim | extension was successfully linked.
+[I 2024-03-08 11:02:40.567 ServerApp] notebook_shim | extension was successfully loaded.
+[I 2024-03-08 11:02:40.567 LabApp] JupyterLab extension loaded from /home/pat/.local/lib/python3.8/site-packages/jupyterlab
+[I 2024-03-08 11:02:40.567 LabApp] JupyterLab application directory is /home/pat/.local/share/jupyter/lab
+[I 2024-03-08 11:02:40.569 ServerApp] jupyterlab | extension was successfully loaded.
+[I 2024-03-08 11:02:40.572 ServerApp] nbclassic | extension was successfully loaded.
+[I 2024-03-08 11:02:40.572 ServerApp] Serving notebooks from local directory: /home/pat/Diamond/pgmcomponents
+[I 2024-03-08 11:02:40.572 ServerApp] Jupyter Server 1.17.0 is running at:
+[I 2024-03-08 11:02:40.572 ServerApp] http://localhost:8888/lab?token=ef5d30b55abbd8e78a2f2f18700f025b3706c9cbf98b8a11
+[I 2024-03-08 11:02:40.572 ServerApp]  or http://127.0.0.1:8888/lab?token=ef5d30b55abbd8e78a2f2f18700f025b3706c9cbf98b8a11
+[I 2024-03-08 11:02:40.572 ServerApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 2024-03-08 11:02:42.070 ServerApp] 
+    
+    To access the server, open this file in a browser:
+        file:///home/pat/.local/share/jupyter/runtime/jpserver-4342-open.html
+    Or copy and paste one of these URLs:
+        http://localhost:8888/lab?token=ef5d30b55abbd8e78a2f2f18700f025b3706c9cbf98b8a11
+     or http://127.0.0.1:8888/lab?token=ef5d30b55abbd8e78a2f2f18700f025b3706c9cbf98b8a11
+[W 2024-03-08 11:02:42.072 ServerApp] Clearing invalid/expired login cookie username-localhost-8888
+[W 2024-03-08 11:02:42.073 ServerApp] Clearing invalid/expired login cookie username-localhost-8888
+[W 2024-03-08 11:02:42.073 ServerApp] Forbidden
+[W 2024-03-08 11:02:42.073 ServerApp] 403 GET /api/kernels/0fa9411e-d95a-424d-a2e9-c215ec4c1d39?1709895753741 (127.0.0.1) 1.46ms referer=http://localhost:8888/lab/tree/b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:02:42.073 ServerApp] Forbidden
+[W 2024-03-08 11:02:42.073 ServerApp] 403 GET /api/kernels/0fa9411e-d95a-424d-a2e9-c215ec4c1d39?1709895756755 (127.0.0.1) 0.93ms referer=http://localhost:8888/lab/tree/b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:02:46.141 LabApp] Could not determine jupyterlab build status without nodejs
+[I 2024-03-08 11:03:51.909 ServerApp] 302 GET / (127.0.0.1) 0.31ms
+[I 2024-03-08 11:03:51.916 LabApp] 302 GET /lab? (127.0.0.1) 0.43ms
+[I 2024-03-08 11:04:36.704 ServerApp] 302 POST /login?next=%2Flab%3F (127.0.0.1) 0.73ms
+[W 2024-03-08 11:04:38.518 LabApp] Could not determine jupyterlab build status without nodejs
+[W 2024-03-08 11:04:48.160 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:04:48.486 ServerApp] Kernel started: f7298587-27eb-440b-acea-b53d759c8e42
+[I 2024-03-08 11:06:48.441 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:06:48.441 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:07:36.200 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:07:36.200 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:07:46.471 ServerApp] Kernel restarted: f7298587-27eb-440b-acea-b53d759c8e42
+[I 2024-03-08 11:09:36.750 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:09:36.751 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:19:39.452 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:19:39.453 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:21:40.411 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:21:40.411 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[W 2024-03-08 11:23:34.202 LabApp] Could not determine jupyterlab build status without nodejs
+[W 2024-03-08 11:23:41.175 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[IPKernelApp] WARNING | No such comm: ea6f433568714cb69b52de30b42021ea
+[IPKernelApp] WARNING | No such comm: ea6f433568714cb69b52de30b42021ea
+[IPKernelApp] WARNING | No such comm: ea6f433568714cb69b52de30b42021ea
+[IPKernelApp] WARNING | No such comm: ea6f433568714cb69b52de30b42021ea
+[IPKernelApp] WARNING | No such comm: ea6f433568714cb69b52de30b42021ea
+[IPKernelApp] WARNING | No such comm: 3d68bd1c54e2476a9906262c0018d85b
+[IPKernelApp] WARNING | No such comm: 3d68bd1c54e2476a9906262c0018d85b
+[IPKernelApp] WARNING | No such comm: 3d68bd1c54e2476a9906262c0018d85b
+[IPKernelApp] WARNING | No such comm: 3d68bd1c54e2476a9906262c0018d85b
+[IPKernelApp] WARNING | No such comm: 3d68bd1c54e2476a9906262c0018d85b
+[IPKernelApp] WARNING | No such comm: 9c17ad5862b142dfabc4f95fc74e0273
+[IPKernelApp] WARNING | No such comm: 9c17ad5862b142dfabc4f95fc74e0273
+[IPKernelApp] WARNING | No such comm: 9c17ad5862b142dfabc4f95fc74e0273
+[IPKernelApp] WARNING | No such comm: 9c17ad5862b142dfabc4f95fc74e0273
+[IPKernelApp] WARNING | No such comm: 9c17ad5862b142dfabc4f95fc74e0273
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[IPKernelApp] WARNING | No such comm: eab0bca369e3403a8cbc13af50ffd1fd
+[I 2024-03-08 11:25:41.455 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:25:41.456 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:29:41.529 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:29:41.530 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:30:02.145 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:30:02.145 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:32:02.225 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:32:02.225 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:34:02.297 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:34:02.297 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:36:02.379 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:36:02.379 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:38:02.453 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:38:02.454 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:40:02.534 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:40:02.535 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:42:02.629 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:42:02.630 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:44:02.707 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:44:02.707 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:46:02.792 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:46:02.793 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:48:02.872 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:48:02.872 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:54:02.948 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:54:02.949 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:56:03.063 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:56:03.064 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 11:58:03.157 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 11:58:03.157 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:00:03.237 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:00:03.237 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:04:52.020 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:04:52.021 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:06:52.114 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:06:52.115 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:08:52.207 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:08:52.208 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:10:52.294 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:10:52.294 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:12:52.380 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:12:52.381 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:14:52.476 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:14:52.477 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:16:52.572 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:16:52.573 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:18:52.668 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:18:52.668 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 12:20:52.774 ServerApp] Saving file at /b07c_raytracing/EnergyGap.ipynb
+[W 2024-03-08 12:20:52.774 ServerApp] Notebook b07c_raytracing/EnergyGap.ipynb is not trusted
+[I 2024-03-08 13:45:02.500 ServerApp] Kernel started: 43e702f0-d38d-4380-b972-bcf4bc3be4f3
+[IPKernelApp] ERROR | No such comm target registered: jupyter.widget.control
+[IPKernelApp] WARNING | No such comm: d8ca5925-5870-4cdf-9c54-0066feb4f920
+[I 2024-03-08 14:00:04.091 ServerApp] Starting buffering for 43e702f0-d38d-4380-b972-bcf4bc3be4f3:72c6ca94-0310-4208-aaa3-0334f79ed7ac
+[I 2024-03-08 22:04:55.704 ServerApp] Starting buffering for f7298587-27eb-440b-acea-b53d759c8e42:60fdbef6-f356-4873-b52a-a9d489403566
