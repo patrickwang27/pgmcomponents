@@ -13,7 +13,8 @@ import scipy.interpolate as ip
 from colorama import Fore
 import contextlib
 import os
-
+import configparser
+import time
 def trace(list_oe, beam):
     iwrite = 0
     num_oe = len(list_oe)
@@ -30,28 +31,28 @@ def trace(list_oe, beam):
         
         # Redirect stdout and stderr to the file
         beam.traceOE(oe, i+1)
+        num_of_rays= len(beam.getshonecol(23, nolost=1))
         intensity_val = beam.getshonecol(23, nolost=1).sum()
         int_dict[f"OE{i+1}"] = intensity_val
-        if intensity_val == 0:
+        if num_of_rays < 500:
             height_dict[f'OE{i+1}'] = 0
             ray_dict[f"OE{i+1}"] = 0
         else:
             height_dict[f'OE{i+1}'] = beam.histo1(3, nbins=50, nolost=1)['fwhm']
-            ray_dict[f"OE{i+1}"] = len(beam.getshonecol(23, nolost=1))
-        
+            ray_dict[f"OE{i+1}"] = num_of_rays
         print(f"Intensity after OE{i+1}: {intensity_val}")
 
-        if iwrite:
-            oe.write(f"end.{i:02d}")
-            beam.write(f"star.{i:02d}")
         if i == 8:
             
-            if intensity_val == 0:
-                print("Intensity too low, skipping")
-                return 0, 0, int_dict, height_dict
+            if num_of_rays < 500:
+                print("Number of rays too low, skipping")
+                return 0, 0, int_dict, height_dict, 0
             else:
-
                 result = Shadow.ShadowTools.histo1(beam, 11, nbins=50, nolost=1)
+                if result['fwhm'] == 0 or result['fwhm'] == None:
+                    print("FWHM too low, skipping")
+                    return 0, 0, int_dict, height_dict, 0
+                
                 return result['fwhm'], intensity_val, int_dict, height_dict, ray_dict
 
 # write (1) or not (0) SHADOW files start.xx end.xx star.xx
@@ -253,8 +254,8 @@ def set_up(E, delta_E, cff, order):
     oe7.F_SCREEN = 1
     oe7.I_SLIT = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
     oe7.N_SCREEN = 1
-    oe7.RX_SLIT = np.array([0.05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
-    oe7.RZ_SLIT = np.array([1000.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+    oe7.RX_SLIT = np.array([0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+    oe7.RZ_SLIT = np.array([0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
     oe7.T_IMAGE = 4000.0
     oe7.T_INCIDENCE = 0.0
     oe7.T_REFLECTION = 180.0
@@ -289,7 +290,7 @@ def set_up(E, delta_E, cff, order):
     oe9.FCYL = 1
     oe9.FHIT_C = 1
     oe9.FILE_RIP = b'./b07c_raytracing/B07_M5c_se.dat'
-    oe9.FILE_REFL = b'/b07c_raytracing/Rhodium_coating.dat'
+    oe9.FILE_REFL = b'./b07c_raytracing/Rhodium_coating.dat'
     oe9.FMIRR = 2
     oe9.FWRITE = 1
     oe9.F_DEFAULT = 0
@@ -347,22 +348,46 @@ def simulate(args):
 
 
 def main():
-    grating_E, grating_EFF = np.loadtxt("./b07c_raytracing/B07cN4C2p0O1F35.dat", unpack=True)
-    interpolated_grating_eff = ip.CubicSpline(grating_E, grating_EFF)
-    flux_E, flux = np.loadtxt("B07flux.dat", unpack=True, skiprows=1)
-    interpolated_flux = ip.CubicSpline(flux_E, flux)
-    args = [(E, 2.0, 1, interpolated_grating_eff(E), interpolated_flux(E)) for E in np.arange(101,3051,50)]
-    
-    with Pool(8) as p:
-        results = list(tqdm.tqdm(p.imap(simulate, args), total=len(args)))
-    
-    with open(f"./b07c_raytracing/resultscff2o1upto3000F35withheightwithrays.csv", "w") as f:
-        writer = csv.writer(f)
-        writer.writerow([f"cff = 2, order = 1, {datetime.now()}"])
-        writer.writerow(["E", "FWHM", "Bandwidth", "Flux", "Intensity", "Intensity_dict", "Height_dict", "Ray Dict"])
-        writer.writerows(results) 
-    
-    
+
+    configs = os.listdir("./b07c_raytracing/configs")
+    for file in configs:
+        print(f"Running {file}")
+        time.sleep(5)
+        config = configparser.ConfigParser()
+        config.read(f"./b07c_raytracing/configs/{file}")
+        grating_path = str(config["paths"]["grating"])
+        flux_path = config["paths"]["flux"]
+        cff = float(config["parameters"]["cff"])
+        order = int(config["parameters"]["order"])
+        E_min = float(config["parameters"]["E_min"])
+        E_max = float(config["parameters"]["E_max"])
+        E_step = float(config["parameters"]["E_step"])
+        outfile = config["paths"]["outfile"]
+        threads = int(config["parameters"]["threads"])
+
+        grating_E, grating_EFF = np.loadtxt(grating_path, unpack=True)
+        interpolated_grating_eff = ip.CubicSpline(grating_E, grating_EFF)
+
+        flux_E, flux = np.loadtxt(flux_path, unpack=True, skiprows=1)
+        interpolated_flux = ip.CubicSpline(flux_E, flux)
+
+        args = [(E, cff, order, interpolated_grating_eff(E), interpolated_flux(E)) for E in np.arange(E_min,E_max,E_step)]
+        
+        with Pool(threads) as p:
+            results = list(tqdm.tqdm(p.imap(simulate, args), total=len(args)))
+        
+        with open(outfile, "w") as f:
+            writer = csv.writer(f)
+            writer.writerow([f"cff = {cff}, order = {order}, {datetime.now()}"])
+            writer.writerow(["E", "FWHM", "Bandwidth", "Flux", "Intensity", "Intensity_dict", "Height_dict", "Ray Dict"])
+            writer.writerows(results) 
+    """
+
+    for arg in tqdm.tqdm(args):
+        print(arg)
+        result = simulate(arg)
+        print(result)
+    """
     #result = simulate((5851, 1.4, 3, interpolated_grating_eff(5851), interpolated_flux(5851)))
     #print(result)
 
