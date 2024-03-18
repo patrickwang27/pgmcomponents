@@ -348,7 +348,7 @@ def main():
 
     for cff in np.arange(1.2, 1.4, 0.2):
         for order in range(1, 3):
-            interpolated_eff = get_eff("./b07c_raytracing/B07cN4_grateffs/B07grating15Mar24.json", return_interpolate=True)
+            interpolated_eff = get_eff("./b07c_raytracing/B07cN4_grateffs/B07grating15Mar24.json", order, E, cff, return_interpolate=True)
 
             args = [(E, cff, order, interpolated_eff(E), interpolated_flux(E)) for E in np.arange(300, order*3000, 10)]
             
