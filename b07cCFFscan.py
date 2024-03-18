@@ -357,11 +357,11 @@ def main():
         for order in range(1, 3):
             interpolated_eff = get_eff("./b07c_raytracing/B07cN4_grateffs/B07grating15Mar24.json", order, None, cff, return_interpolate=True)
 
-            args = [(E, cff, order, interpolated_eff(E), interpolated_flux(E)) for E in np.arange(300, order*3000, 50)]
+            args = [(E, cff, order, interpolated_eff(E), interpolated_flux(E)) for E in np.arange(300, order*3000, 10)]
             
             outfile = f"./b07c_raytracing/cff_scan/cff_{cff}_order_{order}.csv"
 
-            with Pool(5) as p:
+            with Pool(24) as p:
                 results = list(tqdm.tqdm(p.imap(simulate, args), total=len(args)))
             
             with open(outfile, "w") as f:
