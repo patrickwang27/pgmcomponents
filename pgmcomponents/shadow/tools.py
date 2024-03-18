@@ -280,3 +280,49 @@ def intensity(beam:Beam)-> float:
     return np.sum([beam.getshonecol(7,nolost=1)**2,
                    beam.getshonecol(8,nolost=1)**2,
                    beam.getshonecol(9,nolost=1)**2])
+
+
+def get_eff(file, order, E, cff, polarisation='s', interpolate_energy=True, return_interpolate=False):
+    """
+    Reads the grating efficiencies from a JSON file.
+    
+    Parameters
+    __________
+    
+    file: str 
+        path to JSON file containing grating efficiencies
+    order: int 
+        1, 2, 3, 4, or 5
+    E: float 
+        Energy 50 to 15000 eV
+    cff: float 
+        cff value from 1.2 to 3 in steps of 0.2
+    polarisation: str
+        's' for sigma polarisation
+        'p' for pi polarisation
+        'd' for diagonal polarisation
+        'c' for circular polarisation
+    extrapolate_energy: bool
+        True to return cubic extrapolated efficiency at given E
+        False to return an array of energy and efficiency as supplied by file
+        
+    """
+    with open(file, 'r') as f:
+        data = json.load(f)
+    
+    order_index = int(np.abs(order))-1
+    cff_index_dict = {f'{x:.1f}': y for x, y in zip(np.arange(1.2,3.2, 0.2), range(0, 11))} 
+    cff_index = cff_index_dict[f"{cff}"]
+    energy = data['order'][order_index]['cff'][cff_index]['energy']
+    eff = data['order'][order_index]['cff'][cff_index][polarisation]
+    
+    if interpolate_energy == True:
+        energy_interpolate = CubicSpline(energy, eff)
+        
+        if return_interpolate == True:
+            return energy_interpolate
+        else:
+            return energy_interpolate(E)
+
+    else:
+        return np.hstack(energy, eff)
