@@ -3,7 +3,7 @@ from pgmcomponents.geometry import *
 from Shadow import OE, Beam
 from colorama import Fore
 import json
-
+from scipy.interpolate import CubicSpline
 
 def make_pgm(grating_params, mirror_params):
     """
