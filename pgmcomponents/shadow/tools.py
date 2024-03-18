@@ -2,6 +2,8 @@ from pgmcomponents.elements import *
 from pgmcomponents.geometry import *
 from Shadow import OE, Beam
 from colorama import Fore
+import json
+
 
 def make_pgm(grating_params, mirror_params):
     """
@@ -318,7 +320,7 @@ def get_eff(file, order, E, cff, polarisation='s', interpolate_energy=True, retu
     
     if interpolate_energy == True:
         energy_interpolate = CubicSpline(energy, eff)
-        
+
         if return_interpolate == True:
             return energy_interpolate
         else:
