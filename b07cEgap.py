@@ -4,7 +4,7 @@ import sys
 sys.path.append("~/Diamond/pgmcomponents")
 from pgmcomponents.elements import Plane_Mirror, Grating, PGM
 from pgmcomponents.shadow.tools import config_oe, intensity
-import tqdm
+from tqdm.gui import tqdm
 import csv
 import matplotlib.pyplot as plt
 from multiprocessing import Pool
@@ -339,8 +339,10 @@ def simulate(args):
     #print(f"{E}, {cff}, {order}, {grating_eff}, {flux}")
     delta_E = optimize(E, 0.1, cff, order)
     list_oe, beam = set_up(E, delta_E, cff, order)
+    
     fwhm, intensity, intensity_dict, height_dict, ray_dict = trace(list_oe, beam)
     bandwidth = delta_E / E
+    print(bandwidth, flux, grating_eff, intensity/50000)
     flux_calc = bandwidth/0.001 * flux * grating_eff * intensity/50000
     
     return E, fwhm, bandwidth, flux_calc, intensity, intensity_dict, height_dict, ray_dict
@@ -348,11 +350,12 @@ def simulate(args):
 
 
 def main():
-
+    """
     configs = os.listdir("./b07c_raytracing/configs")
     for file in configs:
         print(f"Running {file}")
         time.sleep(5)
+    
         config = configparser.ConfigParser()
         config.read(f"./b07c_raytracing/configs/{file}")
         grating_path = str(config["paths"]["grating"])
@@ -382,12 +385,41 @@ def main():
             writer.writerow(["E", "FWHM", "Bandwidth", "Flux", "Intensity", "Intensity_dict", "Height_dict", "Ray Dict"])
             writer.writerows(results) 
     """
+    config = configparser.ConfigParser()
+    config.read(f"./config.ini")
+    grating_path = str(config["paths"]["grating"])
+    flux_path = config["paths"]["flux"]
+    cff = float(config["parameters"]["cff"])
+    order = int(config["parameters"]["order"])
+    E_min = float(config["parameters"]["E_min"])
+    E_max = float(config["parameters"]["E_max"])
+    E_step = float(config["parameters"]["E_step"])
+    outfile = config["paths"]["outfile"]
+    threads = int(config["parameters"]["threads"])
 
-    for arg in tqdm.tqdm(args):
+    grating_E, grating_EFF = np.loadtxt(grating_path, unpack=True)
+    interpolated_grating_eff = ip.CubicSpline(grating_E, grating_EFF)
+
+    flux_E, flux = np.loadtxt(flux_path, unpack=True, skiprows=1)
+    interpolated_flux = ip.CubicSpline(flux_E, flux)
+
+    args = [(E, cff, order, interpolated_grating_eff(E), interpolated_flux(E)) for E in np.arange(E_min,E_max,E_step)]
+    """
+    with Pool(threads) as p:
+        results = list(tqdm(p.imap(simulate, args), total=len(args)))
+    
+    with open(outfile, "w") as f:
+        writer = csv.writer(f)
+        writer.writerow([f"cff = {cff}, order = {order}, {datetime.now()}"])
+        writer.writerow(["E", "FWHM", "Bandwidth", "Flux", "Intensity", "Intensity_dict", "Height_dict", "Ray Dict"])
+        writer.writerows(results) 
+    """
+
+    for arg in tqdm(args[0:1]):
         print(arg)
         result = simulate(arg)
         print(result)
-    """
+    
     #result = simulate((5851, 1.4, 3, interpolated_grating_eff(5851), interpolated_flux(5851)))
     #print(result)
 
