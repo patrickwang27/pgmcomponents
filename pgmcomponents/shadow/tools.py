@@ -328,3 +328,17 @@ def get_eff(file, order, E, cff, polarisation='s', interpolate_energy=True, retu
 
     else:
         return np.hstack(energy, eff)
+
+
+def initial_read(file, polarisation='s'):
+    with open(file, 'r') as f:
+        data= json.load(f)
+    order_len = len(data['order'])
+    order_list = [order + 1 for order in range(order_len)]
+    cff_dict = {i:[data['order'][i-1]['cff'][j]['cff'] for j in range(len(data['order'][i-1]['cff']))] for i in order_list}
+    #energy_dict = {i:data['order'][i-1]['cff']['energy']}
+    master_dict = {order+1: 
+                   {cff: 
+                    np.array([data['order'][order]['cff'][cff_dict[order+1].index(cff)]['energy'], 
+                              data['order'][order]['cff'][cff_dict[order+1].index(cff)]['s']]) for cff in cff_dict[order+1]} for order in range(order_len)}
+    return order_list, cff_dict, master_dict

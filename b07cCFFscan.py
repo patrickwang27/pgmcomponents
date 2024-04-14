@@ -2,7 +2,7 @@ import Shadow
 import numpy as np
 import sys
 from pgmcomponents.elements import Plane_Mirror, Grating, PGM
-from pgmcomponents.shadow.tools import config_oe, intensity, get_eff
+from pgmcomponents.shadow.tools import config_oe, intensity, get_eff, initial_read
 import tqdm
 import csv
 import matplotlib.pyplot as plt
@@ -16,6 +16,7 @@ import os
 import configparser
 import time
 import json
+from tqdm.gui import tqdm
 
 set_start_method("spawn", force=True)
 
@@ -72,8 +73,8 @@ def set_up(E, delta_E, cff, order):
     pgm = PGM(mirror = Plane_Mirror(), grating = Grating())
 
     pgm.energy = float(E)
-    pgm.grating.line_density = 400.
-    pgm.cff = float(cff)
+    pgm.grating.line_density = 600.
+    pgm.cff = cff
     pgm.beam_offset = -13.
     pgm.mirror.hoffset =40.
     pgm.mirror.voffset = 13.
@@ -204,7 +205,7 @@ def set_up(E, delta_E, cff, order):
     oe4.F_RIPPLE = 1
     oe4.RLEN1 = 100.0
     oe4.RLEN2 = 100.0
-    oe4.RULING = 400.0
+    oe4.RULING = 600.0
     oe4.RWIDX1 = 11.5
     oe4.RWIDX2 = 11.5
     oe4.T_IMAGE = 0.0
@@ -352,14 +353,15 @@ def main():
 
     flux_E, flux = np.loadtxt("./b07c_raytracing/B07_flux_2mradH_0p5mradV_E50eVto15000eV_12Mar2024.dat", unpack=True, skiprows=1)
     interpolated_flux = ip.CubicSpline(flux_E, flux)
+    order_list, cff_dict, master_dict = initial_read("./b07c_raytracing/B07cN4_grateffs/B07grating14Apr24.json")
 
-    for cff in np.arange(1.2, 1.6, 0.2):
-        for order in range(1, 3):
-            interpolated_eff = get_eff("./b07c_raytracing/B07cN4_grateffs/B07grating15Mar24.json", order, None, cff, return_interpolate=True)
+    for cff in cff_dict[1]:
+        for order in order_list:
 
+            interpolated_eff = ip.CubicSpline(master_dict[order][cff][0], master_dict[order][cff][1])
             args = [(E, cff, order, interpolated_eff(E), interpolated_flux(E)) for E in np.arange(300, order*3000, 10)]
             
-            outfile = f"./b07c_raytracing/cff_scan/cff_{cff}_order_{order}.csv"
+            outfile = f"./b07c_raytracing/600lgrating/cff_{cff:.4f}_order_{order}.csv"
 
             with Pool(24) as p:
                 results = list(tqdm.tqdm(p.imap(simulate, args), total=len(args)))
