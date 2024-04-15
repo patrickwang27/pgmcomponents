@@ -18,6 +18,25 @@ import time
 import json
 from tqdm.gui import tqdm
 
+from twilio.rest import Client
+
+
+# Find your Account SID and Auth Token at twilio.com/console
+# and set the environment variables. See http://twil.io/secure
+account_sid = os.environ['TWILIO_ACCOUNT_SID']
+auth_token = os.environ['TWILIO_AUTH_TOKEN']
+client = Client(account_sid, auth_token)
+
+
+def notify(msg):
+    message = client.messages.create(from_='+441315101942',
+    body=f'{msg}',
+    to='+447826713931'
+    )
+
+    print(message.sid)
+    #print(call.sid)
+
 set_start_method("spawn", force=True)
 
 
@@ -73,7 +92,7 @@ def set_up(E, delta_E, cff, order):
     pgm = PGM(mirror = Plane_Mirror(), grating = Grating())
 
     pgm.energy = float(E)
-    pgm.grating.line_density = 600.
+    pgm.grating.line_density = 400.
     pgm.cff = cff
     pgm.beam_offset = -13.
     pgm.mirror.hoffset =40.
@@ -145,7 +164,7 @@ def set_up(E, delta_E, cff, order):
     oe1.DUMMY = 0.1
     oe1.FHIT_C = 1
     oe1.FILE_RIP = b'./b07c_raytracing/B07_m1c_se.dat'
-    oe1.FILE_REFL = b'./b07c_raytracing/Rhodium_coating.dat'
+    oe1.FILE_REFL = b'./b07c_raytracing/Rh_15Apr.dat'
     oe1.FMIRR = 3
     oe1.FWRITE = 1
     oe1.F_EXT = 1
@@ -181,7 +200,7 @@ def set_up(E, delta_E, cff, order):
     oe3.DUMMY = 0.1
     oe3.FHIT_C = 1
     oe3.FILE_RIP = b'./b07c_raytracing/B07_m2c_se.dat'
-    oe3.FILE_REFL = b'./b07c_raytracing/Platinum_coating.dat'
+    oe3.FILE_REFL = b'./b07c_raytracing/Pt_15Apr.dat'
     oe3.FWRITE = 1
     oe3.F_G_S = 2
     oe3.F_RIPPLE = 1
@@ -205,7 +224,7 @@ def set_up(E, delta_E, cff, order):
     oe4.F_RIPPLE = 1
     oe4.RLEN1 = 100.0
     oe4.RLEN2 = 100.0
-    oe4.RULING = 600.0
+    oe4.RULING = 400.0
     oe4.RWIDX1 = 11.5
     oe4.RWIDX2 = 11.5
     oe4.T_IMAGE = 0.0
@@ -237,7 +256,7 @@ def set_up(E, delta_E, cff, order):
     oe6.DUMMY = 0.1
     oe6.FCYL = 1
     oe6.FHIT_C = 1
-    oe6.FILE_REFL = b'./b07c_raytracing/Rhodium_coating.dat'
+    oe6.FILE_REFL = b'./b07c_raytracing/Rh_15Apr.dat'
     oe6.FILE_RIP = b'./b07c_raytracing/B07_M3c_se.dat'
     oe6.FMIRR = 1
     oe6.FWRITE = 1
@@ -273,7 +292,7 @@ def set_up(E, delta_E, cff, order):
     oe8.FCYL = 1
     oe8.FHIT_C = 1
     oe8.FILE_RIP = b'./b07c_raytracing/B07_M4c_se.dat'
-    oe8.FILE_REFL = b'./b07c_raytracing/Rhodium_coating.dat'
+    oe8.FILE_REFL = b'./b07c_raytracing/Rh_15Apr.dat'
     oe8.FMIRR = 1
     oe8.FWRITE = 1
     oe8.F_DEFAULT = 0
@@ -297,7 +316,7 @@ def set_up(E, delta_E, cff, order):
     oe9.FCYL = 1
     oe9.FHIT_C = 1
     oe9.FILE_RIP = b'./b07c_raytracing/B07_M5c_se.dat'
-    oe9.FILE_REFL = b'./b07c_raytracing/Rhodium_coating.dat'
+    oe9.FILE_REFL = b'./b07c_raytracing/Rh_15Apr.dat'
     oe9.FMIRR = 2
     oe9.FWRITE = 1
     oe9.F_DEFAULT = 0
@@ -353,17 +372,21 @@ def main():
 
     flux_E, flux = np.loadtxt("./b07c_raytracing/B07_flux_2mradH_0p5mradV_E50eVto15000eV_12Mar2024.dat", unpack=True, skiprows=1)
     interpolated_flux = ip.CubicSpline(flux_E, flux)
-    order_list, cff_dict, master_dict = initial_read("./b07c_raytracing/B07cN4_grateffs/B07grating14Apr24.json")
+    order_list, cff_dict, master_dict = initial_read("./b07c_raytracing/B07cN4_grateffs/B07grating2Apr24.json")
+    _, cff_dict_l, master_dict_l = initial_read("./b07c_raytracing/B07cN4_grateffs/B07grating15Mar24.json")
 
-    for cff in cff_dict[1]:
+
+    for cff in cff_dict[1] + cff_dict_l[1]:
         for order in order_list:
-
-            interpolated_eff = ip.CubicSpline(master_dict[order][cff][0], master_dict[order][cff][1])
+            if cff in cff_dict[1]:
+                interpolated_eff = ip.CubicSpline(master_dict[order][cff][0], master_dict[order][cff][1])
+            else:
+                interpolated_eff = ip.CubicSpline(master_dict_l[order][cff][0], master_dict_l[order][cff][1])
             args = [(E, cff, order, interpolated_eff(E), interpolated_flux(E)) for E in np.arange(300, order*3000, 10)]
             
-            outfile = f"./b07c_raytracing/600lgrating/cff_{cff:.4f}_order_{order}.csv"
+            outfile = f"./b07c_raytracing/400lgrating_platinum/cff_{cff:.4f}_order_{order}.csv"
 
-            with Pool(24) as p:
+            with Pool(30) as p:
                 results = list(tqdm(p.imap(simulate, args), total=len(args)))
             
             with open(outfile, "w") as f:
@@ -372,6 +395,8 @@ def main():
                 writer.writerow(["E", "FWHM", "Bandwidth", "Flux", "Intensity", "Intensity_dict", "Height_dict", "Ray Dict"])
                 writer.writerows(results)
             print(Fore.GREEN + f"File {outfile} written")
+            notify(f"400 cff:{cff:.5f}, order:{order} completed]")
+        notify(f"400 cff {cff} completed.")
     #result = simulate((5851, 1.4, 3, interpolated_grating_eff(5851), interpolated_flux(5851)))
     #print(result)
 
