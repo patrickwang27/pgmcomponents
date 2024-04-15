@@ -376,7 +376,7 @@ def main():
     _, cff_dict_l, master_dict_l = initial_read("./b07c_raytracing/B07cN4_grateffs/B07grating15Mar24.json")
 
 
-    for cff in cff_dict[1] + cff_dict_l[1]:
+    for cff in cff_dict[1] + cff_dict_l[1][4:]:
         for order in order_list:
             if cff in cff_dict[1]:
                 interpolated_eff = ip.CubicSpline(master_dict[order][cff][0], master_dict[order][cff][1])
