@@ -364,7 +364,7 @@ def main():
             outfile = f"./b07c_raytracing/600lgrating/cff_{cff:.4f}_order_{order}.csv"
 
             with Pool(24) as p:
-                results = list(tqdm.tqdm(p.imap(simulate, args), total=len(args)))
+                results = list(tqdm(p.imap(simulate, args), total=len(args)))
             
             with open(outfile, "w") as f:
                 writer = csv.writer(f)
